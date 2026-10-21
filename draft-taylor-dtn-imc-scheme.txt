@@ -2,8 +2,8 @@
 
 
 
-WG Working Group                                              Y. N. Here
-Internet-Draft                                    Your Organization Here
+WG Working Group                                               R. Taylor
+Internet-Draft                                      Aalyria Technologies
 Intended status: Informational                           21 October 2026
 Expires: 24 April 2027
 
@@ -109,6 +109,6 @@ Acknowledgments
 
 Author's Address
 
-   Your Name Here
-   Your Organization Here
-   Email: your.email@example.com
+   Rick Taylor
+   Aalyria Technologies
+   Email: rtaylor@aalyria.com
