@@ -96,6 +96,8 @@ Table of Contents
      5.6.  Well-Known Service Numbers
    6.  CBOR Representation of imc URIs with BPv7
      6.1.  imc EID CBOR Encoding
+       6.1.1.  Three-Element Scheme-Specific Encoding
+       6.1.2.  Two-Element Scheme-Specific Encoding
      6.2.  'imc' URI Scheme CBOR Syntax
      6.3.  imc EID Matching
    7.  Special Considerations
@@ -565,9 +567,40 @@ Table of Contents
 6.1.  imc EID CBOR Encoding
 
    When encoding imc EIDs for use with BPv7, the scheme-specific part of
-   an imc URI MUST be represented as a CBOR array of exactly three (3)
-   elements.  Each element of the array MUST be encoded as a single CBOR
-   unsigned integer, and:
+   an imc URI MUST be represented as a CBOR array of either two (2) or
+   three (3) elements.  Each element of the array MUST be encoded as a
+   single CBOR unsigned integer, and each element carries exactly one
+   component of the imc EID.  Unlike the two-element encoding of 'ipn'
+   EIDs (Section 6.1.1 of [RFC9758]), neither encoding packs the
+   Allocator Identifier and Group Number into a single integer; there is
+   no packed encoding of a Fully Qualified Group Number.
+
+   An imc EID whose scheme-specific part is not a CBOR array of two (2)
+   or three (3) unsigned integers, or whose Allocator Identifier or
+   Group Number is not less than 2^32, is malformed.  A bundle
+   containing a malformed imc EID in its primary block MUST be treated
+   as malformed.
+
+   The structure and mechanisms of the three-element and two-element
+   encodings are described below, and examples of the different
+   encodings are provided in Appendix B.
+
+
+   // [I-D.burleigh-dtn-multicast] defines a two-element encoding
+   // carrying a packed 64-bit FQGN, mirroring the 'ipn' scheme, and ION
+   // implements it.  The packed 'ipn' two-element encoding was retained
+   // in RFC 9758 only for backwards compatibility with ION, and CCSDS
+   // is already deprecating it, so this document does not carry the bit
+   // packing into the new scheme.  The unpacked two-element form
+   // (Section 6.1.2) keeps the shorter encoding for the Default
+   // Allocator, and is byte-for-byte identical to the packed form for
+   // those EIDs.  Implementations that emit a packed two-element form
+   // for a non-zero Allocator Identifier will not interoperate with
+   // this specification.
+
+6.1.1.  Three-Element Scheme-Specific Encoding
+
+   In the three-element scheme-specific encoding of an imc EID:
 
    *  the first element of the array is the Allocator Identifier,
 
@@ -575,12 +608,9 @@ Table of Contents
 
    *  the third element of the array is the Service Number.
 
-   This encoding corresponds to the three-element scheme-specific
-   encoding of 'ipn' EIDs (Section 6.1.2 of [RFC9758]).  The two-element
-   scheme-specific encoding of 'ipn' EIDs (Section 6.1.1 of [RFC9758])
-   exists only for backwards compatibility with existing deployments of
-   the 'ipn' scheme, and has no equivalent for imc EIDs: there is no
-   packed encoding of a Fully Qualified Group Number.
+   The three-element encoding can be used for any imc EID, and
+   corresponds to the three-element scheme-specific encoding of 'ipn'
+   EIDs (Section 6.1.2 of [RFC9758]).
 
    For example, the imc EID of imc:977000.17.1 would result in the
    three-element array of [977000,17,1], which would be encoded in CBOR
@@ -593,23 +623,44 @@ Table of Contents
          11          # Group Number
          01          # Service Number
 
-   Further examples are provided in Appendix B.
+   When encoding an imc EID using the Default Allocator with this
+   encoding scheme, the first element of the array is the value zero
+   (0).  In this case, using the equivalent two-element scheme-specific
+   encoding (Section 6.1.2) will result in a more concise CBOR
+   representation; therefore, it is RECOMMENDED that implementations use
+   that encoding instead.
 
-   An imc EID whose scheme-specific part is not a CBOR array of exactly
-   three (3) unsigned integers, or whose Allocator Identifier or Group
-   Number is not less than 2^32, is malformed.  In particular, a two-
-   element array is malformed.  A bundle containing a malformed imc EID
-   in its primary block MUST be treated as malformed.
+6.1.2.  Two-Element Scheme-Specific Encoding
 
+   The two-element scheme-specific encoding MUST only be used for imc
+   EIDs whose Allocator Identifier is zero (0), that is, whose Group
+   Number is assigned by the Default Allocator.  In the two-element
+   scheme-specific encoding of an imc EID:
 
-   // [I-D.burleigh-dtn-multicast] also permits a two-element encoding
-   // carrying a packed 64-bit FQGN, mirroring the 'ipn' scheme, and ION
-   // implements it.  This document deliberately omits it.  The 'ipn'
-   // two-element encoding was retained in RFC 9758 only for backwards
-   // compatibility with ION, and CCSDS is already deprecating it, so
-   // there is no reason to carry it into a new scheme.  Implementations
-   // that emit the two-element imc form will not interoperate with this
-   // specification.
+   *  the first element of the array is the Group Number, and
+
+   *  the second element of the array is the Service Number.
+
+   The Allocator Identifier is not encoded, and a decoder MUST take it
+   to be zero (0).
+
+   For example, the imc EID of imc:5.1 would result in the two-element
+   array of [5,1], which would be encoded in CBOR as the following
+   5-octet sequence:
+
+   82       # 2-Element Endpoint Encoding
+      03    # uri-code: 3 ('imc' URI scheme)
+      82    # 2-Element imc EID encoding
+         05 # Group Number
+         01 # Service Number
+
+   Because the first element of the two-element encoding is a Group
+   Number, it is subject to the same limit of 2^32-1 as the Group Number
+   in the three-element encoding.  A two-element array whose first
+   element is not less than 2^32, such as one carrying a packed FQGN
+   with a non-zero Allocator Identifier, is therefore malformed, rather
+   than being interpreted as an imc EID with a non-zero Allocator
+   Identifier.
 
 6.2.  'imc' URI Scheme CBOR Syntax
 
@@ -628,9 +679,13 @@ Table of Contents
 
    $eid /= [
      uri-code: 3,  ; placeholder pending IANA assignment (TBD1)
-     SSP: imc-ssp
+     SSP: imc-ssp2 / imc-ssp3
    ]
-   imc-ssp = [
+   imc-ssp2 = [   ; Allocator Identifier is zero (0)
+     group-number: uint .lt 4294967296,
+     service-number: uint
+   ]
+   imc-ssp3 = [
      allocator-identifier: uint .lt 4294967296,
      group-number: uint .lt 4294967296,
      service-number: uint
@@ -638,16 +693,17 @@ Table of Contents
 
 6.3.  imc EID Matching
 
-   imc EID matching MUST be performed on the decoded EID information
-   itself: two imc EIDs are equal if and only if their Allocator
-   Identifiers, Group Numbers, and Service Numbers are equal.
+   Regardless of whether the two-element or three-element scheme-
+   specific encoding is used, imc EID matching MUST be performed on the
+   decoded EID information itself.  Different encodings of the same imc
+   EID MUST be treated as equivalent when performing EID-specific
+   functions.
 
-   Because there is a single scheme-specific encoding, and Section 4.1
-   of [RFC9171] requires the core deterministic encoding of [RFC8949]
-   for bundle blocks, each imc EID has exactly one CBOR representation.
-   Unlike 'ipn' EIDs (Section 6.4 of [RFC9758]), no imc EID can be
-   represented by different encodings that need to be treated as
-   equivalent.
+   For example, the imc EID of imc:5.1 can be represented as either the
+   two-element encoding of 0x820501 or the three-element encoding of
+   0x83000501.  While message integrity and other syntax-based checks
+   may treat these values differently, any EID-based comparisons MUST
+   treat these values the same: as representing the imc EID imc:5.1.
 
 7.  Special Considerations
 
@@ -1068,7 +1124,17 @@ B.1.  Using the Default Allocator
    EID identifies Service Number 1 on every member of the multicast
    group with Group Number 5 assigned by the Default Allocator (0).
 
-   The six-octet encoding of this EID would be as follows:
+   The recommended five-octet encoding of this EID using the two-element
+   scheme-specific encoding would be as follows:
+
+   82       # 2-Element Endpoint Encoding
+      03    # uri-code: 3 ('imc' URI scheme)
+      82    # 2-Element imc EID encoding
+         05 # Group Number
+         01 # Service Number
+
+   The six-octet encoding of this EID using the three-element scheme-
+   specific encoding would be as follows:
 
    82       # 2-Element Endpoint Encoding
       03    # uri-code: 3 ('imc' URI scheme)
@@ -1083,7 +1149,8 @@ B.2.  Using a Non-Default Allocator
    an imc EID identifies Service Number 1 on every member of the
    multicast group with Group Number 17 assigned by Allocator 977000.
 
-   The 10-octet encoding of this EID would be as follows:
+   The 10-octet encoding of this EID using the three-element scheme-
+   specific encoding would be as follows:
 
    82                # 2-Element Endpoint Encoding
       03             # uri-code: 3 ('imc' URI scheme)
@@ -1092,10 +1159,25 @@ B.2.  Using a Non-Default Allocator
          11          # Group Number
          01          # Service Number
 
+   Because the Allocator Identifier is not zero (0), this EID cannot be
+   represented using the two-element scheme-specific encoding.
+
 B.3.  The Null imc EID
 
-   The six-octet encoding of the Null imc EID (Section 5.2) of imc:0.0
-   would be as follows:
+   The Null imc EID (Section 5.2) of imc:0.0 can be encoded in the
+   following ways.
+
+   The recommended five-octet encoding of the Null imc EID using the
+   two-element scheme-specific encoding would be as follows:
+
+   82       # 2-Element Endpoint Encoding
+      03    # uri-code: 3 ('imc' URI scheme)
+      82    # 2-Element imc EID encoding
+         00 # Group Number
+         00 # Service Number
+
+   The six-octet encoding of the Null imc EID using the three-element
+   scheme-specific encoding would be as follows:
 
    82       # 2-Element Endpoint Encoding
       03    # uri-code: 3 ('imc' URI scheme)
