@@ -20,8 +20,8 @@ Abstract
    'imc' URI comprises an Allocator Identifier, a Group Number, and a
    Service Number.  This document specifies the textual syntax of 'imc'
    URIs, their interpretation when used as BPv7 Endpoint Identifiers,
-   and their CBOR encoding, and requests the associated IANA
-   registrations.
+   their CBOR encoding, and the corresponding EID Pattern, and requests
+   the associated IANA registrations.
 
 About This Document
 
@@ -103,26 +103,31 @@ Table of Contents
    7.  Special Considerations
      7.1.  Relationship to Other URI Schemes
      7.2.  Late Binding
-     7.3.  EID Patterns
-   8.  Security Considerations
-     8.1.  Reliability and Consistency
-     8.2.  Malicious Construction
-     8.3.  Unauthorized Group Membership
-     8.4.  Implicit Group Membership
-     8.5.  Private Use imc EIDs
-     8.6.  Back-End Transcoding
-     8.7.  Rare IP Address Formats
-     8.8.  Sensitive Information
-     8.9.  Semantic Attacks
-   9.  IANA Considerations
-     9.1.  'imc' URI Scheme
-     9.2.  Bundle Protocol URI Scheme Types
-     9.3.  'ipn' Scheme URI Allocator Identifiers
-     9.4.  'imc' Scheme URI Default Allocator Group Numbers Registry
-       9.4.1.  Guidance for Designated Experts
-   10. References
-     10.1.  Normative References
-     10.2.  Informative References
+   8.  imc EID Patterns
+     8.1.  Information Model
+     8.2.  EID Matching and Pattern Set Logic
+     8.3.  Text Form
+     8.4.  CBOR Form
+   9.  Security Considerations
+     9.1.  Reliability and Consistency
+     9.2.  Malicious Construction
+     9.3.  Unauthorized Group Membership
+     9.4.  Implicit Group Membership
+     9.5.  Private Use imc EIDs
+     9.6.  Back-End Transcoding
+     9.7.  Rare IP Address Formats
+     9.8.  Sensitive Information
+     9.9.  Semantic Attacks
+     9.10. EID Patterns
+   10. IANA Considerations
+     10.1.  'imc' URI Scheme
+     10.2.  Bundle Protocol URI Scheme Types
+     10.3.  'ipn' Scheme URI Allocator Identifiers
+     10.4.  'imc' Scheme URI Default Allocator Group Numbers Registry
+       10.4.1.  Guidance for Designated Experts
+   11. References
+     11.1.  Normative References
+     11.2.  Informative References
    Appendix A.  'imc' URI Scheme Text Representation Examples
      A.1.  Using the Default Allocator
      A.2.  Using a Non-Default Allocator
@@ -243,7 +248,7 @@ Table of Contents
 
    A new IANA registry, "'imc' Scheme URI Default Allocator Group
    Numbers", is defined to control the assignment of Group Number values
-   by the Default Allocator; see Section 9.4.  This registry reserves
+   by the Default Allocator; see Section 10.4.  This registry reserves
    some values as defined in Section 3.3 below.
 
    If a system does not require interoperable deployment of 'imc' scheme
@@ -284,7 +289,7 @@ Table of Contents
 3.3.  Special Group Numbers
 
    Some special-case Group Numbers are defined by the Default Allocator;
-   see Section 9.4.
+   see Section 10.4.
 
 3.3.1.  The Zero Group Number
 
@@ -302,7 +307,7 @@ Table of Contents
    // capable node is a member, to be used for distributing group
    // membership information, and ION uses imc:0.0 in this way today.
    // This document instead defines imc:0.0 as the null multicast group,
-   // which never has any members (see Section 5.2 and Section 8.4), so
+   // which never has any members (see Section 5.2 and Section 9.4), so
    // that usage is not interoperable with this specification.
 
 3.3.2.  The Maximum Group Number
@@ -345,7 +350,7 @@ Table of Contents
    Private Use, as defined in [RFC8126].  These ranges are interleaved
    with ranges of registered Group Numbers, so that Private Use Group
    Numbers are available at each length of CBOR encoding; see
-   Section 9.4.
+   Section 10.4.
 
    Any imc URI with a zero (0) Allocator Identifier and a Group Number
    reserved for Private Use is not guaranteed to be unique beyond a
@@ -381,7 +386,7 @@ Table of Contents
    In particular, the Null imc URI MUST NOT be interpreted as
    identifying a multicast group of which all nodes, or all nodes
    supporting the 'imc' scheme, are implicitly members.  See
-   Section 8.4.
+   Section 9.4.
 
 4.  Textual Representation of imc URIs
 
@@ -562,7 +567,7 @@ Table of Contents
 
    The examples in this section use the value 3 as the BPv7 URI scheme
    type of the 'imc' scheme.  This value is a placeholder pending
-   assignment by IANA; see Section 9.2.
+   assignment by IANA; see Section 10.2.
 
 6.1.  imc EID CBOR Encoding
 
@@ -732,21 +737,149 @@ Table of Contents
    location or reachability of the members of a multicast group, or
    other addressing or routing concerns.
 
-7.3.  EID Patterns
+8.  imc EID Patterns
+
+   [I-D.ietf-dtn-eid-pattern] defines EID Patterns, a means of matching
+   sets of BPv7 EIDs, and requires that each URI scheme supporting
+   patterns define a scheme-specific pattern item, comprising a logical
+   information model, EID matching logic, pattern set logic, and both
+   text and CBOR forms (Section 1.1 of [I-D.ietf-dtn-eid-pattern]).
+   This section defines the scheme-specific pattern item for the 'imc'
+   URI scheme, termed the "imc pattern".
+
+   Because the information model of an imc URI is identical to that of
+   an 'ipn' URI, being three unsigned integer elements with the same
+   domains, the imc pattern is defined by reference to the IPN Scheme
+   Pattern Item defined in Section 2.4 of [I-D.ietf-dtn-eid-pattern],
+   termed the "IPN pattern".  Except as specified in this section, every
+   requirement of that section and its subsections applies to the imc
+   pattern, with "imc" substituted for "IPN" or "ipn".
+
+8.1.  Information Model
+
+   An imc pattern SHALL logically contain exactly three elements
+   corresponding to the elements of an imc EID:
+
+   *  Allocator Identifier, with domain 0 to 2^32-1 inclusive
+
+   *  Group Number, with domain 0 to 2^32-1 inclusive
+
+   *  Service Number, with domain 0 to 2^64-1 inclusive
+
+   Each element is matched as a specific value, a range, or a wildcard,
+   and is subject to the same constraints on ranges, normalization,
+   decoding failure, and minimum supported number of intervals as the
+   corresponding element of an IPN pattern (Section 2.4 of
+   [I-D.ietf-dtn-eid-pattern]), with the Group Number taking the place
+   of the Node Number.
+
+8.2.  EID Matching and Pattern Set Logic
+
+   An imc pattern matches an imc EID according to the rules of
+   Section 2.4.1 of [I-D.ietf-dtn-eid-pattern], applied to the decoded
+   Allocator Identifier, Group Number, and Service Number of the EID.
+   An imc pattern never matches an EID of any other scheme; in
+   particular, an imc pattern and an IPN pattern with identical elements
+   match disjoint sets of EIDs (Section 7.1).
+
+   Set logic between imc patterns is as defined for IPN patterns in
+   Section 2.4.2 of [I-D.ietf-dtn-eid-pattern].
+
+8.3.  Text Form
+
+   The text form of the imc pattern is identical to the three-element
+   text form of the IPN pattern defined in Section 2.4.3 of
+   [I-D.ietf-dtn-eid-pattern], except that the scheme name is "imc"
+   rather than "ipn", and that there is no two-element form containing a
+   packed value or the '!' character.  It conforms to the following
+   ABNF, which reuses the rules ipn-part-pat, ipn-decimal, and nbr-delim
+   (and the rules on which they depend) from Figure 1 of
+   [I-D.ietf-dtn-eid-pattern]:
+
+   eid-pattern-item =/ imc-pat-item
+   imc-pat-item = "imc:" (imc-pat-ssp3 / imc-pat-ssp2)
+
+   ; Full pattern for three elements
+   imc-pat-ssp3 = ipn-part-pat
+                  nbr-delim ipn-part-pat
+                  nbr-delim ipn-part-pat
+
+   ; Accept a single EID in two-element text form
+   imc-pat-ssp2 = ipn-decimal nbr-delim ipn-decimal
+
+   When decoding a two-element imc pattern, the first element SHALL be
+   treated as a Group Number assigned by the Default Allocator, and the
+   pattern SHALL be treated as the three-element pattern whose Allocator
+   Identifier element is the specific value zero (0), consistent with
+   the two-element text form of an imc URI (Section 4).  Unlike a two-
+   element IPN pattern, the first element is not a packed value, and has
+   the domain of a Group Number.
+
+   As for the IPN pattern, the canonical text form of an imc pattern
+   SHALL use three elements, and every imc URI is itself a valid imc
+   pattern that matches only that imc URI, satisfying Section 2.1.1 of
+   [I-D.ietf-dtn-eid-pattern].
+
+   For example, the following imc pattern matches every Service Number
+   of the multicast group with Group Number 17 assigned by Allocator
+   977000:
+
+   imc:977000.17.*
+
+   The following imc pattern matches Service Number 1 on every multicast
+   group assigned by the Default Allocator from the first Private Use
+   range (Section 10.4):
+
+   imc:0.[1-127].1
+
+8.4.  CBOR Form
+
+   The CBOR form of the imc pattern is identical to the CBOR form of the
+   IPN pattern defined in Section 2.4.4 of [I-D.ietf-dtn-eid-pattern],
+   including the encoding of specific values, ranges, and wildcards,
+   except that the scheme number is the 'imc' URI scheme type
+   (Section 10.2) rather than 2.  It conforms to the following CDDL,
+   which reuses the rule ipn-part-pat (and the rules on which it
+   depends) from Figure 2 of [I-D.ietf-dtn-eid-pattern]:
+
+   $eid-pat-item /= [
+     scheme-num: 3,  ; placeholder pending IANA assignment (TBD1)
+     SSP: imc-pat-ssp
+   ]
+   imc-pat-ssp = [
+     ; This CDDL representation does not restrict to the
+     ; true domain of each element.
+     3*3 ipn-part-pat,
+   ]
+
+   As for the IPN pattern, the CBOR form always has three elements;
+   there is no two-element CBOR form of an imc pattern.
+
+   For example, the imc pattern imc:977000.17.* would be encoded in CBOR
+   as the following 11-octet sequence, using the placeholder value 3 for
+   the 'imc' URI scheme type:
+
+   81                   # EID Pattern with one item
+      82                # imc pattern item
+         03             # scheme-num: 3 ('imc' URI scheme)
+         83             # 3-Element imc pattern SSP
+            1A 000EE868 # Allocator Identifier
+            11          # Group Number
+            F5          # Service Number: wildcard (true)
 
 
-   // [I-D.ietf-dtn-eid-pattern] requires the specification of a new URI
-   // scheme to define a scheme-specific EID Pattern if patterns are to
-   // be supported for that scheme.  Whether, and where, an EID Pattern
-   // for 'imc' is defined is to be decided.
+   // This section depends normatively on [I-D.ietf-dtn-eid-pattern].
+   // If the WG prefers not to create that dependency, this section
+   // could instead be moved to that document, or to a separate
+   // document.
 
-8.  Security Considerations
+9.  Security Considerations
 
    This section is derived from the security considerations for the
    'imc' scheme in [I-D.burleigh-dtn-multicast], and follows the
    structure of Section 8 of [RFC9758].
 
-8.1.  Reliability and Consistency
+9.1.  Reliability and Consistency
 
    None of the BPv7 endpoints identified by imc EIDs are guaranteed to
    be reachable at any time, and the identity of the processing entities
@@ -755,7 +888,7 @@ Table of Contents
    Integrity Block (BIB) targeting the bundle's primary block, as
    defined by BPSec [RFC9172], is required for this purpose.
 
-8.2.  Malicious Construction
+9.2.  Malicious Construction
 
    Malicious construction of a conformant imc URI is limited to the
    malicious selection of Allocator Identifiers, Group Numbers, and
@@ -767,7 +900,7 @@ Table of Contents
    bundle should verify its authenticity and validity before operating
    on it in any way.
 
-8.3.  Unauthorized Group Membership
+9.3.  Unauthorized Group Membership
 
    Joining a multicast group is a local registration (Section 5.1), and
    the 'imc' URI scheme itself provides no means of restricting which
@@ -777,7 +910,7 @@ Table of Contents
    should be protected using BPSec [RFC9172], and multicast protocols
    should authenticate group membership information before acting on it.
 
-8.4.  Implicit Group Membership
+9.4.  Implicit Group Membership
 
    This document does not define any multicast group of which all nodes,
    or all nodes supporting the 'imc' scheme, are implicitly members.  In
@@ -799,7 +932,7 @@ Table of Contents
    should instead use explicitly assigned multicast groups whose
    membership and origination can be controlled by the deployment.
 
-8.5.  Private Use imc EIDs
+9.5.  Private Use imc EIDs
 
    Private Use (Section 3.3.3) imc URIs present a risk to the stability
    of deployed BPv7 networks.  If such imc URIs are allowed to propagate
@@ -810,18 +943,18 @@ Table of Contents
    See Section 5.4 for required behaviors to mitigate against this form
    of abuse.
 
-8.6.  Back-End Transcoding
+9.6.  Back-End Transcoding
 
    The limited expressiveness of URIs of the 'imc' scheme effectively
    eliminates the possibility of threats due to errors in back-end
    transcoding.
 
-8.7.  Rare IP Address Formats
+9.7.  Rare IP Address Formats
 
    Not relevant, as IP addresses do not appear anywhere in conformant
    imc URIs.
 
-8.8.  Sensitive Information
+9.8.  Sensitive Information
 
    Because imc URIs are used only to represent the numeric identities of
    multicast groups, the risk of disclosure of sensitive information due
@@ -831,14 +964,23 @@ Table of Contents
    encapsulation [I-D.ietf-dtn-bibe] or by secure convergence-layer
    protocols that do not expose endpoint IDs, such as TCPCLv4 [RFC9174].
 
-8.9.  Semantic Attacks
+9.9.  Semantic Attacks
 
    The simplicity of the 'imc' URI scheme syntax minimizes the
    possibility of misinterpretation of a URI by a human user.
 
-9.  IANA Considerations
+9.10.  EID Patterns
 
-9.1.  'imc' URI Scheme
+   The security considerations of Section 5 of
+   [I-D.ietf-dtn-eid-pattern] apply to imc patterns (Section 8).
+   Because the text forms of imc and IPN patterns differ only in their
+   scheme name, care is needed that a pattern intended to match 'ipn'
+   EIDs is not written with the 'imc' scheme name, or vice versa, as the
+   two match disjoint sets of EIDs.
+
+10.  IANA Considerations
+
+10.1.  'imc' URI Scheme
 
    IANA is requested to register the following URI scheme in the
    "Uniform Resource Identifier (URI) Schemes" registry, using the
@@ -857,18 +999,22 @@ Table of Contents
 
    References:  This document.
 
-9.2.  Bundle Protocol URI Scheme Types
+10.2.  Bundle Protocol URI Scheme Types
 
    IANA is requested to assign the following value in the "Bundle
    Protocol URI Scheme Types" registry within the "Bundle Protocol"
-   registry group:
+   registry group, including the "EID Pattern Reference" column added by
+   Section 6.1 of [I-D.ietf-dtn-eid-pattern]:
 
-    +=======+=============+==========================+================+
-    | Value | Description | BP Utilization Reference | URI Definition |
-    |       |             |                          | Reference      |
-    +=======+=============+==========================+================+
-    | TBD1  | imc         | This document            | This document  |
-    +-------+-------------+--------------------------+----------------+
+   +=======+=============+================+================+===========+
+   | Value | Description | BP Utilization | URI            | EID       |
+   |       |             | Reference      | Definition     | Pattern   |
+   |       |             |                | Reference      | Reference |
+   +=======+=============+================+================+===========+
+   | TBD1  | imc         | This document  | This           | This      |
+   |       |             |                | document       | document, |
+   |       |             |                |                | Section 8 |
+   +-------+-------------+----------------+----------------+-----------+
 
     Table 1: New Value in the Bundle Protocol URI Scheme Types Registry
 
@@ -878,7 +1024,7 @@ Table of Contents
    // the value 3 for 'iac'.  The WG needs to resolve this conflict
    // before IANA assignment.
 
-9.3.  'ipn' Scheme URI Allocator Identifiers
+10.3.  'ipn' Scheme URI Allocator Identifiers
 
    IANA is requested to add this document as a reference to the "'ipn'
    Scheme URI Allocator Identifiers" registry, and to add the following
@@ -887,7 +1033,7 @@ Table of Contents
       Allocator Identifiers in this registry are also used to identify
       the Allocators of Group Numbers for the 'imc' URI scheme.
 
-9.4.  'imc' Scheme URI Default Allocator Group Numbers Registry
+10.4.  'imc' Scheme URI Default Allocator Group Numbers Registry
 
    IANA is requested to create a new registry titled "'imc' Scheme URI
    Default Allocator Group Numbers" in the "Uniform Resource Identifier
@@ -957,7 +1103,7 @@ Table of Contents
    // Numbers" registry proposed by [I-D.cavallini-dtn-iac], which uses
    // the same CBOR-aligned ranges, is to be decided.
 
-9.4.1.  Guidance for Designated Experts
+10.4.1.  Guidance for Designated Experts
 
    Due to the nature of the CBOR encoding of unsigned integers used for
    Group Numbers with BPv7, Group Numbers with a low value are encoded
@@ -978,11 +1124,17 @@ Table of Contents
 
    Designated experts MUST NOT approve the registration of any Group
    Number whose specification requires bundle nodes to be implicitly
-   members of the identified multicast group (see Section 8.4).
+   members of the identified multicast group (see Section 9.4).
 
-10.  References
+11.  References
 
-10.1.  Normative References
+11.1.  Normative References
+
+   [I-D.ietf-dtn-eid-pattern]
+              Sipos, B., "Bundle Protocol Endpoint ID Patterns", Work in
+              Progress, Internet-Draft, draft-ietf-dtn-eid-pattern-11,
+              23 September 2026, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-dtn-eid-pattern-11>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -1032,7 +1184,7 @@ Table of Contents
               Scheme", RFC 9758, DOI 10.17487/RFC9758, May 2025,
               <https://www.rfc-editor.org/rfc/rfc9758>.
 
-10.2.  Informative References
+11.2.  Informative References
 
    [I-D.burleigh-dtn-multicast]
               Burleigh, S., "Bundle Multicast", Work in Progress,
@@ -1059,12 +1211,6 @@ Table of Contents
               ietf-dtn-bibe-00, 7 September 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
               bibe-00>.
-
-   [I-D.ietf-dtn-eid-pattern]
-              Sipos, B., "Bundle Protocol Endpoint ID Patterns", Work in
-              Progress, Internet-Draft, draft-ietf-dtn-eid-pattern-11,
-              23 September 2026, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-dtn-eid-pattern-11>.
 
    [RFC9172]  Birrane, III, E. and K. McKeever, "Bundle Protocol
               Security (BPSec)", RFC 9172, DOI 10.17487/RFC9172, January
