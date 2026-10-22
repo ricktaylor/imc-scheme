@@ -40,6 +40,7 @@ normative:
   RFC8949:
   RFC9171:
   RFC9758:
+  I-D.ietf-dtn-eid-pattern:
 
 informative:
   RFC9172:
@@ -48,7 +49,6 @@ informative:
   I-D.burleigh-dtnrg-imc:
   I-D.cavallini-dtn-iac:
   I-D.ietf-dtn-bibe:
-  I-D.ietf-dtn-eid-pattern:
 
 --- abstract
 
@@ -58,8 +58,8 @@ singleton endpoints, termed multicast groups. The structure of 'imc' URIs
 mirrors that of the 'ipn' URI scheme: each 'imc' URI comprises an Allocator
 Identifier, a Group Number, and a Service Number. This document specifies the
 textual syntax of 'imc' URIs, their interpretation when used as BPv7 Endpoint
-Identifiers, and their CBOR encoding, and requests the associated IANA
-registrations.
+Identifiers, their CBOR encoding, and the corresponding EID Pattern, and
+requests the associated IANA registrations.
 
 
 --- middle
@@ -661,14 +661,150 @@ regarded as carrying information relating to the location or reachability of
 the members of a multicast group, or other addressing or routing concerns.
 
 
-## EID Patterns {#eid-patterns}
+# imc EID Patterns {#patterns}
 
-[^eid-pat]
+{{I-D.ietf-dtn-eid-pattern}} defines EID Patterns, a means of matching sets
+of BPv7 EIDs, and requires that each URI scheme supporting patterns define a
+scheme-specific pattern item, comprising a logical information model, EID
+matching logic, pattern set logic, and both text and CBOR forms
+({{Section 1.1 of I-D.ietf-dtn-eid-pattern}}). This section defines the
+scheme-specific pattern item for the 'imc' URI scheme, termed the "imc
+pattern".
 
-[^eid-pat]: {{I-D.ietf-dtn-eid-pattern}} requires the specification of a new
-    URI scheme to define a scheme-specific EID Pattern if patterns are to be
-    supported for that scheme. Whether, and where, an EID Pattern for 'imc'
-    is defined is to be decided.
+Because the information model of an imc URI is identical to that of an 'ipn'
+URI, being three unsigned integer elements with the same domains, the imc
+pattern is defined by reference to the IPN Scheme Pattern Item defined in
+{{Section 2.4 of I-D.ietf-dtn-eid-pattern}}, termed the "IPN pattern". Except
+as specified in this section, every requirement of that section and its
+subsections applies to the imc pattern, with "imc" substituted for "IPN" or
+"ipn".
+
+
+## Information Model {#pattern-model}
+
+An imc pattern SHALL logically contain exactly three elements corresponding
+to the elements of an imc EID:
+
+* Allocator Identifier, with domain 0 to 2^32-1 inclusive
+
+* Group Number, with domain 0 to 2^32-1 inclusive
+
+* Service Number, with domain 0 to 2^64-1 inclusive
+
+Each element is matched as a specific value, a range, or a wildcard, and is
+subject to the same constraints on ranges, normalization, decoding failure,
+and minimum supported number of intervals as the corresponding element of an
+IPN pattern ({{Section 2.4 of I-D.ietf-dtn-eid-pattern}}), with the Group
+Number taking the place of the Node Number.
+
+
+## EID Matching and Pattern Set Logic {#pattern-matching}
+
+An imc pattern matches an imc EID according to the rules of
+{{Section 2.4.1 of I-D.ietf-dtn-eid-pattern}}, applied to the decoded
+Allocator Identifier, Group Number, and Service Number of the EID. An imc
+pattern never matches an EID of any other scheme; in particular, an imc
+pattern and an IPN pattern with identical elements match disjoint sets of
+EIDs ({{other-schemes}}).
+
+Set logic between imc patterns is as defined for IPN patterns in
+{{Section 2.4.2 of I-D.ietf-dtn-eid-pattern}}.
+
+
+## Text Form {#pattern-text}
+
+The text form of the imc pattern is identical to the three-element text form
+of the IPN pattern defined in {{Section 2.4.3 of I-D.ietf-dtn-eid-pattern}},
+except that the scheme name is "imc" rather than "ipn", and that there is no
+two-element form containing a packed value or the '!' character. It conforms
+to the following ABNF, which reuses the rules ipn-part-pat, ipn-decimal, and
+nbr-delim (and the rules on which they depend) from Figure 1 of
+{{I-D.ietf-dtn-eid-pattern}}:
+
+~~~ abnf
+eid-pattern-item =/ imc-pat-item
+imc-pat-item = "imc:" (imc-pat-ssp3 / imc-pat-ssp2)
+
+; Full pattern for three elements
+imc-pat-ssp3 = ipn-part-pat
+               nbr-delim ipn-part-pat
+               nbr-delim ipn-part-pat
+
+; Accept a single EID in two-element text form
+imc-pat-ssp2 = ipn-decimal nbr-delim ipn-decimal
+~~~
+
+When decoding a two-element imc pattern, the first element SHALL be treated
+as a Group Number assigned by the Default Allocator, and the pattern SHALL be
+treated as the three-element pattern whose Allocator Identifier element is
+the specific value zero (0), consistent with the two-element text form of an
+imc URI ({{text}}). Unlike a two-element IPN pattern, the first element is not
+a packed value, and has the domain of a Group Number.
+
+As for the IPN pattern, the canonical text form of an imc pattern SHALL use
+three elements, and every imc URI is itself a valid imc pattern that matches
+only that imc URI, satisfying {{Section 2.1.1 of I-D.ietf-dtn-eid-pattern}}.
+
+For example, the following imc pattern matches every Service Number of the
+multicast group with Group Number 17 assigned by Allocator 977000:
+
+~~~
+imc:977000.17.*
+~~~
+
+The following imc pattern matches Service Number 1 on every multicast group
+assigned by the Default Allocator from the first Private Use range
+({{iana-groups}}):
+
+~~~
+imc:0.[1-127].1
+~~~
+
+
+## CBOR Form {#pattern-cbor}
+
+The CBOR form of the imc pattern is identical to the CBOR form of the IPN
+pattern defined in {{Section 2.4.4 of I-D.ietf-dtn-eid-pattern}}, including
+the encoding of specific values, ranges, and wildcards, except that the scheme
+number is the 'imc' URI scheme type ({{iana-bp}}) rather than 2. It conforms
+to the following CDDL, which reuses the rule ipn-part-pat (and the rules on
+which it depends) from Figure 2 of {{I-D.ietf-dtn-eid-pattern}}:
+
+~~~ cddl
+$eid-pat-item /= [
+  scheme-num: 3,  ; placeholder pending IANA assignment (TBD1)
+  SSP: imc-pat-ssp
+]
+imc-pat-ssp = [
+  ; This CDDL representation does not restrict to the
+  ; true domain of each element.
+  3*3 ipn-part-pat,
+]
+~~~
+
+As for the IPN pattern, the CBOR form always has three elements; there is no
+two-element CBOR form of an imc pattern.
+
+For example, the imc pattern imc:977000.17.\* would be encoded in CBOR as the
+following 11-octet sequence, using the placeholder value 3 for the 'imc' URI
+scheme type:
+
+~~~ cbor-pretty
+81                   # EID Pattern with one item
+   82                # imc pattern item
+      03             # scheme-num: 3 ('imc' URI scheme)
+      83             # 3-Element imc pattern SSP
+         1A 000EE868 # Allocator Identifier
+         11          # Group Number
+         F5          # Service Number: wildcard (true)
+~~~
+
+[^pattern-dep]
+
+[^pattern-dep]: This section depends normatively on
+    {{I-D.ietf-dtn-eid-pattern}}. If the WG prefers not to create that
+    dependency, this section could instead be moved to that document, or
+    to a separate document.
 
 
 # Security Considerations {#security}
@@ -773,6 +909,15 @@ The simplicity of the 'imc' URI scheme syntax minimizes the possibility of
 misinterpretation of a URI by a human user.
 
 
+## EID Patterns
+
+The security considerations of {{Section 5 of I-D.ietf-dtn-eid-pattern}}
+apply to imc patterns ({{patterns}}). Because the text forms of imc and IPN
+patterns differ only in their scheme name, care is needed that a pattern
+intended to match 'ipn' EIDs is not written with the 'imc' scheme name, or
+vice versa, as the two match disjoint sets of EIDs.
+
+
 # IANA Considerations {#iana}
 
 ## 'imc' URI Scheme {#iana-uri}
@@ -804,11 +949,13 @@ References:
 ## Bundle Protocol URI Scheme Types {#iana-bp}
 
 IANA is requested to assign the following value in the "Bundle Protocol URI
-Scheme Types" registry within the "Bundle Protocol" registry group:
+Scheme Types" registry within the "Bundle Protocol" registry group, including
+the "EID Pattern Reference" column added by
+{{Section 6.1 of I-D.ietf-dtn-eid-pattern}}:
 
-| Value | Description | BP Utilization Reference | URI Definition Reference |
-|-------|-------------|--------------------------|--------------------------|
-| TBD1  | imc         | This document            | This document            |
+| Value | Description | BP Utilization Reference | URI Definition Reference | EID Pattern Reference |
+|-------|-------------|--------------------------|--------------------------|-----------------------|
+| TBD1  | imc         | This document            | This document            | This document, {{patterns}} |
 {: title="New Value in the Bundle Protocol URI Scheme Types Registry"}
 
 [^tbd1]
