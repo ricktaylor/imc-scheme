@@ -4,16 +4,25 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>TODO - Your title</title>
+<title>The 'imc' URI Scheme for Bundle Protocol Multicast</title>
 <meta content="Rick Taylor" name="author">
 <meta content="
-       TODO Abstract 
+       This document defines the 'imc' URI scheme, a concise integer-based scheme
+for identifying Bundle Protocol Version 7 (BPv7) endpoints that are not
+singleton endpoints, termed multicast groups. The structure of 'imc' URIs
+mirrors that of the 'ipn' URI scheme: each 'imc' URI comprises an Allocator
+Identifier, a Group Number, and a Service Number. This document specifies the
+textual syntax of 'imc' URIs, their interpretation when used as BPv7 Endpoint
+Identifiers, and their CBOR encoding, and requests the associated IANA
+registrations. 
     " name="description">
 <meta content="xml2rfc 3.34.1" name="generator">
-<meta content="next generation" name="keyword">
-<meta content="unicorn" name="keyword">
-<meta content="AI-native" name="keyword">
-<meta content="draft-todo-yourname-protocol-latest" name="ietf.draft">
+<meta content="DTN" name="keyword">
+<meta content="Bundle Protocol" name="keyword">
+<meta content="BPv7" name="keyword">
+<meta content="multicast" name="keyword">
+<meta content="URI scheme" name="keyword">
+<meta content="draft-taylor-dtn-imc-scheme-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.34.1
     Python 3.14.8
@@ -1042,12 +1051,12 @@ svg {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">TODO - Abbreviation</td>
+<td class="center">imc URI Scheme</td>
 <td class="right">October 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Taylor</td>
-<td class="center">Expires 24 April 2027</td>
+<td class="center">Expires 25 April 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1055,17 +1064,17 @@ svg {
 <div id="internal-metadata" class="document-information">
 <dl id="identifiers">
 <dt class="label-workgroup">Workgroup:</dt>
-<dd class="workgroup">WG Working Group</dd>
+<dd class="workgroup">Delay/Disruption Tolerant Networking</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-todo-yourname-protocol-latest</dd>
+<dd class="internet-draft">draft-taylor-dtn-imc-scheme-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-10-21" class="published">21 October 2026</time>
+<time datetime="2026-10-22" class="published">22 October 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
-<dd class="intended-status">Informational</dd>
+<dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-04-24">24 April 2027</time></dd>
+<dd class="expires"><time datetime="2027-04-25">25 April 2027</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1075,10 +1084,17 @@ svg {
 </dd>
 </dl>
 </div>
-<h1 id="title">TODO - Your title</h1>
+<h1 id="title">The 'imc' URI Scheme for Bundle Protocol Multicast</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document defines the 'imc' URI scheme, a concise integer-based scheme
+for identifying Bundle Protocol Version 7 (BPv7) endpoints that are not
+singleton endpoints, termed multicast groups. The structure of 'imc' URIs
+mirrors that of the 'ipn' URI scheme: each 'imc' URI comprises an Allocator
+Identifier, a Group Number, and a Service Number. This document specifies the
+textual syntax of 'imc' URIs, their interpretation when used as BPv7 Endpoint
+Identifiers, and their CBOR encoding, and requests the associated IANA
+registrations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1086,14 +1102,15 @@ svg {
       </h2>
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">
-        The latest revision of this draft can be found at <span><a href="https://example.com/LATEST">https://example.com/LATEST</a></span>.
-        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-todo-yourname-protocol/">https://datatracker.ietf.org/doc/draft-todo-yourname-protocol/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+        The latest revision of this draft can be found at <span><a href="https://ricktaylor.github.io/imc-scheme/draft-taylor-dtn-imc-scheme.html">https://ricktaylor.github.io/imc-scheme/draft-taylor-dtn-imc-scheme.html</a></span>.
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-taylor-dtn-imc-scheme/">https://datatracker.ietf.org/doc/draft-taylor-dtn-imc-scheme/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 <p id="section-note.1-3">
         Discussion of this document takes place on the
-        WG Working Group mailing list (<span><a href="mailto:WG@example.com">mailto:WG@example.com</a></span>),
-        which is archived at <span><a href="https://example.com/WG">https://example.com/WG</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+        Delay/Disruption Tolerant Networking Working Group mailing list (<span><a href="mailto:dtn@ietf.org">mailto:dtn@ietf.org</a></span>),
+        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/dtn/">https://mailarchive.ietf.org/arch/browse/dtn/</a></span>.
+        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/dtn/">https://www.ietf.org/mailman/listinfo/dtn/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 <p id="section-note.1-4">Source for this draft and an issue tracker can be found at
-        <span><a href="https://github.com/USER/REPO">https://github.com/USER/REPO</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
+        <span><a href="https://github.com/ricktaylor/imc-scheme">https://github.com/ricktaylor/imc-scheme</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1114,7 +1131,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 24 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 25 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1150,19 +1167,198 @@ svg {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-core-concepts" class="internal xref">Core Concepts</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-allocator-identifiers" class="internal xref">Allocator Identifiers</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-group-numbers" class="internal xref">Group Numbers</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.1">
+                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="auto internal xref">3.2.1</a>.  <a href="#name-fully-qualified-group-numbe" class="internal xref">Fully Qualified Group Numbers</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-special-group-numbers" class="internal xref">Special Group Numbers</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
+                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-the-zero-group-number" class="internal xref">The Zero Group Number</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2">
+                    <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-the-maximum-group-number" class="internal xref">The Maximum Group Number</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.3">
+                    <p id="section-toc.1-1.3.2.3.2.3.1"><a href="#section-3.3.3" class="auto internal xref">3.3.3</a>.  <a href="#name-private-use-group-numbers" class="internal xref">Private Use Group Numbers</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-service-numbers" class="internal xref">Service Numbers</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-the-null-imc-uri" class="internal xref">The Null imc URI</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-textual-representation-of-i" class="internal xref">Textual Representation of imc URIs</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-imc-uri-scheme-text-syntax" class="internal xref">'imc' URI Scheme Text Syntax</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-usage-of-imc-uris-with-bpv7" class="internal xref">Usage of imc URIs with BPv7</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-multicast-group-membership" class="internal xref">Multicast Group Membership</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-the-null-multicast-group" class="internal xref">The Null Multicast Group</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-node-ids-and-bundle-sources" class="internal xref">Node IDs and Bundle Sources</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-private-use-imc-eids" class="internal xref">Private Use imc EIDs</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
+                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-administrative-endpoints" class="internal xref">Administrative Endpoints</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6">
+                <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-well-known-service-numbers" class="internal xref">Well-Known Service Numbers</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-cbor-representation-of-imc-" class="internal xref">CBOR Representation of imc URIs with BPv7</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-imc-eid-cbor-encoding" class="internal xref">imc EID CBOR Encoding</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-imc-uri-scheme-cbor-syntax" class="internal xref">'imc' URI Scheme CBOR Syntax</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-imc-eid-matching" class="internal xref">imc EID Matching</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-special-considerations" class="internal xref">Special Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-relationship-to-other-uri-s" class="internal xref">Relationship to Other URI Schemes</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-late-binding" class="internal xref">Late Binding</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-eid-patterns" class="internal xref">EID Patterns</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-reliability-and-consistency" class="internal xref">Reliability and Consistency</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-malicious-construction" class="internal xref">Malicious Construction</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-unauthorized-group-membersh" class="internal xref">Unauthorized Group Membership</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-implicit-group-membership" class="internal xref">Implicit Group Membership</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="auto internal xref">8.5</a>.  <a href="#name-private-use-imc-eids-2" class="internal xref">Private Use imc EIDs</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.6">
+                <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="auto internal xref">8.6</a>.  <a href="#name-back-end-transcoding" class="internal xref">Back-End Transcoding</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.7">
+                <p id="section-toc.1-1.8.2.7.1"><a href="#section-8.7" class="auto internal xref">8.7</a>.  <a href="#name-rare-ip-address-formats" class="internal xref">Rare IP Address Formats</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.8">
+                <p id="section-toc.1-1.8.2.8.1"><a href="#section-8.8" class="auto internal xref">8.8</a>.  <a href="#name-sensitive-information" class="internal xref">Sensitive Information</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.9">
+                <p id="section-toc.1-1.8.2.9.1"><a href="#section-8.9" class="auto internal xref">8.9</a>.  <a href="#name-semantic-attacks" class="internal xref">Semantic Attacks</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-imc-uri-scheme" class="internal xref">'imc' URI Scheme</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-bundle-protocol-uri-scheme-" class="internal xref">Bundle Protocol URI Scheme Types</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-ipn-scheme-uri-allocator-id" class="internal xref">'ipn' Scheme URI Allocator Identifiers</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
+                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-imc-scheme-uri-default-allo" class="internal xref">'imc' Scheme URI Default Allocator Group Numbers Registry</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4.2.1">
+                    <p id="section-toc.1-1.9.2.4.2.1.1"><a href="#section-9.4.1" class="auto internal xref">9.4.1</a>.  <a href="#name-guidance-for-designated-exp" class="internal xref">Guidance for Designated Experts</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-imc-uri-scheme-text-represe" class="internal xref">'imc' URI Scheme Text Representation Examples</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
+                <p id="section-toc.1-1.11.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-using-the-default-allocator" class="internal xref">Using the Default Allocator</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
+                <p id="section-toc.1-1.11.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-using-a-non-default-allocat" class="internal xref">Using a Non-Default Allocator</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3">
+                <p id="section-toc.1-1.11.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-the-null-imc-uri-2" class="internal xref">The Null imc URI</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-imc-uri-scheme-cbor-encodin" class="internal xref">'imc' URI Scheme CBOR Encoding Examples</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-B.1" class="auto internal xref">B.1</a>.  <a href="#name-using-the-default-allocator-2" class="internal xref">Using the Default Allocator</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#appendix-B.2" class="auto internal xref">B.2</a>.  <a href="#name-using-a-non-default-allocato" class="internal xref">Using a Non-Default Allocator</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
+                <p id="section-toc.1-1.12.2.3.1"><a href="#appendix-B.3" class="auto internal xref">B.3</a>.  <a href="#name-the-null-imc-eid" class="internal xref">The Null imc EID</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1173,7 +1369,35 @@ svg {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">TODO Introduction<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">The Bundle Protocol Version 7 (BPv7) <span>[<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> identifies the destination
+of every bundle by an Endpoint Identifier (EID), which is a URI. A bundle
+endpoint is a set of zero or more bundle nodes, and a node becomes a member of
+an endpoint by registering in it. Although BPv7 permits endpoints with any
+number of members, the 'ipn' URI scheme <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>, the scheme most commonly
+used in deployed BPv7 networks, only identifies singleton endpoints. There is
+no equivalently concise scheme for identifying endpoints that may have many
+members.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document defines the 'imc' URI scheme for this purpose. An 'imc' URI
+identifies an endpoint that is never a singleton endpoint; such an endpoint
+is termed a "multicast group". The name 'imc' is derived from
+"InterPlanetary MultiCast", in the same way that 'ipn' was derived from
+"InterPlanetary Network", but like 'ipn' the term is now used as a
+non-acronymous name.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">The 'imc' scheme was first proposed in <span>[<a href="#I-D.burleigh-dtnrg-imc" class="cite xref">I-D.burleigh-dtnrg-imc</a>]</span> for use
+with Compressed Bundle Header Encoding and the experimental Bundle Protocol
+version 6, and was subsequently specified for BPv7 as part of the Bundle
+Multicast protocol <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span>. This document separates the
+definition of the 'imc' scheme from that protocol, so that the scheme can be
+standardized independently of any particular multicast forwarding mechanism,
+and aligns its structure, terminology, and encodings with the 'ipn' URI scheme
+as updated by <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Like the 'ipn' URI scheme, the 'imc' URI scheme defines identifiers only. An
+'imc' URI does not carry any topological information describing how to route
+bundles to the members of the identified multicast group. The procedures by
+which bundles destined for multicast groups are forwarded, and by which
+information about group membership is distributed, are out of scope for this
+document; one such set of procedures is defined in
+<span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1185,51 +1409,1149 @@ svg {
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">For the remainder of this document, the term "imc URI" is used to refer to a
+URI that uses the 'imc' URI scheme, and the term "imc EID" is used to refer to
+an imc URI that is used as a BPv7 EID.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">The term "multicast group" refers to a BPv7 endpoint identified by an imc EID.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">The terms "Allocator", "Allocator Identifier", "Default Allocator", "Node
+Number", and "Service Number" are used as defined in <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>.<a href="#section-2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="core">
+<section id="section-3">
+      <h2 id="name-core-concepts">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-core-concepts" class="section-name selfRef">Core Concepts</a>
+      </h2>
+<p id="section-3-1">Every imc URI, no matter whether it is expressed with a textual
+representation or a binary encoding, <span class="bcp14">MUST</span> be considered as a tuple of the
+following three components:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-2.1">
+          <p id="section-3-2.1.1">The Allocator Identifier<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-2.2">
+          <p id="section-3-2.2.1">The Group Number<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-2.3">
+          <p id="section-3-2.3.1">The Service Number<a href="#section-3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-3-3">The Allocator Identifier indicates the entity responsible for assigning Group
+Numbers, maintaining uniqueness whilst avoiding the need for a single registry
+for all assigned Group Numbers. See <a href="#allocators" class="auto internal xref">Section 3.1</a>.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">The Group Number identifies a multicast group in the context of an Allocator.
+See <a href="#group-numbers" class="auto internal xref">Section 3.2</a>.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The Service Number distinguishes between services operating on each member of
+a multicast group. See <a href="#service-numbers" class="auto internal xref">Section 3.4</a>.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">The combination of the Allocator Identifier and the Group Number uniquely
+identifies a multicast group. See <a href="#fqgn" class="auto internal xref">Section 3.2.1</a>.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<div id="allocators">
+<section id="section-3.1">
+        <h3 id="name-allocator-identifiers">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-allocator-identifiers" class="section-name selfRef">Allocator Identifiers</a>
+        </h3>
+<p id="section-3.1-1">The Allocator Identifier of an imc URI has the same structure, purpose, and
+range as the Allocator Identifier of an 'ipn' URI defined in
+<span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>, and is drawn from the same "'ipn' Scheme URI
+Allocator Identifiers" registry. An Allocator Identifier is an unsigned
+integer in the range 0 to 2^32-1.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">An Allocator that has been assigned an Allocator Identifier is authorized to
+assign Group Numbers for use with the 'imc' URI scheme, in addition to Node
+Numbers for use with the 'ipn' URI scheme. Each Allocator assigns Group
+Numbers according to its own policies. Other than ensuring that any Group
+Numbers it assigns are unique amongst all Group Numbers it assigns, an
+Allocator does not need to coordinate its assignments with other Allocators.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">Group Numbers and Node Numbers are distinct namespaces. An Allocator <span class="bcp14">MAY</span>
+assign the same numeric value as both a Group Number and a Node Number, and
+there is no relationship between a multicast group and a node that happen to
+share the same Allocator Identifier and number.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">In any case where an encoded imc URI does not explicitly include an Allocator
+Identifier, an implementation <span class="bcp14">MUST</span> assume that the Group Number has been
+assigned by the Default Allocator (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.2.2" class="relref">Section 3.2.2</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>).<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">A new IANA registry, "'imc' Scheme URI Default Allocator Group Numbers", is
+defined to control the assignment of Group Number values by the Default
+Allocator; see <a href="#iana-groups" class="auto internal xref">Section 9.4</a>. This registry reserves some values as defined
+in <a href="#special-groups" class="auto internal xref">Section 3.3</a> below.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-6">If a system does not require interoperable deployment of 'imc' scheme URIs,
+then the Private Use Group Numbers (<a href="#private-groups" class="auto internal xref">Section 3.3.3</a>), reserved by the
+Default Allocator for this purpose, are to be used.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="group-numbers">
+<section id="section-3.2">
+        <h3 id="name-group-numbers">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-group-numbers" class="section-name selfRef">Group Numbers</a>
+        </h3>
+<p id="section-3.2-1">A Group Number identifies a multicast group in the context of an Allocator. A
+Group Number is an unsigned integer. A single Group Number assigned by a
+single Allocator <span class="bcp14">MUST</span> refer to a single multicast group.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">All Group Number assignments, by all Allocators, <span class="bcp14">MUST</span> be in the range 0 to
+2^32-1.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">It is <span class="bcp14">RECOMMENDED</span> that Group Number zero (0) not be assigned by an Allocator,
+to avoid confusion with the Null imc URI (<a href="#null-imc" class="auto internal xref">Section 3.5</a>).<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<div id="fqgn">
+<section id="section-3.2.1">
+          <h4 id="name-fully-qualified-group-numbe">
+<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-fully-qualified-group-numbe" class="section-name selfRef">Fully Qualified Group Numbers</a>
+          </h4>
+<p id="section-3.2.1-1">The combination of the Allocator Identifier and the Group Number of an imc
+URI uniquely identifies a particular multicast group, and is termed the "Fully
+Qualified Group Number" (FQGN), by analogy with the Fully Qualified Node
+Number of an 'ipn' URI (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.3.1" class="relref">Section 3.3.1</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>).<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-2">In the examples in this document, FQGNs are written as (Allocator Identifier,
+Group Number). For example, (977000,17) is the FQGN for a multicast group
+assigned Group Number 17 by an Allocator with Allocator Identifier 977000.<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-3">An FQGN is a pair of identifiers, not a single number. Unlike the FQNN of an
+'ipn' URI, this document defines no representation of an FQGN as a single
+packed integer, in either the text or the CBOR representation of imc URIs.<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="special-groups">
+<section id="section-3.3">
+        <h3 id="name-special-group-numbers">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-special-group-numbers" class="section-name selfRef">Special Group Numbers</a>
+        </h3>
+<p id="section-3.3-1">Some special-case Group Numbers are defined by the Default Allocator; see
+<a href="#iana-groups" class="auto internal xref">Section 9.4</a>.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<div id="zero-group">
+<section id="section-3.3.1">
+          <h4 id="name-the-zero-group-number">
+<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-the-zero-group-number" class="section-name selfRef">The Zero Group Number</a>
+          </h4>
+<p id="section-3.3.1-1">The Default Allocator assigns the use of Group Number zero (0) solely for
+identifying the Null imc URI (<a href="#null-imc" class="auto internal xref">Section 3.5</a>).<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-2">This means that any imc URI with a zero (0) Allocator Identifier and a zero
+(0) Group Number, but a non-zero Service Number component, is invalid. Such
+imc URIs <span class="bcp14">MUST NOT</span> be composed, and processors of such imc URIs <span class="bcp14">MUST</span> consider
+them as the Null imc URI.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-3"><span class="cref" id="grp0">Appendix A of <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> suggests that imc:0.0
+could identify an implicit multicast group of which every IMC-capable node
+is a member, to be used for distributing group membership information,
+and ION uses imc:0.0 in this way today. This document instead defines
+imc:0.0 as the null multicast group, which never has any members (see
+<a href="#null-group" class="auto internal xref">Section 5.2</a> and <a href="#sec-implicit" class="auto internal xref">Section 8.4</a>), so that usage is not interoperable
+with this specification.</span><a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="max-group">
+<section id="section-3.3.2">
+          <h4 id="name-the-maximum-group-number">
+<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-the-maximum-group-number" class="section-name selfRef">The Maximum Group Number</a>
+          </h4>
+<p id="section-3.3.2-1">The Default Allocator reserves Group Number 2^32-1 (0xFFFFFFFF) as invalid.
+This Group Number <span class="bcp14">MUST NOT</span> be assigned, and any imc URI with a zero (0)
+Allocator Identifier and a Group Number of 2^32-1 is invalid and <span class="bcp14">MUST NOT</span> be
+composed.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-2">This reservation exists solely to guard against confusion with LocalNode ipn
+URIs (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.4.2" class="relref">Section 3.4.2</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>), which use the same Node Number. For
+example, if this Group Number were assignable, the mistyped URI
+imc:4294967295.7, intended as the LocalNode ipn URI ipn:4294967295.7, could
+silently identify a real multicast group. Reserving it ensures that such an
+error causes the bundle to be discarded rather than delivered to unintended
+recipients.<a href="#section-3.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-3">The reservation does not give imc URIs any LocalNode semantics, and the
+'imc' URI scheme has no equivalent of LocalNode ipn URIs. Services do not
+receive bundles; they receive the application data units (ADUs) of bundles
+delivered to them by their local bundle protocol agent
+(<span><a href="https://rfc-editor.org/rfc/rfc9171#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>). An imc URI identifying "the local services"
+would therefore not identify anything to which a bundle could meaningfully be
+sent.<a href="#section-3.3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-4">A bundle node that receives or originates a bundle whose destination is an
+imc EID with a zero (0) Allocator Identifier and a Group Number of 2^32-1
+<span class="bcp14">MUST NOT</span> forward or deliver it, and <span class="bcp14">MUST</span> delete it
+(<span><a href="https://rfc-editor.org/rfc/rfc9171#section-5.10" class="relref">Section 5.10</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>). If a bundle deletion status report is
+requested, the reason code "Destination endpoint ID unavailable"
+(<span><a href="https://rfc-editor.org/rfc/rfc9171#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>) <span class="bcp14">SHOULD</span> be used.<a href="#section-3.3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-5">This reservation applies only to the Default Allocator. Other Allocators <span class="bcp14">MAY</span>
+assign Group Number 2^32-1 according to their own policies.<a href="#section-3.3.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="private-groups">
+<section id="section-3.3.3">
+          <h4 id="name-private-use-group-numbers">
+<a href="#section-3.3.3" class="section-number selfRef">3.3.3. </a><a href="#name-private-use-group-numbers" class="section-name selfRef">Private Use Group Numbers</a>
+          </h4>
+<p id="section-3.3.3-1">The Default Allocator reserves several ranges of Group Numbers for Private
+Use, as defined in <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. These ranges are interleaved with ranges of
+registered Group Numbers, so that Private Use Group Numbers are available at
+each length of CBOR encoding; see <a href="#iana-groups" class="auto internal xref">Section 9.4</a>.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.3-2">Any imc URI with a zero (0) Allocator Identifier and a Group Number reserved
+for Private Use is not guaranteed to be unique beyond a single administrative
+domain. An administrative domain, as used here, is defined as the set of
+nodes that share a unique allocation of FQGNs from the Private Use ranges.<a href="#section-3.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3.3-3">Because of this lack of uniqueness, any implementation of a protocol using
+imc URIs that resides on the border between administrative domains <span class="bcp14">MUST</span> have
+suitable mechanisms in place to prevent protocol units using such Private Use
+Group Numbers from crossing between different administrative domains.<a href="#section-3.3.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="service-numbers">
+<section id="section-3.4">
+        <h3 id="name-service-numbers">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-service-numbers" class="section-name selfRef">Service Numbers</a>
+        </h3>
+<p id="section-3.4-1">A Service Number is an unsigned integer that identifies a particular service
+operating on a node, as defined in <span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.5" class="relref">Section 3.5</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>. In an imc URI,
+the Service Number identifies the service on each member of the multicast
+group to which a bundle destined for that group is to be delivered.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="null-imc">
+<section id="section-3.5">
+        <h3 id="name-the-null-imc-uri">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-the-null-imc-uri" class="section-name selfRef">The Null imc URI</a>
+        </h3>
+<p id="section-3.5-1">There is value in defining a unique imc URI that identifies a multicast group
+that can never have any members. This imc URI is termed the "Null imc URI" and
+has all three components (the Allocator Identifier, Group Number, and Service
+Number) set to the value zero (0). The multicast group identified by the Null
+imc URI is termed the "null multicast group". No node is ever a member of the
+null multicast group, and any destination identified by the Null imc URI is
+therefore by definition unreachable.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">In particular, the Null imc URI <span class="bcp14">MUST NOT</span> be interpreted as identifying a
+multicast group of which all nodes, or all nodes supporting the 'imc' scheme,
+are implicitly members. See <a href="#sec-implicit" class="auto internal xref">Section 8.4</a>.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="text">
+<section id="section-4">
+      <h2 id="name-textual-representation-of-i">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-textual-representation-of-i" class="section-name selfRef">Textual Representation of imc URIs</a>
+      </h2>
+<p id="section-4-1">All 'imc' scheme URIs comply with <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> and are therefore represented
+by a scheme identifier and a scheme-specific part. The scheme identifier is
+imc, and the scheme-specific parts are represented as a sequence of numeric
+components separated with the '.' character. A formal definition is provided
+below (see <a href="#text-syntax" class="auto internal xref">Section 4.1</a>) and can be informally considered as:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4-2">
+<pre>
+imc:[&lt;allocator-identifier&gt;.]&lt;group-number&gt;.&lt;service-number&gt;
+</pre><a href="#section-4-2" class="pilcrow">¶</a>
+</div>
+<p id="section-4-3">To keep the text representation concise, the following rules apply:<a href="#section-4-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4-4.1">
+          <p id="section-4-4.1.1">All leading '0' characters <span class="bcp14">MUST</span> be omitted. A single '0' is valid.<a href="#section-4-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-4-4.2">
+          <p id="section-4-4.2.1">If the Allocator Identifier is zero (0), then the
+&lt;allocator-identifier&gt; and '.' <span class="bcp14">MAY</span> be omitted.<a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-4-5">Examples of the textual representation of imc URIs can be found in
+<a href="#text-examples" class="auto internal xref">Appendix A</a>.<a href="#section-4-5" class="pilcrow">¶</a></p>
+<div id="text-syntax">
+<section id="section-4.1">
+        <h3 id="name-imc-uri-scheme-text-syntax">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-imc-uri-scheme-text-syntax" class="section-name selfRef">'imc' URI Scheme Text Syntax</a>
+        </h3>
+<p id="section-4.1-1">The text syntax of an imc URI <span class="bcp14">MUST</span> comply with the following ABNF syntax from
+<span>[<a href="#RFC5234" class="cite xref">RFC5234</a>]</span> and repeats the core ABNF syntax rule for DIGIT defined by that
+specification:<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<div class="lang-abnf sourcecode" id="section-4.1-2">
+<pre>
+imc-uri = "imc:" imc-hier-part
+
+imc-hier-part = group-part "." service-number
+
+group-part = [allocator-identifier "."] group-number
+
+allocator-identifier = number
+
+group-number = number
+
+service-number = number
+
+number = "0" / non-zero-number
+
+non-zero-number = (%x31-39 *DIGIT)
+
+DIGIT = %x30-39
+</pre><a href="#section-4.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1-3">None of the reserved characters defined in the generic URI syntax are used as
+delimiters within URIs of the 'imc' scheme, other than '.'.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4"><span class="cref" id="text-fqgn">The ABNF in <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> names the
+single-number form of the group label "fqgn", implying that it carries
+the 64-bit packed FQGN. This document instead follows Section 4 of
+<span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>: the single-number form is a Group Number assigned by the
+Default Allocator. No packed FQGN is defined (<a href="#fqgn" class="auto internal xref">Section 3.2.1</a>).</span><a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1-5">Unlike the 'ipn' URI scheme, the 'imc' URI scheme has no '!' form, because
+it has no equivalent of LocalNode ipn URIs; see <a href="#max-group" class="auto internal xref">Section 3.3.2</a>.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="bpv7">
+<section id="section-5">
+      <h2 id="name-usage-of-imc-uris-with-bpv7">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-usage-of-imc-uris-with-bpv7" class="section-name selfRef">Usage of imc URIs with BPv7</a>
+      </h2>
+<p id="section-5-1">This section identifies the behavior and interpretation of 'imc' scheme URIs
+that <span class="bcp14">MUST</span> be followed when using this URI scheme to represent EIDs in BPv7.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">This document does not define the use of imc URIs with the experimental
+Bundle Protocol version 6.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<div id="membership">
+<section id="section-5.1">
+        <h3 id="name-multicast-group-membership">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-multicast-group-membership" class="section-name selfRef">Multicast Group Membership</a>
+        </h3>
+<p id="section-5.1-1">An imc EID <span class="bcp14">MUST NOT</span> identify a singleton endpoint. The multicast group
+identified by an imc EID may at any time have zero, one, or many members.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">A bundle node joins a multicast group by registering in the endpoint
+identified by the imc EID of that group, and leaves the group by
+unregistering from that endpoint. A single bundle node <span class="bcp14">MAY</span> be a member of any
+number of multicast groups.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">As noted in <span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>, registrations are local, and BPv7 does
+not include a mechanism for distributing information about registrations.
+Mechanisms by which information about the membership of multicast groups is
+distributed are out of scope for this document.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="null-group">
+<section id="section-5.2">
+        <h3 id="name-the-null-multicast-group">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-the-null-multicast-group" class="section-name selfRef">The Null Multicast Group</a>
+        </h3>
+<p id="section-5.2-1">When the Null imc URI (<a href="#null-imc" class="auto internal xref">Section 3.5</a>) is used as a BPv7 EID, it is termed the
+"Null imc EID", and the endpoint it identifies is the null multicast group.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">The null multicast group never has any members. A bundle node <span class="bcp14">MUST NOT</span>
+register in the null multicast group, and any request to do so <span class="bcp14">MUST</span> be
+refused.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">Because the null multicast group has no members, a bundle destined for the
+Null imc EID can never be delivered. Such a bundle <span class="bcp14">SHOULD NOT</span> be created, and
+a bundle node that receives or originates such a bundle <span class="bcp14">MUST NOT</span> forward it to
+any other node. If such a bundle is deleted and a bundle deletion status
+report is requested, the reason code "Destination endpoint ID unavailable"
+(<span><a href="https://rfc-editor.org/rfc/rfc9171#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>) <span class="bcp14">SHOULD</span> be used.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">The null multicast group is distinct from the BPv7 null endpoint ("dtn:none",
+<span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.2.5.1.1" class="relref">Section 4.2.5.1.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>). Although both identify endpoints that never
+have any members, the Null imc EID <span class="bcp14">MUST NOT</span> be used in place of the null
+endpoint ID, for example to indicate an anonymous bundle source or that no
+status reports are to be sent. Equally, the null endpoint ID and the Null ipn
+EID (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-5.2" class="relref">Section 5.2</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>) are not imc EIDs.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="node-ids">
+<section id="section-5.3">
+        <h3 id="name-node-ids-and-bundle-sources">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-node-ids-and-bundle-sources" class="section-name selfRef">Node IDs and Bundle Sources</a>
+        </h3>
+<p id="section-5.3-1"><span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.2.5.2" class="relref">Section 4.2.5.2</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> requires that a Node ID be the EID of a
+singleton endpoint. Because no imc EID identifies a singleton endpoint, an imc
+EID <span class="bcp14">MUST NOT</span> be used as a Node ID.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">As a consequence, an imc EID <span class="bcp14">MUST NOT</span> be used as the source node ID of a
+bundle (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-5.2" class="relref">Section 5.2</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>), as the node ID carried in a Previous Node
+Block (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.4.1" class="relref">Section 4.4.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>), or as the security source of a Bundle
+Protocol Security (BPSec) <span>[<a href="#RFC9172" class="cite xref">RFC9172</a>]</span> security block.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="private-eids">
+<section id="section-5.4">
+        <h3 id="name-private-use-imc-eids">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-private-use-imc-eids" class="section-name selfRef">Private Use imc EIDs</a>
+        </h3>
+<p id="section-5.4-1">Bundles destined for EIDs that use an imc URI with an FQGN (<a href="#fqgn" class="auto internal xref">Section 3.2.1</a>) that is
+within the Private Use ranges of the Default Allocator (<a href="#private-groups" class="auto internal xref">Section 3.3.3</a>) are
+not universally unique; therefore, they are only valid within the scope of the
+current administrative domain. This means that any bundle using a Private Use
+imc EID as a bundle destination <span class="bcp14">MUST NOT</span> be allowed to cross administrative
+domains. All implementations that could be deployed as a gateway between
+administrative domains <span class="bcp14">MUST</span> be sufficiently configurable to ensure that this
+is enforced, and operators <span class="bcp14">MUST</span> ensure correct configuration.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">Private Use imc EIDs <span class="bcp14">MUST NOT</span> be present in any other part of a bundle that is
+destined for another administrative domain when the lack of uniqueness
+prevents correct operation.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="admin">
+<section id="section-5.5">
+        <h3 id="name-administrative-endpoints">
+<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-administrative-endpoints" class="section-name selfRef">Administrative Endpoints</a>
+        </h3>
+<p id="section-5.5-1">The Administrative Endpoint of a node is a singleton endpoint
+(<span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>). Therefore no imc EID identifies the
+Administrative Endpoint of any node, regardless of its Service Number.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<p id="section-5.5-2"><span class="cref" id="svc0">The meaning, if any, of Service Number zero (0) in an imc EID needs
+to be decided. Appendix A of <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> uses
+imc:0.0 to convey administrative information about group membership,
+which this document does not permit (see <a href="#null-group" class="auto internal xref">Section 5.2</a>).</span><a href="#section-5.5-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="well-known">
+<section id="section-5.6">
+        <h3 id="name-well-known-service-numbers">
+<a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-well-known-service-numbers" class="section-name selfRef">Well-Known Service Numbers</a>
+        </h3>
+<p id="section-5.6-1">The Service Number of an imc EID is interpreted in the same way as the
+Service Number of an 'ipn' EID. In particular, the well-known Service Numbers
+registered in the "'ipn' Scheme URI Well-Known Service Numbers for BPv7"
+registry (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>) identify the same services when they
+appear in imc EIDs.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
+<p id="section-5.6-2"><span class="cref" id="svc-reg"><span>[<a href="#I-D.cavallini-dtn-iac" class="cite xref">I-D.cavallini-dtn-iac</a>]</span> requests that the registries shared by
+'ipn' and 'iac' be renamed. The WG needs to coordinate how these shared
+registries are named and referenced across 'ipn', 'imc', and 'iac'.</span><a href="#section-5.6-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="cbor">
+<section id="section-6">
+      <h2 id="name-cbor-representation-of-imc-">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-cbor-representation-of-imc-" class="section-name selfRef">CBOR Representation of imc URIs with BPv7</a>
+      </h2>
+<p id="section-6-1"><span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.2.5.1" class="relref">Section 4.2.5.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> requires that any URI scheme used to represent
+BPv7 EIDs <span class="bcp14">MUST</span> define how the scheme-specific part of the URI scheme is
+encoded with Concise Binary Object Representation (CBOR) <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>. To meet
+this requirement, this section describes the CBOR encoding of imc EIDs. The formal definition of the CBOR representation is
+specified in <a href="#cbor-syntax" class="auto internal xref">Section 6.2</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">The examples in this section use the value 3 as the BPv7 URI scheme type of
+the 'imc' scheme. This value is a placeholder pending assignment by IANA; see
+<a href="#iana-bp" class="auto internal xref">Section 9.2</a>.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<div id="cbor-encoding">
+<section id="section-6.1">
+        <h3 id="name-imc-eid-cbor-encoding">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-imc-eid-cbor-encoding" class="section-name selfRef">imc EID CBOR Encoding</a>
+        </h3>
+<p id="section-6.1-1">When encoding imc EIDs for use with BPv7, the scheme-specific part of an imc
+URI <span class="bcp14">MUST</span> be represented as a CBOR array of exactly three (3) elements. Each
+element of the array <span class="bcp14">MUST</span> be encoded as a single CBOR unsigned integer, and:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.1-2.1">
+            <p id="section-6.1-2.1.1">the first element of the array is the Allocator Identifier,<a href="#section-6.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.1-2.2">
+            <p id="section-6.1-2.2.1">the second element of the array is the Group Number, and<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.1-2.3">
+            <p id="section-6.1-2.3.1">the third element of the array is the Service Number.<a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-6.1-3">This encoding corresponds to the three-element scheme-specific encoding of
+'ipn' EIDs (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-6.1.2" class="relref">Section 6.1.2</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>). The two-element scheme-specific
+encoding of 'ipn' EIDs (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>) exists only for
+backwards compatibility with existing deployments of the 'ipn' scheme, and
+has no equivalent for imc EIDs: there is no packed encoding of a Fully
+Qualified Group Number.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">For example, the imc EID of imc:977000.17.1 would result in the three-element
+array of [977000,17,1], which would be encoded in CBOR as the following
+10-octet sequence:<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<div class="lang-cbor-pretty sourcecode" id="section-6.1-5">
+<pre>
+82                # 2-Element Endpoint Encoding
+   03             # uri-code: 3 ('imc' URI scheme)
+   83             # 3-Element imc EID encoding
+      1A 000EE868 # Allocator Identifier
+      11          # Group Number
+      01          # Service Number
+</pre><a href="#section-6.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-6">Further examples are provided in <a href="#cbor-examples" class="auto internal xref">Appendix B</a>.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.1-7">An imc EID whose scheme-specific part is not a CBOR array of exactly three
+(3) unsigned integers, or whose Allocator Identifier or Group Number is not
+less than 2^32, is malformed. In particular, a two-element array is
+malformed. A bundle containing a malformed imc EID in its primary block <span class="bcp14">MUST</span>
+be treated as malformed.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
+<p id="section-6.1-8"><span class="cref" id="no-2el"><span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> also permits a two-element
+encoding carrying a packed 64-bit FQGN, mirroring the 'ipn' scheme, and
+ION implements it. This document deliberately omits it. The 'ipn'
+two-element encoding was retained in RFC 9758 only for backwards
+compatibility with ION, and CCSDS is already deprecating it, so there is
+no reason to carry it into a new scheme. Implementations that emit the
+two-element imc form will not interoperate with this specification.</span><a href="#section-6.1-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="cbor-syntax">
+<section id="section-6.2">
+        <h3 id="name-imc-uri-scheme-cbor-syntax">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-imc-uri-scheme-cbor-syntax" class="section-name selfRef">'imc' URI Scheme CBOR Syntax</a>
+        </h3>
+<p id="section-6.2-1">When encoded in CBOR <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>, a BPv7 endpoint identified by an imc URI
+<span class="bcp14">MUST</span> comply with the following Concise Data Definition Language (CDDL)
+<span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> specification:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-6.2-2">
+<pre>
+eid = $eid .within eid-structure
+
+eid-structure = [
+  uri-code: uint,
+  SSP: any
+]
+
+; ... Syntax for other uri-code values defined in RFC 9171 ...
+
+$eid /= [
+  uri-code: 3,  ; placeholder pending IANA assignment (TBD1)
+  SSP: imc-ssp
+]
+imc-ssp = [
+  allocator-identifier: uint .lt 4294967296,
+  group-number: uint .lt 4294967296,
+  service-number: uint
+]
+</pre><a href="#section-6.2-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="matching">
+<section id="section-6.3">
+        <h3 id="name-imc-eid-matching">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-imc-eid-matching" class="section-name selfRef">imc EID Matching</a>
+        </h3>
+<p id="section-6.3-1">imc EID matching <span class="bcp14">MUST</span> be performed on the decoded EID information itself:
+two imc EIDs are equal if and only if their Allocator Identifiers, Group
+Numbers, and Service Numbers are equal.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">Because there is a single scheme-specific encoding, and <span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> requires the core deterministic encoding of <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> for bundle
+blocks, each imc EID has exactly one CBOR representation. Unlike 'ipn' EIDs
+(<span><a href="https://rfc-editor.org/rfc/rfc9758#section-6.4" class="relref">Section 6.4</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>), no imc EID can be represented by different
+encodings that need to be treated as equivalent.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="special">
+<section id="section-7">
+      <h2 id="name-special-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-special-considerations" class="section-name selfRef">Special Considerations</a>
+      </h2>
+<div id="other-schemes">
+<section id="section-7.1">
+        <h3 id="name-relationship-to-other-uri-s">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-relationship-to-other-uri-s" class="section-name selfRef">Relationship to Other URI Schemes</a>
+        </h3>
+<p id="section-7.1-1">Although imc URIs share their structure, Allocator Identifiers, and Service
+Numbers with 'ipn' URIs, the two schemes identify different kinds of
+endpoint. An imc EID and an 'ipn' EID with identical numeric components, such
+as imc:977000.17.1 and ipn:977000.17.1, identify unrelated endpoints.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2"><span class="cref" id="iac"><span>[<a href="#I-D.cavallini-dtn-iac" class="cite xref">I-D.cavallini-dtn-iac</a>]</span> proposes that Group Numbers have the same
+meaning in the 'iac' anycast scheme and in multi-destination schemes such
+as 'imc', so that one group of nodes can be addressed by either scheme.
+The WG needs to decide whether to adopt that alignment.</span><a href="#section-7.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="late-binding">
+<section id="section-7.2">
+        <h3 id="name-late-binding">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-late-binding" class="section-name selfRef">Late Binding</a>
+        </h3>
+<p id="section-7.2-1"><span>[<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> mandates the concept of the "late binding" of an EID, whereby the
+address of the destination of a bundle is resolved from its identifier
+hop-by-hop as it transits a BPv7 network. The concept of late binding is
+preserved in the 'imc' URI scheme. Elements of an imc URI <span class="bcp14">MUST NOT</span> be
+regarded as carrying information relating to the location or reachability of
+the members of a multicast group, or other addressing or routing concerns.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="eid-patterns">
+<section id="section-7.3">
+        <h3 id="name-eid-patterns">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-eid-patterns" class="section-name selfRef">EID Patterns</a>
+        </h3>
+<p id="section-7.3-1"><span class="cref" id="eid-pat"><span>[<a href="#I-D.ietf-dtn-eid-pattern" class="cite xref">I-D.ietf-dtn-eid-pattern</a>]</span> requires the specification of a new
+URI scheme to define a scheme-specific EID Pattern if patterns are to be
+supported for that scheme. Whether, and where, an EID Pattern for 'imc'
+is defined is to be decided.</span><a href="#section-7.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="security">
-<section id="section-3">
+<section id="section-8">
       <h2 id="name-security-considerations">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-3-1">TODO Security<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">This section is derived from the security considerations for the 'imc' scheme
+in <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span>, and follows the structure of
+<span><a href="https://rfc-editor.org/rfc/rfc9758#section-8" class="relref">Section 8</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<div id="reliability-and-consistency">
+<section id="section-8.1">
+        <h3 id="name-reliability-and-consistency">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-reliability-and-consistency" class="section-name selfRef">Reliability and Consistency</a>
+        </h3>
+<p id="section-8.1-1">None of the BPv7 endpoints identified by imc EIDs are guaranteed to be
+reachable at any time, and the identity of the processing entities operating
+on those endpoints is never guaranteed by the Bundle Protocol itself.
+Verification of the signature provided by the Block Integrity Block (BIB)
+targeting the bundle's primary block, as defined by BPSec <span>[<a href="#RFC9172" class="cite xref">RFC9172</a>]</span>, is
+required for this purpose.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="malicious-construction">
+<section id="section-8.2">
+        <h3 id="name-malicious-construction">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-malicious-construction" class="section-name selfRef">Malicious Construction</a>
+        </h3>
+<p id="section-8.2-1">Malicious construction of a conformant imc URI is limited to the malicious
+selection of Allocator Identifiers, Group Numbers, and Service Numbers. That
+is, a maliciously constructed imc EID could be used to direct a bundle to a
+multicast group whose members might be damaged by the arrival of that bundle.
+A bundle that asserts an imc EID as its source node ID is not valid
+(<a href="#node-ids" class="auto internal xref">Section 5.3</a>). In all cases (and indeed in all bundle processing), the node
+that receives a bundle should verify its authenticity and validity before
+operating on it in any way.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="unauthorized-group-membership">
+<section id="section-8.3">
+        <h3 id="name-unauthorized-group-membersh">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-unauthorized-group-membersh" class="section-name selfRef">Unauthorized Group Membership</a>
+        </h3>
+<p id="section-8.3-1">Joining a multicast group is a local registration (<a href="#membership" class="auto internal xref">Section 5.1</a>), and the
+'imc' URI scheme itself provides no means of restricting which nodes may join
+a group. Bundles destined for a multicast group may therefore be delivered to
+nodes that are not intended recipients. Where this is a concern, the
+confidentiality of bundle contents should be protected using BPSec
+<span>[<a href="#RFC9172" class="cite xref">RFC9172</a>]</span>, and multicast protocols should authenticate group membership
+information before acting on it.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-implicit">
+<section id="section-8.4">
+        <h3 id="name-implicit-group-membership">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-implicit-group-membership" class="section-name selfRef">Implicit Group Membership</a>
+        </h3>
+<p id="section-8.4-1">This document does not define any multicast group of which all nodes, or all
+nodes supporting the 'imc' scheme, are implicitly members. In particular, the
+Null imc URI (<a href="#null-imc" class="auto internal xref">Section 3.5</a>), which earlier specifications suggested for such
+a purpose, instead identifies the null multicast group, which never has any
+members (<a href="#null-group" class="auto internal xref">Section 5.2</a>).<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<p id="section-8.4-2">Such a group would allow any node able to inject a single bundle into a BPv7
+network to cause that bundle to be replicated to, and delivered at, every
+node in the network. This is an amplification mechanism that could be used
+to exhaust transmission opportunities, storage, and power across the whole
+network, which is a particularly severe threat in networks with scarce or
+scheduled connectivity. Because membership would be implicit rather than the
+result of a local registration, no node could decline to receive such
+bundles, and the scope of the group could not be confined to a single
+administrative domain. Mechanisms that require communication with many nodes,
+such as the distribution of group membership information, should instead use
+explicitly assigned multicast groups whose membership and origination can be
+controlled by the deployment.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-private">
+<section id="section-8.5">
+        <h3 id="name-private-use-imc-eids-2">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-private-use-imc-eids-2" class="section-name selfRef">Private Use imc EIDs</a>
+        </h3>
+<p id="section-8.5-1">Private Use (<a href="#private-groups" class="auto internal xref">Section 3.3.3</a>) imc URIs present a risk to the stability of
+deployed BPv7 networks. If such imc URIs are allowed to propagate beyond the
+domain in which they are valid, then the required uniqueness of imc URIs no
+longer holds, and bundles may be delivered to unintended multicast groups in
+other administrative domains.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.5-2">See <a href="#private-eids" class="auto internal xref">Section 5.4</a> for required behaviors to mitigate against this form of
+abuse.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="back-end-transcoding">
+<section id="section-8.6">
+        <h3 id="name-back-end-transcoding">
+<a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-back-end-transcoding" class="section-name selfRef">Back-End Transcoding</a>
+        </h3>
+<p id="section-8.6-1">The limited expressiveness of URIs of the 'imc' scheme effectively eliminates
+the possibility of threats due to errors in back-end transcoding.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="rare-ip-address-formats">
+<section id="section-8.7">
+        <h3 id="name-rare-ip-address-formats">
+<a href="#section-8.7" class="section-number selfRef">8.7. </a><a href="#name-rare-ip-address-formats" class="section-name selfRef">Rare IP Address Formats</a>
+        </h3>
+<p id="section-8.7-1">Not relevant, as IP addresses do not appear anywhere in conformant imc URIs.<a href="#section-8.7-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sensitive-information">
+<section id="section-8.8">
+        <h3 id="name-sensitive-information">
+<a href="#section-8.8" class="section-number selfRef">8.8. </a><a href="#name-sensitive-information" class="section-name selfRef">Sensitive Information</a>
+        </h3>
+<p id="section-8.8-1">Because imc URIs are used only to represent the numeric identities of
+multicast groups, the risk of disclosure of sensitive information due to
+interception of these URIs is minimal. Examination of imc URIs could be used
+to support traffic analysis; where traffic analysis is a plausible danger,
+bundles should be conveyed by bundle-in-bundle encapsulation
+<span>[<a href="#I-D.ietf-dtn-bibe" class="cite xref">I-D.ietf-dtn-bibe</a>]</span> or by secure convergence-layer protocols that do not
+expose endpoint IDs, such as TCPCLv4 <span>[<a href="#RFC9174" class="cite xref">RFC9174</a>]</span>.<a href="#section-8.8-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="semantic-attacks">
+<section id="section-8.9">
+        <h3 id="name-semantic-attacks">
+<a href="#section-8.9" class="section-number selfRef">8.9. </a><a href="#name-semantic-attacks" class="section-name selfRef">Semantic Attacks</a>
+        </h3>
+<p id="section-8.9-1">The simplicity of the 'imc' URI scheme syntax minimizes the possibility of
+misinterpretation of a URI by a human user.<a href="#section-8.9-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="iana">
-<section id="section-4">
+<section id="section-9">
       <h2 id="name-iana-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-4-1">This document has no IANA actions.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="iana-uri">
+<section id="section-9.1">
+        <h3 id="name-imc-uri-scheme">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-imc-uri-scheme" class="section-name selfRef">'imc' URI Scheme</a>
+        </h3>
+<p id="section-9.1-1">IANA is requested to register the following URI scheme in the "Uniform
+Resource Identifier (URI) Schemes" registry, using the template in
+<span><a href="https://rfc-editor.org/rfc/rfc7595#section-7.4" class="relref">Section 7.4</a> of [<a href="#RFC7595" class="cite xref">RFC7595</a>]</span>:<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-9.1-2">
+          <dt id="section-9.1-2.1">Scheme name:</dt>
+          <dd style="margin-left: 1.5em" id="section-9.1-2.2">
+            <p id="section-9.1-2.2.1">imc<a href="#section-9.1-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-9.1-2.3">Status:</dt>
+          <dd style="margin-left: 1.5em" id="section-9.1-2.4">
+            <p id="section-9.1-2.4.1">Permanent<a href="#section-9.1-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-9.1-2.5">Applications/protocols that use this scheme name:</dt>
+          <dd style="margin-left: 1.5em" id="section-9.1-2.6">
+            <p id="section-9.1-2.6.1">The Delay-Tolerant Networking (DTN) Bundle Protocol Version 7 (BPv7)
+<span>[<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>.<a href="#section-9.1-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-9.1-2.7">Contact:</dt>
+          <dd style="margin-left: 1.5em" id="section-9.1-2.8">
+            <p id="section-9.1-2.8.1">IESG &lt;iesg@ietf.org&gt;<a href="#section-9.1-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-9.1-2.9">Change controller:</dt>
+          <dd style="margin-left: 1.5em" id="section-9.1-2.10">
+            <p id="section-9.1-2.10.1">IETF<a href="#section-9.1-2.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-9.1-2.11">References:</dt>
+          <dd style="margin-left: 1.5em" id="section-9.1-2.12">
+            <p id="section-9.1-2.12.1">This document.<a href="#section-9.1-2.12.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
 </section>
 </div>
-<div id="sec-normative-references">
-<section id="section-5">
-      <h2 id="name-normative-references">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<div id="iana-bp">
+<section id="section-9.2">
+        <h3 id="name-bundle-protocol-uri-scheme-">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-bundle-protocol-uri-scheme-" class="section-name selfRef">Bundle Protocol URI Scheme Types</a>
+        </h3>
+<p id="section-9.2-1">IANA is requested to assign the following value in the "Bundle Protocol URI
+Scheme Types" registry within the "Bundle Protocol" registry group:<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<span id="name-new-value-in-the-bundle-pro"></span><table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-new-value-in-the-bundle-pro" class="selfRef">New Value in the Bundle Protocol URI Scheme Types Registry</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+              <th class="text-left" rowspan="1" colspan="1">BP Utilization Reference</th>
+              <th class="text-left" rowspan="1" colspan="1">URI Definition Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">TBD1</td>
+              <td class="text-left" rowspan="1" colspan="1">imc</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-9.2-3"><span class="cref" id="tbd1">Implementations of <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span>, such as ION, use
+the value 3 for 'imc', and <span>[<a href="#I-D.cavallini-dtn-iac" class="cite xref">I-D.cavallini-dtn-iac</a>]</span> also suggests the
+value 3 for 'iac'. The WG needs to resolve this conflict before IANA
+assignment.</span><a href="#section-9.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-allocators">
+<section id="section-9.3">
+        <h3 id="name-ipn-scheme-uri-allocator-id">
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-ipn-scheme-uri-allocator-id" class="section-name selfRef">'ipn' Scheme URI Allocator Identifiers</a>
+        </h3>
+<p id="section-9.3-1">IANA is requested to add this document as a reference to the "'ipn' Scheme
+URI Allocator Identifiers" registry, and to add the following note to that
+registry:<a href="#section-9.3-1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-9.3-2.1">
+            <p id="section-9.3-2.1.1">Allocator Identifiers in this registry are also used to identify the
+Allocators of Group Numbers for the 'imc' URI scheme.<a href="#section-9.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="iana-groups">
+<section id="section-9.4">
+        <h3 id="name-imc-scheme-uri-default-allo">
+<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-imc-scheme-uri-default-allo" class="section-name selfRef">'imc' Scheme URI Default Allocator Group Numbers Registry</a>
+        </h3>
+<p id="section-9.4-1">IANA is requested to create a new registry titled "'imc' Scheme URI Default
+Allocator Group Numbers" in the "Uniform Resource Identifier (URI) Schemes"
+registry group. Using terms defined in <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>, the registration
+procedures for this registry are:<a href="#section-9.4-1" class="pilcrow">¶</a></p>
+<span id="name-registration-procedures-for"></span><table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-registration-procedures-for" class="selfRef">Registration Procedures for the 'imc' Scheme URI Default Allocator Group Numbers Registry</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Range</th>
+              <th class="text-left" rowspan="1" colspan="1">Registration Procedures</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">1..127</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">128..255</td>
+              <td class="text-left" rowspan="1" colspan="1">Standards Action</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x0100..0x7FFF</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x8000..0xFFFF</td>
+              <td class="text-left" rowspan="1" colspan="1">Specification Required</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x10000..0xFFFFFFFE</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">&gt;=0x100000000</td>
+              <td class="text-left" rowspan="1" colspan="1">Invalid</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-9.4-3">These ranges follow the CBOR encoding of unsigned integers
+(<span><a href="https://rfc-editor.org/rfc/rfc8949#section-3" class="relref">Section 3</a> of [<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>), in which values less than 24 are encoded in one
+octet, values less than 256 in two octets, values less than 65536 in three
+octets, and values less than 2^32 in five octets. The two-octet and
+three-octet encoded lengths are each divided between Private Use and
+registered Group Numbers, so that deployments using Private Use Group Numbers
+are not forced to use less efficiently encoded values than registered
+multicast groups. All one-octet values other than zero (0), and all
+five-octet values other than 2^32-1, are reserved for Private Use. This is
+the same structure as the "'ipn' Scheme URI Well-Known Service Numbers for
+BPv7" registry (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-9.3" class="relref">Section 9.3</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>).<a href="#section-9.4-3" class="pilcrow">¶</a></p>
+<p id="section-9.4-4">The initial values in the registry are:<a href="#section-9.4-4" class="pilcrow">¶</a></p>
+<span id="name-initial-values-in-the-imc-s"></span><table class="center" id="table-3">
+          <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-initial-values-in-the-imc-s" class="selfRef">Initial Values in the 'imc' Scheme URI Default Allocator Group Numbers Registry</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for the Null imc URI</td>
+              <td class="text-left" rowspan="1" colspan="1">This document, <a href="#null-imc" class="auto internal xref">Section 3.5</a>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">4294967295</td>
+              <td class="text-left" rowspan="1" colspan="1">Invalid; avoids confusion with LocalNode ipn URIs</td>
+              <td class="text-left" rowspan="1" colspan="1">This document, <a href="#max-group" class="auto internal xref">Section 3.3.2</a>
+</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-9.4-6">Each entry in this registry associates a single Group Number with a
+multicast group of interest to the wider BPv7 community. Within the registry,
+the multicast group is identified using the "Description" field, and the
+"Reference" field identifies a publicly available specification of the
+purpose of the group.<a href="#section-9.4-6" class="pilcrow">¶</a></p>
+<p id="section-9.4-7"><span class="cref" id="groups-ranges">The ranges of the "'ipn' Scheme URI Default Allocator Node
+Numbers" registry (Section 9.2 of <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>) are not used as a model,
+because that registry retains its pre-existing structure and assignments
+rather than following CBOR encoding lengths. How this registry relates to
+the "Bundle Protocol Well-Known Group Numbers" registry proposed by
+<span>[<a href="#I-D.cavallini-dtn-iac" class="cite xref">I-D.cavallini-dtn-iac</a>]</span>, which uses the same CBOR-aligned ranges, is to
+be decided.</span><a href="#section-9.4-7" class="pilcrow">¶</a></p>
+<div id="iana-groups-experts">
+<section id="section-9.4.1">
+          <h4 id="name-guidance-for-designated-exp">
+<a href="#section-9.4.1" class="section-number selfRef">9.4.1. </a><a href="#name-guidance-for-designated-exp" class="section-name selfRef">Guidance for Designated Experts</a>
+          </h4>
+<p id="section-9.4.1-1">Due to the nature of the CBOR encoding of unsigned integers used for Group
+Numbers with BPv7, Group Numbers with a low value are encoded more
+efficiently than larger numbers. The two-octet registered range (128..255)
+is therefore reserved for Standards Action. Designated experts reviewing
+requests in the three-octet registered range (0x8000..0xFFFF) are strongly
+recommended to familiarize themselves with the CBOR encoding of unsigned
+integers in <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>.<a href="#section-9.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.4.1-2">Group Numbers assigned by the Default Allocator are intended for multicast
+groups that are of use to the entire BPv7 community. Each registration
+outside the Private Use ranges <span class="bcp14">MUST</span> have a corresponding publicly available
+specification describing the purpose of the multicast group. Multicast
+groups that are specific to a particular deployment or organization are
+expected to use Group Numbers assigned by that organization's own Allocator,
+or Private Use Group Numbers, and do not require an entry in this registry.<a href="#section-9.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.4.1-3">Designated experts <span class="bcp14">MUST NOT</span> approve the registration of any Group Number
+whose specification requires bundle nodes to be implicitly members of the
+identified multicast group (see <a href="#sec-implicit" class="auto internal xref">Section 8.4</a>).<a href="#section-9.4.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-combined-references">
+<section id="section-10">
+      <h2 id="name-references">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
+<section id="section-10.1">
+        <h3 id="name-normative-references">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC3986">[RFC3986]</dt>
+        <dd>
+<span class="refAuthor">Berners-Lee, T.</span>, <span class="refAuthor">Fielding, R.</span>, and <span class="refAuthor">L. Masinter</span>, <span class="refTitle">"Uniform Resource Identifier (URI): Generic Syntax"</span>, <span class="seriesInfo">STD 66</span>, <span class="seriesInfo">RFC 3986</span>, <span class="seriesInfo">DOI 10.17487/RFC3986</span>, <time datetime="2005-01" class="refDate">January 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3986">https://www.rfc-editor.org/rfc/rfc3986</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5234">[RFC5234]</dt>
+        <dd>
+<span class="refAuthor">Crocker, D., Ed.</span> and <span class="refAuthor">P. Overell</span>, <span class="refTitle">"Augmented BNF for Syntax Specifications: ABNF"</span>, <span class="seriesInfo">STD 68</span>, <span class="seriesInfo">RFC 5234</span>, <span class="seriesInfo">DOI 10.17487/RFC5234</span>, <time datetime="2008-01" class="refDate">January 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5234">https://www.rfc-editor.org/rfc/rfc5234</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7595">[RFC7595]</dt>
+        <dd>
+<span class="refAuthor">Thaler, D., Ed.</span>, <span class="refAuthor">Hansen, T.</span>, and <span class="refAuthor">T. Hardie</span>, <span class="refTitle">"Guidelines and Registration Procedures for URI Schemes"</span>, <span class="seriesInfo">BCP 35</span>, <span class="seriesInfo">RFC 7595</span>, <span class="seriesInfo">DOI 10.17487/RFC7595</span>, <time datetime="2015-06" class="refDate">June 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7595">https://www.rfc-editor.org/rfc/rfc7595</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8126">[RFC8126]</dt>
+        <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-    <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8610">[RFC8610]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8949">[RFC8949]</dt>
+        <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9171">[RFC9171]</dt>
+        <dd>
+<span class="refAuthor">Burleigh, S.</span>, <span class="refAuthor">Fall, K.</span>, and <span class="refAuthor">E. Birrane, III</span>, <span class="refTitle">"Bundle Protocol Version 7"</span>, <span class="seriesInfo">RFC 9171</span>, <span class="seriesInfo">DOI 10.17487/RFC9171</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9171">https://www.rfc-editor.org/rfc/rfc9171</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9758">[RFC9758]</dt>
+      <dd>
+<span class="refAuthor">Taylor, R.</span> and <span class="refAuthor">E. Birrane III</span>, <span class="refTitle">"Updates to the 'ipn' URI Scheme"</span>, <span class="seriesInfo">RFC 9758</span>, <span class="seriesInfo">DOI 10.17487/RFC9758</span>, <time datetime="2025-05" class="refDate">May 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9758">https://www.rfc-editor.org/rfc/rfc9758</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
 </div>
-<div id="acknowledgments">
+<div id="sec-informative-references">
+<section id="section-10.2">
+        <h3 id="name-informative-references">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.burleigh-dtn-multicast">[I-D.burleigh-dtn-multicast]</dt>
+        <dd>
+<span class="refAuthor">Burleigh, S.</span>, <span class="refTitle">"Bundle Multicast"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-burleigh-dtn-multicast-00</span>, <time datetime="2026-10-10" class="refDate">10 October 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-burleigh-dtn-multicast-00">https://datatracker.ietf.org/doc/html/draft-burleigh-dtn-multicast-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.burleigh-dtnrg-imc">[I-D.burleigh-dtnrg-imc]</dt>
+        <dd>
+<span class="refAuthor">Burleigh, S.</span>, <span class="refTitle">"CBHE-Compatible Bundle Multicast"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-burleigh-dtnrg-imc-00</span>, <time datetime="2012-11-07" class="refDate">7 November 2012</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-burleigh-dtnrg-imc-00">https://datatracker.ietf.org/doc/html/draft-burleigh-dtnrg-imc-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.cavallini-dtn-iac">[I-D.cavallini-dtn-iac]</dt>
+        <dd>
+<span class="refAuthor">Cavallini, D.</span> and <span class="refAuthor">F. Flentge</span>, <span class="refTitle">"DTN Interplanetary Anycast Scheme"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-cavallini-dtn-iac-00</span>, <time datetime="2025-09-17" class="refDate">17 September 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-cavallini-dtn-iac-00">https://datatracker.ietf.org/doc/html/draft-cavallini-dtn-iac-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-dtn-bibe">[I-D.ietf-dtn-bibe]</dt>
+        <dd>
+<span class="refAuthor">Taylor, R.</span> and <span class="refAuthor">A. Montilla</span>, <span class="refTitle">"Bundle-in-Bundle Encapsulation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-bibe-00</span>, <time datetime="2026-09-07" class="refDate">7 September 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bibe-00">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-bibe-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-dtn-eid-pattern">[I-D.ietf-dtn-eid-pattern]</dt>
+        <dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Bundle Protocol Endpoint ID Patterns"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-eid-pattern-11</span>, <time datetime="2026-09-23" class="refDate">23 September 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-eid-pattern-11">https://datatracker.ietf.org/doc/html/draft-ietf-dtn-eid-pattern-11</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9172">[RFC9172]</dt>
+        <dd>
+<span class="refAuthor">Birrane, III, E.</span> and <span class="refAuthor">K. McKeever</span>, <span class="refTitle">"Bundle Protocol Security (BPSec)"</span>, <span class="seriesInfo">RFC 9172</span>, <span class="seriesInfo">DOI 10.17487/RFC9172</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9172">https://www.rfc-editor.org/rfc/rfc9172</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9174">[RFC9174]</dt>
+      <dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refAuthor">Demmer, M.</span>, <span class="refAuthor">Ott, J.</span>, and <span class="refAuthor">S. Perreault</span>, <span class="refTitle">"Delay-Tolerant Networking TCP Convergence-Layer Protocol Version 4"</span>, <span class="seriesInfo">RFC 9174</span>, <span class="seriesInfo">DOI 10.17487/RFC9174</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9174">https://www.rfc-editor.org/rfc/rfc9174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="text-examples">
 <section id="appendix-A">
+      <h2 id="name-imc-uri-scheme-text-represe">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-imc-uri-scheme-text-represe" class="section-name selfRef">'imc' URI Scheme Text Representation Examples</a>
+      </h2>
+<p id="appendix-A-1">This section provides some example imc URIs in their textual representation.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<div id="using-the-default-allocator">
+<section id="appendix-A.1">
+        <h3 id="name-using-the-default-allocator">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-using-the-default-allocator" class="section-name selfRef">Using the Default Allocator</a>
+        </h3>
+<p id="appendix-A.1-1">Consider the imc URI identifying Service Number 1 on every member of the
+multicast group with Group Number 5 assigned by the Default Allocator (0).<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-2">The recommended seven-character representation of this URI would be as
+follows:<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.1-3">
+<pre>
+imc:5.1
+</pre><a href="#appendix-A.1-3" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.1-4">The nine-character representation of this URI, with the explicit Allocator
+Identifier, would be as follows:<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.1-5">
+<pre>
+imc:0.5.1
+</pre><a href="#appendix-A.1-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="using-a-non-default-allocator">
+<section id="appendix-A.2">
+        <h3 id="name-using-a-non-default-allocat">
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-using-a-non-default-allocat" class="section-name selfRef">Using a Non-Default Allocator</a>
+        </h3>
+<p id="appendix-A.2-1">Consider the imc URI identifying Service Number 1 on every member of the
+multicast group with Group Number 17 assigned by Allocator 977000.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-2">The 15-character representation of this URI would be as follows:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.2-3">
+<pre>
+imc:977000.17.1
+</pre><a href="#appendix-A.2-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="the-null-imc-uri">
+<section id="appendix-A.3">
+        <h3 id="name-the-null-imc-uri-2">
+<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-the-null-imc-uri-2" class="section-name selfRef">The Null imc URI</a>
+        </h3>
+<p id="appendix-A.3-1">The Null imc URI (<a href="#null-imc" class="auto internal xref">Section 3.5</a>) is represented as:<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.3-2">
+<pre>
+imc:0.0
+</pre><a href="#appendix-A.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="cbor-examples">
+<section id="appendix-B">
+      <h2 id="name-imc-uri-scheme-cbor-encodin">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-imc-uri-scheme-cbor-encodin" class="section-name selfRef">'imc' URI Scheme CBOR Encoding Examples</a>
+      </h2>
+<p id="appendix-B-1">This section provides some example CBOR encodings of imc EIDs. As in
+<a href="#cbor" class="auto internal xref">Section 6</a>, these examples use the placeholder value 3 for the 'imc' URI scheme
+type.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<div id="using-the-default-allocator-1">
+<section id="appendix-B.1">
+        <h3 id="name-using-the-default-allocator-2">
+<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-using-the-default-allocator-2" class="section-name selfRef">Using the Default Allocator</a>
+        </h3>
+<p id="appendix-B.1-1">Consider the imc EID imc:5.1. This textual representation of an imc EID
+identifies Service Number 1 on every member of the multicast group with Group
+Number 5 assigned by the Default Allocator (0).<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-2">The six-octet encoding of this EID would be as follows:<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
+<div class="lang-cbor-pretty sourcecode" id="appendix-B.1-3">
+<pre>
+82       # 2-Element Endpoint Encoding
+   03    # uri-code: 3 ('imc' URI scheme)
+   83    # 3-Element imc EID encoding
+      00 # Default Allocator
+      05 # Group Number
+      01 # Service Number
+</pre><a href="#appendix-B.1-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="using-a-non-default-allocator-1">
+<section id="appendix-B.2">
+        <h3 id="name-using-a-non-default-allocato">
+<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-using-a-non-default-allocato" class="section-name selfRef">Using a Non-Default Allocator</a>
+        </h3>
+<p id="appendix-B.2-1">Consider the imc EID imc:977000.17.1. This textual representation of an imc
+EID identifies Service Number 1 on every member of the multicast group with
+Group Number 17 assigned by Allocator 977000.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.2-2">The 10-octet encoding of this EID would be as follows:<a href="#appendix-B.2-2" class="pilcrow">¶</a></p>
+<div class="lang-cbor-pretty sourcecode" id="appendix-B.2-3">
+<pre>
+82                # 2-Element Endpoint Encoding
+   03             # uri-code: 3 ('imc' URI scheme)
+   83             # 3-Element imc EID encoding
+      1A 000EE868 # Allocator Identifier
+      11          # Group Number
+      01          # Service Number
+</pre><a href="#appendix-B.2-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="the-null-imc-eid">
+<section id="appendix-B.3">
+        <h3 id="name-the-null-imc-eid">
+<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-the-null-imc-eid" class="section-name selfRef">The Null imc EID</a>
+        </h3>
+<p id="appendix-B.3-1">The six-octet encoding of the Null imc EID (<a href="#null-group" class="auto internal xref">Section 5.2</a>) of imc:0.0 would
+be as follows:<a href="#appendix-B.3-1" class="pilcrow">¶</a></p>
+<div class="lang-cbor-pretty sourcecode" id="appendix-B.3-2">
+<pre>
+82       # 2-Element Endpoint Encoding
+   03    # uri-code: 3 ('imc' URI scheme)
+   83    # 3-Element imc EID encoding
+      00 # Default Allocator
+      00 # Group Number
+      00 # Service Number
+</pre><a href="#appendix-B.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="appendix-C">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-C-1">The 'imc' URI scheme was designed by Scott Burleigh, and much of the text of
+this document is derived from <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> and
+<span>[<a href="#I-D.burleigh-dtnrg-imc" class="cite xref">I-D.burleigh-dtnrg-imc</a>]</span>. The structure of this document follows
+<span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-B">
+<section id="appendix-D">
       <h2 id="name-authors-address">
 <a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
       </h2>

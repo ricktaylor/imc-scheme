@@ -2,34 +2,43 @@
 
 
 
-WG Working Group                                               R. Taylor
+Delay/Disruption Tolerant Networking                           R. Taylor
 Internet-Draft                                      Aalyria Technologies
-Intended status: Informational                           21 October 2026
-Expires: 24 April 2027
+Intended status: Standards Track                         22 October 2026
+Expires: 25 April 2027
 
 
-                           TODO - Your title
-                  draft-todo-yourname-protocol-latest
+           The 'imc' URI Scheme for Bundle Protocol Multicast
+                   draft-taylor-dtn-imc-scheme-latest
 
 Abstract
 
-   TODO Abstract
+   This document defines the 'imc' URI scheme, a concise integer-based
+   scheme for identifying Bundle Protocol Version 7 (BPv7) endpoints
+   that are not singleton endpoints, termed multicast groups.  The
+   structure of 'imc' URIs mirrors that of the 'ipn' URI scheme: each
+   'imc' URI comprises an Allocator Identifier, a Group Number, and a
+   Service Number.  This document specifies the textual syntax of 'imc'
+   URIs, their interpretation when used as BPv7 Endpoint Identifiers,
+   and their CBOR encoding, and requests the associated IANA
+   registrations.
 
 About This Document
 
    This note is to be removed before publishing as an RFC.
 
    The latest revision of this draft can be found at
-   https://example.com/LATEST.  Status information for this document may
-   be found at https://datatracker.ietf.org/doc/draft-todo-yourname-
-   protocol/.
+   https://ricktaylor.github.io/imc-scheme/draft-taylor-dtn-imc-
+   scheme.html.  Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-taylor-dtn-imc-scheme/.
 
-   Discussion of this document takes place on the WG Working Group
-   mailing list (mailto:WG@example.com), which is archived at
-   https://example.com/WG.
+   Discussion of this document takes place on the Delay/Disruption
+   Tolerant Networking Working Group mailing list (mailto:dtn@ietf.org),
+   which is archived at https://mailarchive.ietf.org/arch/browse/dtn/.
+   Subscribe at https://www.ietf.org/mailman/listinfo/dtn/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/USER/REPO.
+   https://github.com/ricktaylor/imc-scheme.
 
 Status of This Memo
 
@@ -46,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 April 2027.
+   This Internet-Draft will expire on 25 April 2027.
 
 Copyright Notice
 
@@ -66,15 +75,99 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Security Considerations
-   4.  IANA Considerations
-   5.  Normative References
+   3.  Core Concepts
+     3.1.  Allocator Identifiers
+     3.2.  Group Numbers
+       3.2.1.  Fully Qualified Group Numbers
+     3.3.  Special Group Numbers
+       3.3.1.  The Zero Group Number
+       3.3.2.  The Maximum Group Number
+       3.3.3.  Private Use Group Numbers
+     3.4.  Service Numbers
+     3.5.  The Null imc URI
+   4.  Textual Representation of imc URIs
+     4.1.  'imc' URI Scheme Text Syntax
+   5.  Usage of imc URIs with BPv7
+     5.1.  Multicast Group Membership
+     5.2.  The Null Multicast Group
+     5.3.  Node IDs and Bundle Sources
+     5.4.  Private Use imc EIDs
+     5.5.  Administrative Endpoints
+     5.6.  Well-Known Service Numbers
+   6.  CBOR Representation of imc URIs with BPv7
+     6.1.  imc EID CBOR Encoding
+     6.2.  'imc' URI Scheme CBOR Syntax
+     6.3.  imc EID Matching
+   7.  Special Considerations
+     7.1.  Relationship to Other URI Schemes
+     7.2.  Late Binding
+     7.3.  EID Patterns
+   8.  Security Considerations
+     8.1.  Reliability and Consistency
+     8.2.  Malicious Construction
+     8.3.  Unauthorized Group Membership
+     8.4.  Implicit Group Membership
+     8.5.  Private Use imc EIDs
+     8.6.  Back-End Transcoding
+     8.7.  Rare IP Address Formats
+     8.8.  Sensitive Information
+     8.9.  Semantic Attacks
+   9.  IANA Considerations
+     9.1.  'imc' URI Scheme
+     9.2.  Bundle Protocol URI Scheme Types
+     9.3.  'ipn' Scheme URI Allocator Identifiers
+     9.4.  'imc' Scheme URI Default Allocator Group Numbers Registry
+       9.4.1.  Guidance for Designated Experts
+   10. References
+     10.1.  Normative References
+     10.2.  Informative References
+   Appendix A.  'imc' URI Scheme Text Representation Examples
+     A.1.  Using the Default Allocator
+     A.2.  Using a Non-Default Allocator
+     A.3.  The Null imc URI
+   Appendix B.  'imc' URI Scheme CBOR Encoding Examples
+     B.1.  Using the Default Allocator
+     B.2.  Using a Non-Default Allocator
+     B.3.  The Null imc EID
    Acknowledgments
    Author's Address
 
 1.  Introduction
 
-   TODO Introduction
+   The Bundle Protocol Version 7 (BPv7) [RFC9171] identifies the
+   destination of every bundle by an Endpoint Identifier (EID), which is
+   a URI.  A bundle endpoint is a set of zero or more bundle nodes, and
+   a node becomes a member of an endpoint by registering in it.
+   Although BPv7 permits endpoints with any number of members, the 'ipn'
+   URI scheme [RFC9758], the scheme most commonly used in deployed BPv7
+   networks, only identifies singleton endpoints.  There is no
+   equivalently concise scheme for identifying endpoints that may have
+   many members.
+
+   This document defines the 'imc' URI scheme for this purpose.  An
+   'imc' URI identifies an endpoint that is never a singleton endpoint;
+   such an endpoint is termed a "multicast group".  The name 'imc' is
+   derived from "InterPlanetary MultiCast", in the same way that 'ipn'
+   was derived from "InterPlanetary Network", but like 'ipn' the term is
+   now used as a non-acronymous name.
+
+   The 'imc' scheme was first proposed in [I-D.burleigh-dtnrg-imc] for
+   use with Compressed Bundle Header Encoding and the experimental
+   Bundle Protocol version 6, and was subsequently specified for BPv7 as
+   part of the Bundle Multicast protocol [I-D.burleigh-dtn-multicast].
+   This document separates the definition of the 'imc' scheme from that
+   protocol, so that the scheme can be standardized independently of any
+   particular multicast forwarding mechanism, and aligns its structure,
+   terminology, and encodings with the 'ipn' URI scheme as updated by
+   [RFC9758].
+
+   Like the 'ipn' URI scheme, the 'imc' URI scheme defines identifiers
+   only.  An 'imc' URI does not carry any topological information
+   describing how to route bundles to the members of the identified
+   multicast group.  The procedures by which bundles destined for
+   multicast groups are forwarded, and by which information about group
+   membership is distributed, are out of scope for this document; one
+   such set of procedures is defined in [I-D.burleigh-dtn-multicast].
 
 2.  Conventions and Definitions
 
@@ -84,28 +177,939 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Security Considerations
+   For the remainder of this document, the term "imc URI" is used to
+   refer to a URI that uses the 'imc' URI scheme, and the term "imc EID"
+   is used to refer to an imc URI that is used as a BPv7 EID.
 
-   TODO Security
+   The term "multicast group" refers to a BPv7 endpoint identified by an
+   imc EID.
 
-4.  IANA Considerations
+   The terms "Allocator", "Allocator Identifier", "Default Allocator",
+   "Node Number", and "Service Number" are used as defined in [RFC9758].
 
-   This document has no IANA actions.
+3.  Core Concepts
 
-5.  Normative References
+   Every imc URI, no matter whether it is expressed with a textual
+   representation or a binary encoding, MUST be considered as a tuple of
+   the following three components:
+
+   *  The Allocator Identifier
+
+   *  The Group Number
+
+   *  The Service Number
+
+   The Allocator Identifier indicates the entity responsible for
+   assigning Group Numbers, maintaining uniqueness whilst avoiding the
+   need for a single registry for all assigned Group Numbers.  See
+   Section 3.1.
+
+   The Group Number identifies a multicast group in the context of an
+   Allocator.  See Section 3.2.
+
+   The Service Number distinguishes between services operating on each
+   member of a multicast group.  See Section 3.4.
+
+   The combination of the Allocator Identifier and the Group Number
+   uniquely identifies a multicast group.  See Section 3.2.1.
+
+3.1.  Allocator Identifiers
+
+   The Allocator Identifier of an imc URI has the same structure,
+   purpose, and range as the Allocator Identifier of an 'ipn' URI
+   defined in Section 3.2 of [RFC9758], and is drawn from the same
+   "'ipn' Scheme URI Allocator Identifiers" registry.  An Allocator
+   Identifier is an unsigned integer in the range 0 to 2^32-1.
+
+   An Allocator that has been assigned an Allocator Identifier is
+   authorized to assign Group Numbers for use with the 'imc' URI scheme,
+   in addition to Node Numbers for use with the 'ipn' URI scheme.  Each
+   Allocator assigns Group Numbers according to its own policies.  Other
+   than ensuring that any Group Numbers it assigns are unique amongst
+   all Group Numbers it assigns, an Allocator does not need to
+   coordinate its assignments with other Allocators.
+
+   Group Numbers and Node Numbers are distinct namespaces.  An Allocator
+   MAY assign the same numeric value as both a Group Number and a Node
+   Number, and there is no relationship between a multicast group and a
+   node that happen to share the same Allocator Identifier and number.
+
+   In any case where an encoded imc URI does not explicitly include an
+   Allocator Identifier, an implementation MUST assume that the Group
+   Number has been assigned by the Default Allocator (Section 3.2.2 of
+   [RFC9758]).
+
+   A new IANA registry, "'imc' Scheme URI Default Allocator Group
+   Numbers", is defined to control the assignment of Group Number values
+   by the Default Allocator; see Section 9.4.  This registry reserves
+   some values as defined in Section 3.3 below.
+
+   If a system does not require interoperable deployment of 'imc' scheme
+   URIs, then the Private Use Group Numbers (Section 3.3.3), reserved by
+   the Default Allocator for this purpose, are to be used.
+
+3.2.  Group Numbers
+
+   A Group Number identifies a multicast group in the context of an
+   Allocator.  A Group Number is an unsigned integer.  A single Group
+   Number assigned by a single Allocator MUST refer to a single
+   multicast group.
+
+   All Group Number assignments, by all Allocators, MUST be in the range
+   0 to 2^32-1.
+
+   It is RECOMMENDED that Group Number zero (0) not be assigned by an
+   Allocator, to avoid confusion with the Null imc URI (Section 3.5).
+
+3.2.1.  Fully Qualified Group Numbers
+
+   The combination of the Allocator Identifier and the Group Number of
+   an imc URI uniquely identifies a particular multicast group, and is
+   termed the "Fully Qualified Group Number" (FQGN), by analogy with the
+   Fully Qualified Node Number of an 'ipn' URI (Section 3.3.1 of
+   [RFC9758]).
+
+   In the examples in this document, FQGNs are written as (Allocator
+   Identifier, Group Number).  For example, (977000,17) is the FQGN for
+   a multicast group assigned Group Number 17 by an Allocator with
+   Allocator Identifier 977000.
+
+   An FQGN is a pair of identifiers, not a single number.  Unlike the
+   FQNN of an 'ipn' URI, this document defines no representation of an
+   FQGN as a single packed integer, in either the text or the CBOR
+   representation of imc URIs.
+
+3.3.  Special Group Numbers
+
+   Some special-case Group Numbers are defined by the Default Allocator;
+   see Section 9.4.
+
+3.3.1.  The Zero Group Number
+
+   The Default Allocator assigns the use of Group Number zero (0) solely
+   for identifying the Null imc URI (Section 3.5).
+
+   This means that any imc URI with a zero (0) Allocator Identifier and
+   a zero (0) Group Number, but a non-zero Service Number component, is
+   invalid.  Such imc URIs MUST NOT be composed, and processors of such
+   imc URIs MUST consider them as the Null imc URI.
+
+
+   // Appendix A of [I-D.burleigh-dtn-multicast] suggests that imc:0.0
+   // could identify an implicit multicast group of which every IMC-
+   // capable node is a member, to be used for distributing group
+   // membership information, and ION uses imc:0.0 in this way today.
+   // This document instead defines imc:0.0 as the null multicast group,
+   // which never has any members (see Section 5.2 and Section 8.4), so
+   // that usage is not interoperable with this specification.
+
+3.3.2.  The Maximum Group Number
+
+   The Default Allocator reserves Group Number 2^32-1 (0xFFFFFFFF) as
+   invalid.  This Group Number MUST NOT be assigned, and any imc URI
+   with a zero (0) Allocator Identifier and a Group Number of 2^32-1 is
+   invalid and MUST NOT be composed.
+
+   This reservation exists solely to guard against confusion with
+   LocalNode ipn URIs (Section 3.4.2 of [RFC9758]), which use the same
+   Node Number.  For example, if this Group Number were assignable, the
+   mistyped URI imc:4294967295.7, intended as the LocalNode ipn URI
+   ipn:4294967295.7, could silently identify a real multicast group.
+   Reserving it ensures that such an error causes the bundle to be
+   discarded rather than delivered to unintended recipients.
+
+   The reservation does not give imc URIs any LocalNode semantics, and
+   the 'imc' URI scheme has no equivalent of LocalNode ipn URIs.
+   Services do not receive bundles; they receive the application data
+   units (ADUs) of bundles delivered to them by their local bundle
+   protocol agent (Section 5.7 of [RFC9171]).  An imc URI identifying
+   "the local services" would therefore not identify anything to which a
+   bundle could meaningfully be sent.
+
+   A bundle node that receives or originates a bundle whose destination
+   is an imc EID with a zero (0) Allocator Identifier and a Group Number
+   of 2^32-1 MUST NOT forward or deliver it, and MUST delete it
+   (Section 5.10 of [RFC9171]).  If a bundle deletion status report is
+   requested, the reason code "Destination endpoint ID unavailable"
+   (Section 6.1.1 of [RFC9171]) SHOULD be used.
+
+   This reservation applies only to the Default Allocator.  Other
+   Allocators MAY assign Group Number 2^32-1 according to their own
+   policies.
+
+3.3.3.  Private Use Group Numbers
+
+   The Default Allocator reserves several ranges of Group Numbers for
+   Private Use, as defined in [RFC8126].  These ranges are interleaved
+   with ranges of registered Group Numbers, so that Private Use Group
+   Numbers are available at each length of CBOR encoding; see
+   Section 9.4.
+
+   Any imc URI with a zero (0) Allocator Identifier and a Group Number
+   reserved for Private Use is not guaranteed to be unique beyond a
+   single administrative domain.  An administrative domain, as used
+   here, is defined as the set of nodes that share a unique allocation
+   of FQGNs from the Private Use ranges.
+
+   Because of this lack of uniqueness, any implementation of a protocol
+   using imc URIs that resides on the border between administrative
+   domains MUST have suitable mechanisms in place to prevent protocol
+   units using such Private Use Group Numbers from crossing between
+   different administrative domains.
+
+3.4.  Service Numbers
+
+   A Service Number is an unsigned integer that identifies a particular
+   service operating on a node, as defined in Section 3.5 of [RFC9758].
+   In an imc URI, the Service Number identifies the service on each
+   member of the multicast group to which a bundle destined for that
+   group is to be delivered.
+
+3.5.  The Null imc URI
+
+   There is value in defining a unique imc URI that identifies a
+   multicast group that can never have any members.  This imc URI is
+   termed the "Null imc URI" and has all three components (the Allocator
+   Identifier, Group Number, and Service Number) set to the value zero
+   (0).  The multicast group identified by the Null imc URI is termed
+   the "null multicast group".  No node is ever a member of the null
+   multicast group, and any destination identified by the Null imc URI
+   is therefore by definition unreachable.
+
+   In particular, the Null imc URI MUST NOT be interpreted as
+   identifying a multicast group of which all nodes, or all nodes
+   supporting the 'imc' scheme, are implicitly members.  See
+   Section 8.4.
+
+4.  Textual Representation of imc URIs
+
+   All 'imc' scheme URIs comply with [RFC3986] and are therefore
+   represented by a scheme identifier and a scheme-specific part.  The
+   scheme identifier is imc, and the scheme-specific parts are
+   represented as a sequence of numeric components separated with the
+   '.' character.  A formal definition is provided below (see
+   Section 4.1) and can be informally considered as:
+
+   imc:[<allocator-identifier>.]<group-number>.<service-number>
+
+   To keep the text representation concise, the following rules apply:
+
+   *  All leading '0' characters MUST be omitted.  A single '0' is
+      valid.
+
+   *  If the Allocator Identifier is zero (0), then the <allocator-
+      identifier> and '.'  MAY be omitted.
+
+   Examples of the textual representation of imc URIs can be found in
+   Appendix A.
+
+4.1.  'imc' URI Scheme Text Syntax
+
+   The text syntax of an imc URI MUST comply with the following ABNF
+   syntax from [RFC5234] and repeats the core ABNF syntax rule for DIGIT
+   defined by that specification:
+
+   imc-uri = "imc:" imc-hier-part
+
+   imc-hier-part = group-part "." service-number
+
+   group-part = [allocator-identifier "."] group-number
+
+   allocator-identifier = number
+
+   group-number = number
+
+   service-number = number
+
+   number = "0" / non-zero-number
+
+   non-zero-number = (%x31-39 *DIGIT)
+
+   DIGIT = %x30-39
+
+   None of the reserved characters defined in the generic URI syntax are
+   used as delimiters within URIs of the 'imc' scheme, other than '.'.
+
+
+   // The ABNF in [I-D.burleigh-dtn-multicast] names the single-number
+   // form of the group label "fqgn", implying that it carries the
+   // 64-bit packed FQGN.  This document instead follows Section 4 of
+   // [RFC9758]: the single-number form is a Group Number assigned by
+   // the Default Allocator.  No packed FQGN is defined (Section 3.2.1).
+
+   Unlike the 'ipn' URI scheme, the 'imc' URI scheme has no '!' form,
+   because it has no equivalent of LocalNode ipn URIs; see
+   Section 3.3.2.
+
+5.  Usage of imc URIs with BPv7
+
+   This section identifies the behavior and interpretation of 'imc'
+   scheme URIs that MUST be followed when using this URI scheme to
+   represent EIDs in BPv7.
+
+   This document does not define the use of imc URIs with the
+   experimental Bundle Protocol version 6.
+
+5.1.  Multicast Group Membership
+
+   An imc EID MUST NOT identify a singleton endpoint.  The multicast
+   group identified by an imc EID may at any time have zero, one, or
+   many members.
+
+   A bundle node joins a multicast group by registering in the endpoint
+   identified by the imc EID of that group, and leaves the group by
+   unregistering from that endpoint.  A single bundle node MAY be a
+   member of any number of multicast groups.
+
+   As noted in Section 3.1 of [RFC9171], registrations are local, and
+   BPv7 does not include a mechanism for distributing information about
+   registrations.  Mechanisms by which information about the membership
+   of multicast groups is distributed are out of scope for this
+   document.
+
+5.2.  The Null Multicast Group
+
+   When the Null imc URI (Section 3.5) is used as a BPv7 EID, it is
+   termed the "Null imc EID", and the endpoint it identifies is the null
+   multicast group.
+
+   The null multicast group never has any members.  A bundle node MUST
+   NOT register in the null multicast group, and any request to do so
+   MUST be refused.
+
+   Because the null multicast group has no members, a bundle destined
+   for the Null imc EID can never be delivered.  Such a bundle SHOULD
+   NOT be created, and a bundle node that receives or originates such a
+   bundle MUST NOT forward it to any other node.  If such a bundle is
+   deleted and a bundle deletion status report is requested, the reason
+   code "Destination endpoint ID unavailable" (Section 6.1.1 of
+   [RFC9171]) SHOULD be used.
+
+   The null multicast group is distinct from the BPv7 null endpoint
+   ("dtn:none", Section 4.2.5.1.1 of [RFC9171]).  Although both identify
+   endpoints that never have any members, the Null imc EID MUST NOT be
+   used in place of the null endpoint ID, for example to indicate an
+   anonymous bundle source or that no status reports are to be sent.
+   Equally, the null endpoint ID and the Null ipn EID (Section 5.2 of
+   [RFC9758]) are not imc EIDs.
+
+5.3.  Node IDs and Bundle Sources
+
+   Section 4.2.5.2 of [RFC9171] requires that a Node ID be the EID of a
+   singleton endpoint.  Because no imc EID identifies a singleton
+   endpoint, an imc EID MUST NOT be used as a Node ID.
+
+   As a consequence, an imc EID MUST NOT be used as the source node ID
+   of a bundle (Section 5.2 of [RFC9171]), as the node ID carried in a
+   Previous Node Block (Section 4.4.1 of [RFC9171]), or as the security
+   source of a Bundle Protocol Security (BPSec) [RFC9172] security
+   block.
+
+5.4.  Private Use imc EIDs
+
+   Bundles destined for EIDs that use an imc URI with an FQGN
+   (Section 3.2.1) that is within the Private Use ranges of the Default
+   Allocator (Section 3.3.3) are not universally unique; therefore, they
+   are only valid within the scope of the current administrative domain.
+   This means that any bundle using a Private Use imc EID as a bundle
+   destination MUST NOT be allowed to cross administrative domains.  All
+   implementations that could be deployed as a gateway between
+   administrative domains MUST be sufficiently configurable to ensure
+   that this is enforced, and operators MUST ensure correct
+   configuration.
+
+   Private Use imc EIDs MUST NOT be present in any other part of a
+   bundle that is destined for another administrative domain when the
+   lack of uniqueness prevents correct operation.
+
+5.5.  Administrative Endpoints
+
+   The Administrative Endpoint of a node is a singleton endpoint
+   (Section 3.2 of [RFC9171]).  Therefore no imc EID identifies the
+   Administrative Endpoint of any node, regardless of its Service
+   Number.
+
+
+   // The meaning, if any, of Service Number zero (0) in an imc EID
+   // needs to be decided.  Appendix A of [I-D.burleigh-dtn-multicast]
+   // uses imc:0.0 to convey administrative information about group
+   // membership, which this document does not permit (see Section 5.2).
+
+5.6.  Well-Known Service Numbers
+
+   The Service Number of an imc EID is interpreted in the same way as
+   the Service Number of an 'ipn' EID.  In particular, the well-known
+   Service Numbers registered in the "'ipn' Scheme URI Well-Known
+   Service Numbers for BPv7" registry (Section 5.6 of [RFC9758])
+   identify the same services when they appear in imc EIDs.
+
+
+   // [I-D.cavallini-dtn-iac] requests that the registries shared by
+   // 'ipn' and 'iac' be renamed.  The WG needs to coordinate how these
+   // shared registries are named and referenced across 'ipn', 'imc',
+   // and 'iac'.
+
+6.  CBOR Representation of imc URIs with BPv7
+
+   Section 4.2.5.1 of [RFC9171] requires that any URI scheme used to
+   represent BPv7 EIDs MUST define how the scheme-specific part of the
+   URI scheme is encoded with Concise Binary Object Representation
+   (CBOR) [RFC8949].  To meet this requirement, this section describes
+   the CBOR encoding of imc EIDs.  The formal definition of the CBOR
+   representation is specified in Section 6.2.
+
+   The examples in this section use the value 3 as the BPv7 URI scheme
+   type of the 'imc' scheme.  This value is a placeholder pending
+   assignment by IANA; see Section 9.2.
+
+6.1.  imc EID CBOR Encoding
+
+   When encoding imc EIDs for use with BPv7, the scheme-specific part of
+   an imc URI MUST be represented as a CBOR array of exactly three (3)
+   elements.  Each element of the array MUST be encoded as a single CBOR
+   unsigned integer, and:
+
+   *  the first element of the array is the Allocator Identifier,
+
+   *  the second element of the array is the Group Number, and
+
+   *  the third element of the array is the Service Number.
+
+   This encoding corresponds to the three-element scheme-specific
+   encoding of 'ipn' EIDs (Section 6.1.2 of [RFC9758]).  The two-element
+   scheme-specific encoding of 'ipn' EIDs (Section 6.1.1 of [RFC9758])
+   exists only for backwards compatibility with existing deployments of
+   the 'ipn' scheme, and has no equivalent for imc EIDs: there is no
+   packed encoding of a Fully Qualified Group Number.
+
+   For example, the imc EID of imc:977000.17.1 would result in the
+   three-element array of [977000,17,1], which would be encoded in CBOR
+   as the following 10-octet sequence:
+
+   82                # 2-Element Endpoint Encoding
+      03             # uri-code: 3 ('imc' URI scheme)
+      83             # 3-Element imc EID encoding
+         1A 000EE868 # Allocator Identifier
+         11          # Group Number
+         01          # Service Number
+
+   Further examples are provided in Appendix B.
+
+   An imc EID whose scheme-specific part is not a CBOR array of exactly
+   three (3) unsigned integers, or whose Allocator Identifier or Group
+   Number is not less than 2^32, is malformed.  In particular, a two-
+   element array is malformed.  A bundle containing a malformed imc EID
+   in its primary block MUST be treated as malformed.
+
+
+   // [I-D.burleigh-dtn-multicast] also permits a two-element encoding
+   // carrying a packed 64-bit FQGN, mirroring the 'ipn' scheme, and ION
+   // implements it.  This document deliberately omits it.  The 'ipn'
+   // two-element encoding was retained in RFC 9758 only for backwards
+   // compatibility with ION, and CCSDS is already deprecating it, so
+   // there is no reason to carry it into a new scheme.  Implementations
+   // that emit the two-element imc form will not interoperate with this
+   // specification.
+
+6.2.  'imc' URI Scheme CBOR Syntax
+
+   When encoded in CBOR [RFC8949], a BPv7 endpoint identified by an imc
+   URI MUST comply with the following Concise Data Definition Language
+   (CDDL) [RFC8610] specification:
+
+   eid = $eid .within eid-structure
+
+   eid-structure = [
+     uri-code: uint,
+     SSP: any
+   ]
+
+   ; ... Syntax for other uri-code values defined in RFC 9171 ...
+
+   $eid /= [
+     uri-code: 3,  ; placeholder pending IANA assignment (TBD1)
+     SSP: imc-ssp
+   ]
+   imc-ssp = [
+     allocator-identifier: uint .lt 4294967296,
+     group-number: uint .lt 4294967296,
+     service-number: uint
+   ]
+
+6.3.  imc EID Matching
+
+   imc EID matching MUST be performed on the decoded EID information
+   itself: two imc EIDs are equal if and only if their Allocator
+   Identifiers, Group Numbers, and Service Numbers are equal.
+
+   Because there is a single scheme-specific encoding, and Section 4.1
+   of [RFC9171] requires the core deterministic encoding of [RFC8949]
+   for bundle blocks, each imc EID has exactly one CBOR representation.
+   Unlike 'ipn' EIDs (Section 6.4 of [RFC9758]), no imc EID can be
+   represented by different encodings that need to be treated as
+   equivalent.
+
+7.  Special Considerations
+
+7.1.  Relationship to Other URI Schemes
+
+   Although imc URIs share their structure, Allocator Identifiers, and
+   Service Numbers with 'ipn' URIs, the two schemes identify different
+   kinds of endpoint.  An imc EID and an 'ipn' EID with identical
+   numeric components, such as imc:977000.17.1 and ipn:977000.17.1,
+   identify unrelated endpoints.
+
+
+   // [I-D.cavallini-dtn-iac] proposes that Group Numbers have the same
+   // meaning in the 'iac' anycast scheme and in multi-destination
+   // schemes such as 'imc', so that one group of nodes can be addressed
+   // by either scheme.  The WG needs to decide whether to adopt that
+   // alignment.
+
+7.2.  Late Binding
+
+   [RFC9171] mandates the concept of the "late binding" of an EID,
+   whereby the address of the destination of a bundle is resolved from
+   its identifier hop-by-hop as it transits a BPv7 network.  The concept
+   of late binding is preserved in the 'imc' URI scheme.  Elements of an
+   imc URI MUST NOT be regarded as carrying information relating to the
+   location or reachability of the members of a multicast group, or
+   other addressing or routing concerns.
+
+7.3.  EID Patterns
+
+
+   // [I-D.ietf-dtn-eid-pattern] requires the specification of a new URI
+   // scheme to define a scheme-specific EID Pattern if patterns are to
+   // be supported for that scheme.  Whether, and where, an EID Pattern
+   // for 'imc' is defined is to be decided.
+
+8.  Security Considerations
+
+   This section is derived from the security considerations for the
+   'imc' scheme in [I-D.burleigh-dtn-multicast], and follows the
+   structure of Section 8 of [RFC9758].
+
+8.1.  Reliability and Consistency
+
+   None of the BPv7 endpoints identified by imc EIDs are guaranteed to
+   be reachable at any time, and the identity of the processing entities
+   operating on those endpoints is never guaranteed by the Bundle
+   Protocol itself.  Verification of the signature provided by the Block
+   Integrity Block (BIB) targeting the bundle's primary block, as
+   defined by BPSec [RFC9172], is required for this purpose.
+
+8.2.  Malicious Construction
+
+   Malicious construction of a conformant imc URI is limited to the
+   malicious selection of Allocator Identifiers, Group Numbers, and
+   Service Numbers.  That is, a maliciously constructed imc EID could be
+   used to direct a bundle to a multicast group whose members might be
+   damaged by the arrival of that bundle.  A bundle that asserts an imc
+   EID as its source node ID is not valid (Section 5.3).  In all cases
+   (and indeed in all bundle processing), the node that receives a
+   bundle should verify its authenticity and validity before operating
+   on it in any way.
+
+8.3.  Unauthorized Group Membership
+
+   Joining a multicast group is a local registration (Section 5.1), and
+   the 'imc' URI scheme itself provides no means of restricting which
+   nodes may join a group.  Bundles destined for a multicast group may
+   therefore be delivered to nodes that are not intended recipients.
+   Where this is a concern, the confidentiality of bundle contents
+   should be protected using BPSec [RFC9172], and multicast protocols
+   should authenticate group membership information before acting on it.
+
+8.4.  Implicit Group Membership
+
+   This document does not define any multicast group of which all nodes,
+   or all nodes supporting the 'imc' scheme, are implicitly members.  In
+   particular, the Null imc URI (Section 3.5), which earlier
+   specifications suggested for such a purpose, instead identifies the
+   null multicast group, which never has any members (Section 5.2).
+
+   Such a group would allow any node able to inject a single bundle into
+   a BPv7 network to cause that bundle to be replicated to, and
+   delivered at, every node in the network.  This is an amplification
+   mechanism that could be used to exhaust transmission opportunities,
+   storage, and power across the whole network, which is a particularly
+   severe threat in networks with scarce or scheduled connectivity.
+   Because membership would be implicit rather than the result of a
+   local registration, no node could decline to receive such bundles,
+   and the scope of the group could not be confined to a single
+   administrative domain.  Mechanisms that require communication with
+   many nodes, such as the distribution of group membership information,
+   should instead use explicitly assigned multicast groups whose
+   membership and origination can be controlled by the deployment.
+
+8.5.  Private Use imc EIDs
+
+   Private Use (Section 3.3.3) imc URIs present a risk to the stability
+   of deployed BPv7 networks.  If such imc URIs are allowed to propagate
+   beyond the domain in which they are valid, then the required
+   uniqueness of imc URIs no longer holds, and bundles may be delivered
+   to unintended multicast groups in other administrative domains.
+
+   See Section 5.4 for required behaviors to mitigate against this form
+   of abuse.
+
+8.6.  Back-End Transcoding
+
+   The limited expressiveness of URIs of the 'imc' scheme effectively
+   eliminates the possibility of threats due to errors in back-end
+   transcoding.
+
+8.7.  Rare IP Address Formats
+
+   Not relevant, as IP addresses do not appear anywhere in conformant
+   imc URIs.
+
+8.8.  Sensitive Information
+
+   Because imc URIs are used only to represent the numeric identities of
+   multicast groups, the risk of disclosure of sensitive information due
+   to interception of these URIs is minimal.  Examination of imc URIs
+   could be used to support traffic analysis; where traffic analysis is
+   a plausible danger, bundles should be conveyed by bundle-in-bundle
+   encapsulation [I-D.ietf-dtn-bibe] or by secure convergence-layer
+   protocols that do not expose endpoint IDs, such as TCPCLv4 [RFC9174].
+
+8.9.  Semantic Attacks
+
+   The simplicity of the 'imc' URI scheme syntax minimizes the
+   possibility of misinterpretation of a URI by a human user.
+
+9.  IANA Considerations
+
+9.1.  'imc' URI Scheme
+
+   IANA is requested to register the following URI scheme in the
+   "Uniform Resource Identifier (URI) Schemes" registry, using the
+   template in Section 7.4 of [RFC7595]:
+
+   Scheme name:  imc
+
+   Status:  Permanent
+
+   Applications/protocols that use this scheme name:  The Delay-Tolerant
+      Networking (DTN) Bundle Protocol Version 7 (BPv7) [RFC9171].
+
+   Contact:  IESG <iesg@ietf.org>
+
+   Change controller:  IETF
+
+   References:  This document.
+
+9.2.  Bundle Protocol URI Scheme Types
+
+   IANA is requested to assign the following value in the "Bundle
+   Protocol URI Scheme Types" registry within the "Bundle Protocol"
+   registry group:
+
+    +=======+=============+==========================+================+
+    | Value | Description | BP Utilization Reference | URI Definition |
+    |       |             |                          | Reference      |
+    +=======+=============+==========================+================+
+    | TBD1  | imc         | This document            | This document  |
+    +-------+-------------+--------------------------+----------------+
+
+    Table 1: New Value in the Bundle Protocol URI Scheme Types Registry
+
+
+   // Implementations of [I-D.burleigh-dtn-multicast], such as ION, use
+   // the value 3 for 'imc', and [I-D.cavallini-dtn-iac] also suggests
+   // the value 3 for 'iac'.  The WG needs to resolve this conflict
+   // before IANA assignment.
+
+9.3.  'ipn' Scheme URI Allocator Identifiers
+
+   IANA is requested to add this document as a reference to the "'ipn'
+   Scheme URI Allocator Identifiers" registry, and to add the following
+   note to that registry:
+
+      Allocator Identifiers in this registry are also used to identify
+      the Allocators of Group Numbers for the 'imc' URI scheme.
+
+9.4.  'imc' Scheme URI Default Allocator Group Numbers Registry
+
+   IANA is requested to create a new registry titled "'imc' Scheme URI
+   Default Allocator Group Numbers" in the "Uniform Resource Identifier
+   (URI) Schemes" registry group.  Using terms defined in [RFC8126], the
+   registration procedures for this registry are:
+
+             +=====================+=========================+
+             | Range               | Registration Procedures |
+             +=====================+=========================+
+             | 1..127              | Private Use             |
+             +---------------------+-------------------------+
+             | 128..255            | Standards Action        |
+             +---------------------+-------------------------+
+             | 0x0100..0x7FFF      | Private Use             |
+             +---------------------+-------------------------+
+             | 0x8000..0xFFFF      | Specification Required  |
+             +---------------------+-------------------------+
+             | 0x10000..0xFFFFFFFE | Private Use             |
+             +---------------------+-------------------------+
+             | >=0x100000000       | Invalid                 |
+             +---------------------+-------------------------+
+
+                  Table 2: Registration Procedures for the
+                  'imc' Scheme URI Default Allocator Group
+                              Numbers Registry
+
+   These ranges follow the CBOR encoding of unsigned integers (Section 3
+   of [RFC8949]), in which values less than 24 are encoded in one octet,
+   values less than 256 in two octets, values less than 65536 in three
+   octets, and values less than 2^32 in five octets.  The two-octet and
+   three-octet encoded lengths are each divided between Private Use and
+   registered Group Numbers, so that deployments using Private Use Group
+   Numbers are not forced to use less efficiently encoded values than
+   registered multicast groups.  All one-octet values other than zero
+   (0), and all five-octet values other than 2^32-1, are reserved for
+   Private Use. This is the same structure as the "'ipn' Scheme URI
+   Well-Known Service Numbers for BPv7" registry (Section 9.3 of
+   [RFC9758]).
+
+   The initial values in the registry are:
+
+      +============+===============================+================+
+      | Value      | Description                   | Reference      |
+      +============+===============================+================+
+      | 0          | Reserved for the Null imc URI | This document, |
+      |            |                               | Section 3.5    |
+      +------------+-------------------------------+----------------+
+      | 4294967295 | Invalid; avoids confusion     | This document, |
+      |            | with LocalNode ipn URIs       | Section 3.3.2  |
+      +------------+-------------------------------+----------------+
+
+          Table 3: Initial Values in the 'imc' Scheme URI Default
+                      Allocator Group Numbers Registry
+
+   Each entry in this registry associates a single Group Number with a
+   multicast group of interest to the wider BPv7 community.  Within the
+   registry, the multicast group is identified using the "Description"
+   field, and the "Reference" field identifies a publicly available
+   specification of the purpose of the group.
+
+
+   // The ranges of the "'ipn' Scheme URI Default Allocator Node
+   // Numbers" registry (Section 9.2 of [RFC9758]) are not used as a
+   // model, because that registry retains its pre-existing structure
+   // and assignments rather than following CBOR encoding lengths.  How
+   // this registry relates to the "Bundle Protocol Well-Known Group
+   // Numbers" registry proposed by [I-D.cavallini-dtn-iac], which uses
+   // the same CBOR-aligned ranges, is to be decided.
+
+9.4.1.  Guidance for Designated Experts
+
+   Due to the nature of the CBOR encoding of unsigned integers used for
+   Group Numbers with BPv7, Group Numbers with a low value are encoded
+   more efficiently than larger numbers.  The two-octet registered range
+   (128..255) is therefore reserved for Standards Action.  Designated
+   experts reviewing requests in the three-octet registered range
+   (0x8000..0xFFFF) are strongly recommended to familiarize themselves
+   with the CBOR encoding of unsigned integers in [RFC8949].
+
+   Group Numbers assigned by the Default Allocator are intended for
+   multicast groups that are of use to the entire BPv7 community.  Each
+   registration outside the Private Use ranges MUST have a corresponding
+   publicly available specification describing the purpose of the
+   multicast group.  Multicast groups that are specific to a particular
+   deployment or organization are expected to use Group Numbers assigned
+   by that organization's own Allocator, or Private Use Group Numbers,
+   and do not require an entry in this registry.
+
+   Designated experts MUST NOT approve the registration of any Group
+   Number whose specification requires bundle nodes to be implicitly
+   members of the identified multicast group (see Section 8.4).
+
+10.  References
+
+10.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
+              RFC 3986, DOI 10.17487/RFC3986, January 2005,
+              <https://www.rfc-editor.org/rfc/rfc3986>.
+
+   [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234,
+              DOI 10.17487/RFC5234, January 2008,
+              <https://www.rfc-editor.org/rfc/rfc5234>.
+
+   [RFC7595]  Thaler, D., Ed., Hansen, T., and T. Hardie, "Guidelines
+              and Registration Procedures for URI Schemes", BCP 35,
+              RFC 7595, DOI 10.17487/RFC7595, June 2015,
+              <https://www.rfc-editor.org/rfc/rfc7595>.
+
+   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/rfc/rfc8126>.
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
+   [RFC8610]  Birkholz, H., Vigano, C., and C. Bormann, "Concise Data
+              Definition Language (CDDL): A Notational Convention to
+              Express Concise Binary Object Representation (CBOR) and
+              JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
+              June 2019, <https://www.rfc-editor.org/rfc/rfc8610>.
+
+   [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
+              Representation (CBOR)", STD 94, RFC 8949,
+              DOI 10.17487/RFC8949, December 2020,
+              <https://www.rfc-editor.org/rfc/rfc8949>.
+
+   [RFC9171]  Burleigh, S., Fall, K., and E. Birrane, III, "Bundle
+              Protocol Version 7", RFC 9171, DOI 10.17487/RFC9171,
+              January 2022, <https://www.rfc-editor.org/rfc/rfc9171>.
+
+   [RFC9758]  Taylor, R. and E. Birrane III, "Updates to the 'ipn' URI
+              Scheme", RFC 9758, DOI 10.17487/RFC9758, May 2025,
+              <https://www.rfc-editor.org/rfc/rfc9758>.
+
+10.2.  Informative References
+
+   [I-D.burleigh-dtn-multicast]
+              Burleigh, S., "Bundle Multicast", Work in Progress,
+              Internet-Draft, draft-burleigh-dtn-multicast-00, 10
+              October 2026, <https://datatracker.ietf.org/doc/html/
+              draft-burleigh-dtn-multicast-00>.
+
+   [I-D.burleigh-dtnrg-imc]
+              Burleigh, S., "CBHE-Compatible Bundle Multicast", Work in
+              Progress, Internet-Draft, draft-burleigh-dtnrg-imc-00, 7
+              November 2012, <https://datatracker.ietf.org/doc/html/
+              draft-burleigh-dtnrg-imc-00>.
+
+   [I-D.cavallini-dtn-iac]
+              Cavallini, D. and F. Flentge, "DTN Interplanetary Anycast
+              Scheme", Work in Progress, Internet-Draft, draft-
+              cavallini-dtn-iac-00, 17 September 2025,
+              <https://datatracker.ietf.org/doc/html/draft-cavallini-
+              dtn-iac-00>.
+
+   [I-D.ietf-dtn-bibe]
+              Taylor, R. and A. Montilla, "Bundle-in-Bundle
+              Encapsulation", Work in Progress, Internet-Draft, draft-
+              ietf-dtn-bibe-00, 7 September 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
+              bibe-00>.
+
+   [I-D.ietf-dtn-eid-pattern]
+              Sipos, B., "Bundle Protocol Endpoint ID Patterns", Work in
+              Progress, Internet-Draft, draft-ietf-dtn-eid-pattern-11,
+              23 September 2026, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-dtn-eid-pattern-11>.
+
+   [RFC9172]  Birrane, III, E. and K. McKeever, "Bundle Protocol
+              Security (BPSec)", RFC 9172, DOI 10.17487/RFC9172, January
+              2022, <https://www.rfc-editor.org/rfc/rfc9172>.
+
+   [RFC9174]  Sipos, B., Demmer, M., Ott, J., and S. Perreault, "Delay-
+              Tolerant Networking TCP Convergence-Layer Protocol Version
+              4", RFC 9174, DOI 10.17487/RFC9174, January 2022,
+              <https://www.rfc-editor.org/rfc/rfc9174>.
+
+Appendix A.  'imc' URI Scheme Text Representation Examples
+
+   This section provides some example imc URIs in their textual
+   representation.
+
+A.1.  Using the Default Allocator
+
+   Consider the imc URI identifying Service Number 1 on every member of
+   the multicast group with Group Number 5 assigned by the Default
+   Allocator (0).
+
+   The recommended seven-character representation of this URI would be
+   as follows:
+
+   imc:5.1
+
+   The nine-character representation of this URI, with the explicit
+   Allocator Identifier, would be as follows:
+
+   imc:0.5.1
+
+A.2.  Using a Non-Default Allocator
+
+   Consider the imc URI identifying Service Number 1 on every member of
+   the multicast group with Group Number 17 assigned by Allocator
+   977000.
+
+   The 15-character representation of this URI would be as follows:
+
+   imc:977000.17.1
+
+A.3.  The Null imc URI
+
+   The Null imc URI (Section 3.5) is represented as:
+
+   imc:0.0
+
+Appendix B.  'imc' URI Scheme CBOR Encoding Examples
+
+   This section provides some example CBOR encodings of imc EIDs.  As in
+   Section 6, these examples use the placeholder value 3 for the 'imc'
+   URI scheme type.
+
+B.1.  Using the Default Allocator
+
+   Consider the imc EID imc:5.1.  This textual representation of an imc
+   EID identifies Service Number 1 on every member of the multicast
+   group with Group Number 5 assigned by the Default Allocator (0).
+
+   The six-octet encoding of this EID would be as follows:
+
+   82       # 2-Element Endpoint Encoding
+      03    # uri-code: 3 ('imc' URI scheme)
+      83    # 3-Element imc EID encoding
+         00 # Default Allocator
+         05 # Group Number
+         01 # Service Number
+
+B.2.  Using a Non-Default Allocator
+
+   Consider the imc EID imc:977000.17.1.  This textual representation of
+   an imc EID identifies Service Number 1 on every member of the
+   multicast group with Group Number 17 assigned by Allocator 977000.
+
+   The 10-octet encoding of this EID would be as follows:
+
+   82                # 2-Element Endpoint Encoding
+      03             # uri-code: 3 ('imc' URI scheme)
+      83             # 3-Element imc EID encoding
+         1A 000EE868 # Allocator Identifier
+         11          # Group Number
+         01          # Service Number
+
+B.3.  The Null imc EID
+
+   The six-octet encoding of the Null imc EID (Section 5.2) of imc:0.0
+   would be as follows:
+
+   82       # 2-Element Endpoint Encoding
+      03    # uri-code: 3 ('imc' URI scheme)
+      83    # 3-Element imc EID encoding
+         00 # Default Allocator
+         00 # Group Number
+         00 # Service Number
+
 Acknowledgments
 
-   TODO acknowledge.
+   The 'imc' URI scheme was designed by Scott Burleigh, and much of the
+   text of this document is derived from [I-D.burleigh-dtn-multicast]
+   and [I-D.burleigh-dtnrg-imc].  The structure of this document follows
+   [RFC9758].
 
 Author's Address
 
