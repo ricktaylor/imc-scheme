@@ -9,7 +9,7 @@
 <meta content="
        This document defines the 'imc' URI scheme, a concise integer-based scheme
 for identifying Bundle Protocol Version 7 (BPv7) endpoints that are not
-singleton endpoints, termed multicast groups. The structure of 'imc' URIs
+singleton endpoints, termed multicast endpoints. The structure of 'imc' URIs
 mirrors that of the 'ipn' URI scheme: each 'imc' URI comprises an Allocator
 Identifier, a Group Number, and a Service Number. This document specifies the
 textual syntax of 'imc' URIs, their interpretation when used as BPv7 Endpoint
@@ -1089,7 +1089,7 @@ svg {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document defines the 'imc' URI scheme, a concise integer-based scheme
 for identifying Bundle Protocol Version 7 (BPv7) endpoints that are not
-singleton endpoints, termed multicast groups. The structure of 'imc' URIs
+singleton endpoints, termed multicast endpoints. The structure of 'imc' URIs
 mirrors that of the 'ipn' URI scheme: each 'imc' URI comprises an Allocator
 Identifier, a Group Number, and a Service Number. This document specifies the
 textual syntax of 'imc' URIs, their interpretation when used as BPv7 Endpoint
@@ -1174,11 +1174,6 @@ requests the associated IANA registrations.<a href="#section-abstract-1" class="
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-group-numbers" class="internal xref">Group Numbers</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.1">
-                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="auto internal xref">3.2.1</a>.  <a href="#name-fully-qualified-group-numbe" class="internal xref">Fully Qualified Group Numbers</a></p>
-</li>
-                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-special-group-numbers" class="internal xref">Special Group Numbers</a></p>
@@ -1214,10 +1209,10 @@ requests the associated IANA registrations.<a href="#section-abstract-1" class="
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-usage-of-imc-uris-with-bpv7" class="internal xref">Usage of imc URIs with BPv7</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-multicast-group-membership" class="internal xref">Multicast Group Membership</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-multicast-endpoint-membersh" class="internal xref">Multicast Endpoint Membership</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-the-null-multicast-group" class="internal xref">The Null Multicast Group</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-the-null-multicast-endpoint" class="internal xref">The Null Multicast Endpoint</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-node-ids-and-bundle-sources" class="internal xref">Node IDs and Bundle Sources</a></p>
@@ -1226,7 +1221,7 @@ requests the associated IANA registrations.<a href="#section-abstract-1" class="
                 <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-private-use-imc-eids" class="internal xref">Private Use imc EIDs</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
-                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-administrative-endpoints" class="internal xref">Administrative Endpoints</a></p>
+                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-administrative-multicast-en" class="internal xref">Administrative Multicast Endpoints</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6">
                 <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-well-known-service-numbers" class="internal xref">Well-Known Service Numbers</a></p>
@@ -1293,28 +1288,31 @@ requests the associated IANA registrations.<a href="#section-abstract-1" class="
                 <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-malicious-construction" class="internal xref">Malicious Construction</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-unauthorized-group-membersh" class="internal xref">Unauthorized Group Membership</a></p>
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-unauthorized-membership" class="internal xref">Unauthorized Membership</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
-                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-implicit-group-membership" class="internal xref">Implicit Group Membership</a></p>
+                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-implicit-membership" class="internal xref">Implicit Membership</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.5">
-                <p id="section-toc.1-1.9.2.5.1"><a href="#section-9.5" class="auto internal xref">9.5</a>.  <a href="#name-private-use-imc-eids-2" class="internal xref">Private Use imc EIDs</a></p>
+                <p id="section-toc.1-1.9.2.5.1"><a href="#section-9.5" class="auto internal xref">9.5</a>.  <a href="#name-status-report-implosion" class="internal xref">Status Report Implosion</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.6">
-                <p id="section-toc.1-1.9.2.6.1"><a href="#section-9.6" class="auto internal xref">9.6</a>.  <a href="#name-back-end-transcoding" class="internal xref">Back-End Transcoding</a></p>
+                <p id="section-toc.1-1.9.2.6.1"><a href="#section-9.6" class="auto internal xref">9.6</a>.  <a href="#name-private-use-imc-eids-2" class="internal xref">Private Use imc EIDs</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.7">
-                <p id="section-toc.1-1.9.2.7.1"><a href="#section-9.7" class="auto internal xref">9.7</a>.  <a href="#name-rare-ip-address-formats" class="internal xref">Rare IP Address Formats</a></p>
+                <p id="section-toc.1-1.9.2.7.1"><a href="#section-9.7" class="auto internal xref">9.7</a>.  <a href="#name-back-end-transcoding" class="internal xref">Back-End Transcoding</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.8">
-                <p id="section-toc.1-1.9.2.8.1"><a href="#section-9.8" class="auto internal xref">9.8</a>.  <a href="#name-sensitive-information" class="internal xref">Sensitive Information</a></p>
+                <p id="section-toc.1-1.9.2.8.1"><a href="#section-9.8" class="auto internal xref">9.8</a>.  <a href="#name-rare-ip-address-formats" class="internal xref">Rare IP Address Formats</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.9">
-                <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="auto internal xref">9.9</a>.  <a href="#name-semantic-attacks" class="internal xref">Semantic Attacks</a></p>
+                <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="auto internal xref">9.9</a>.  <a href="#name-sensitive-information" class="internal xref">Sensitive Information</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.10">
-                <p id="section-toc.1-1.9.2.10.1"><a href="#section-9.10" class="auto internal xref">9.10</a>. <a href="#name-eid-patterns" class="internal xref">EID Patterns</a></p>
+                <p id="section-toc.1-1.9.2.10.1"><a href="#section-9.10" class="auto internal xref">9.10</a>. <a href="#name-semantic-attacks" class="internal xref">Semantic Attacks</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.11">
+                <p id="section-toc.1-1.9.2.11.1"><a href="#section-9.11" class="auto internal xref">9.11</a>. <a href="#name-eid-patterns" class="internal xref">EID Patterns</a></p>
 </li>
             </ul>
 </li>
@@ -1396,33 +1394,40 @@ requests the associated IANA registrations.<a href="#section-abstract-1" class="
       </h2>
 <p id="section-1-1">The Bundle Protocol Version 7 (BPv7) <span>[<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> identifies the destination
 of every bundle by an Endpoint Identifier (EID), which is a URI. A bundle
-endpoint is a set of zero or more bundle nodes, and a node becomes a member of
-an endpoint by registering in it. Although BPv7 permits endpoints with any
+endpoint is a set of zero or more bundle nodes, the members of which are
+determined by their registrations in it. Although BPv7 permits endpoints with any
 number of members, the 'ipn' URI scheme <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>, the scheme most commonly
 used in deployed BPv7 networks, only identifies singleton endpoints. There is
 no equivalently concise scheme for identifying endpoints that may have many
 members.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This document defines the 'imc' URI scheme for this purpose. An 'imc' URI
 identifies an endpoint that is never a singleton endpoint; such an endpoint
-is termed a "multicast group". The name 'imc' is derived from
+is termed a "multicast endpoint". The name 'imc' is derived from
 "InterPlanetary MultiCast", in the same way that 'ipn' was derived from
 "InterPlanetary Network", but like 'ipn' the term is now used as a
 non-acronymous name.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">The 'imc' scheme was first proposed in <span>[<a href="#I-D.burleigh-dtnrg-imc" class="cite xref">I-D.burleigh-dtnrg-imc</a>]</span> for use
+<p id="section-1-3">The structure of an imc URI mirrors that of an 'ipn' URI, with a Group Number
+in place of the 'ipn' Node Number. However, whereas a Node Number identifies a
+node, a Group Number identifies neither a node nor a set of nodes. As
+throughout BPv7, it is endpoints that are addressed, and nodes are members of
+endpoints: each imc URI identifies a single multicast
+endpoint, with its own membership, and the Group Number names a group of
+related multicast endpoints.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">The 'imc' scheme was first proposed in <span>[<a href="#I-D.burleigh-dtnrg-imc" class="cite xref">I-D.burleigh-dtnrg-imc</a>]</span> for use
 with Compressed Bundle Header Encoding and the experimental Bundle Protocol
 version 6, and was subsequently specified for BPv7 as part of the Bundle
 Multicast protocol <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span>. This document separates the
 definition of the 'imc' scheme from that protocol, so that the scheme can be
 standardized independently of any particular multicast forwarding mechanism,
 and aligns its structure, terminology, and encodings with the 'ipn' URI scheme
-as updated by <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">Like the 'ipn' URI scheme, the 'imc' URI scheme defines identifiers only. An
+as updated by <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">Like the 'ipn' URI scheme, the 'imc' URI scheme defines identifiers only. An
 'imc' URI does not carry any topological information describing how to route
-bundles to the members of the identified multicast group. The procedures by
-which bundles destined for multicast groups are forwarded, and by which
-information about group membership is distributed, are out of scope for this
+bundles to the members of the identified multicast endpoint. The procedures by
+which bundles destined for multicast endpoints are forwarded, and by which
+information about membership is distributed, are out of scope for this
 document; one such set of procedures is defined in
-<span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1437,9 +1442,16 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <p id="section-2-2">For the remainder of this document, the term "imc URI" is used to refer to a
 URI that uses the 'imc' URI scheme, and the term "imc EID" is used to refer to
 an imc URI that is used as a BPv7 EID.<a href="#section-2-2" class="pilcrow">¶</a></p>
-<p id="section-2-3">The term "multicast group" refers to a BPv7 endpoint identified by an imc EID.<a href="#section-2-3" class="pilcrow">¶</a></p>
-<p id="section-2-4">The terms "Allocator", "Allocator Identifier", "Default Allocator", "Node
-Number", and "Service Number" are used as defined in <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-3">The term "multicast endpoint" refers to the BPv7 endpoint identified by an imc
+EID. The members of a multicast endpoint are the bundle nodes that have a
+registration (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>) in that imc EID (<a href="#membership" class="auto internal xref">Section 5.1</a>);
+a multicast endpoint is therefore never a
+singleton endpoint (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>).<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">The term "group" refers to the set of all multicast endpoints whose imc EIDs
+share the same Allocator Identifier and Group Number, differing only in their
+Service Numbers (<a href="#group-numbers" class="auto internal xref">Section 3.2</a>). A group has no members of its own.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5">The terms "Allocator", "Allocator Identifier", "Default Allocator", "Node
+Number", and "Service Number" are used as defined in <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>.<a href="#section-2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="core">
@@ -1464,12 +1476,16 @@ following three components:<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-3">The Allocator Identifier indicates the entity responsible for assigning Group
 Numbers, maintaining uniqueness whilst avoiding the need for a single registry
 for all assigned Group Numbers. See <a href="#allocators" class="auto internal xref">Section 3.1</a>.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">The Group Number identifies a multicast group in the context of an Allocator.
-See <a href="#group-numbers" class="auto internal xref">Section 3.2</a>.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">The Service Number distinguishes between services operating on each member of
-a multicast group. See <a href="#service-numbers" class="auto internal xref">Section 3.4</a>.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">The combination of the Allocator Identifier and the Group Number uniquely
-identifies a multicast group. See <a href="#fqgn" class="auto internal xref">Section 3.2.1</a>.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-4">The Group Number names a group of multicast endpoints in the context of an
+Allocator. See <a href="#group-numbers" class="auto internal xref">Section 3.2</a>.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The Service Number distinguishes between the multicast endpoints of a group.
+See <a href="#service-numbers" class="auto internal xref">Section 3.4</a>.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">The combination of all three components identifies a single multicast
+endpoint. The combination of the Allocator Identifier and the Group Number
+uniquely identifies a group. See <a href="#group-numbers" class="auto internal xref">Section 3.2</a>.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">Membership is a property of each multicast endpoint, not of a group: the
+multicast endpoints of a group can have entirely different members. See
+<a href="#membership" class="auto internal xref">Section 5.1</a>.<a href="#section-3-7" class="pilcrow">¶</a></p>
 <div id="allocators">
 <section id="section-3.1">
         <h3 id="name-allocator-identifiers">
@@ -1486,10 +1502,10 @@ Numbers for use with the 'ipn' URI scheme. Each Allocator assigns Group
 Numbers according to its own policies. Other than ensuring that any Group
 Numbers it assigns are unique amongst all Group Numbers it assigns, an
 Allocator does not need to coordinate its assignments with other Allocators.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">Group Numbers and Node Numbers are distinct namespaces. An Allocator <span class="bcp14">MAY</span>
+<p id="section-3.1-3">Group Numbers and Node Numbers are distinct namespaces. An Allocator may
 assign the same numeric value as both a Group Number and a Node Number, and
-there is no relationship between a multicast group and a node that happen to
-share the same Allocator Identifier and number.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+there is no relationship between a group and a node that happen to share the
+same Allocator Identifier and number.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">In any case where an encoded imc URI does not explicitly include an Allocator
 Identifier, an implementation <span class="bcp14">MUST</span> assume that the Group Number has been
 assigned by the Default Allocator (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.2.2" class="relref">Section 3.2.2</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>).<a href="#section-3.1-4" class="pilcrow">¶</a></p>
@@ -1507,30 +1523,25 @@ Default Allocator for this purpose, are to be used.<a href="#section-3.1-6" clas
         <h3 id="name-group-numbers">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-group-numbers" class="section-name selfRef">Group Numbers</a>
         </h3>
-<p id="section-3.2-1">A Group Number identifies a multicast group in the context of an Allocator. A
-Group Number is an unsigned integer. A single Group Number assigned by a
-single Allocator <span class="bcp14">MUST</span> refer to a single multicast group.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">All Group Number assignments, by all Allocators, <span class="bcp14">MUST</span> be in the range 0 to
-2^32-1.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">It is <span class="bcp14">RECOMMENDED</span> that Group Number zero (0) not be assigned by an Allocator,
-to avoid confusion with the Null imc URI (<a href="#null-imc" class="auto internal xref">Section 3.5</a>).<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<div id="fqgn">
-<section id="section-3.2.1">
-          <h4 id="name-fully-qualified-group-numbe">
-<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-fully-qualified-group-numbe" class="section-name selfRef">Fully Qualified Group Numbers</a>
-          </h4>
-<p id="section-3.2.1-1">The combination of the Allocator Identifier and the Group Number of an imc
-URI uniquely identifies a particular multicast group, and is termed the "Fully
-Qualified Group Number" (FQGN), by analogy with the Fully Qualified Node
-Number of an 'ipn' URI (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.3.1" class="relref">Section 3.3.1</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>).<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.1-2">In the examples in this document, FQGNs are written as (Allocator Identifier,
-Group Number). For example, (977000,17) is the FQGN for a multicast group
-assigned Group Number 17 by an Allocator with Allocator Identifier 977000.<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.1-3">An FQGN is a pair of identifiers, not a single number. Unlike the FQNN of an
-'ipn' URI, this document defines no representation of an FQGN as a single
-packed integer, in either the text or the CBOR representation of imc URIs.<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-3.2-1">A Group Number names a group in the context of an Allocator. A Group Number is
+an unsigned integer. A single Group Number assigned by a single Allocator <span class="bcp14">MUST</span>
+refer to a single group.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">A group is the set of all multicast endpoints whose imc EIDs share an
+Allocator Identifier and Group Number, distinguished by their Service Numbers,
+in the same way that an 'ipn' FQNN names a node whose services are
+distinguished by their Service Numbers. An Allocator might assign a Group
+Number to a community of interest, a mission, or a function, with the
+multicast endpoints of the group identifying the services of that community.
+A Group Number does not identify any node or set of nodes, and assigning it
+does not make any node a member of any multicast endpoint.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">All Group Number assignments, by all Allocators, <span class="bcp14">MUST</span> be in the range 0 to
+2^32-1.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">It is <span class="bcp14">RECOMMENDED</span> that Group Number zero (0) not be assigned by an Allocator,
+to avoid confusion with the Null imc URI (<a href="#null-imc" class="auto internal xref">Section 3.5</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">Unlike the Fully Qualified Node Number of an 'ipn' URI
+(<span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.3.1" class="relref">Section 3.3.1</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>), this document defines no representation of an
+Allocator Identifier and Group Number packed together as a single integer, in
+either the text or the CBOR representation of imc URIs.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="special-groups">
@@ -1555,7 +1566,7 @@ them as the Null imc URI.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
 could identify an implicit multicast group of which every IMC-capable node
 is a member, to be used for distributing group membership information,
 and ION uses imc:0.0 in this way today. This document instead defines
-imc:0.0 as the null multicast group, which never has any members (see
+imc:0.0 as the null multicast endpoint, which never has any members (see
 <a href="#null-group" class="auto internal xref">Section 5.2</a> and <a href="#sec-implicit" class="auto internal xref">Section 9.4</a>), so that usage is not interoperable
 with this specification.</span><a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -1573,7 +1584,7 @@ composed.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
 URIs (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.4.2" class="relref">Section 3.4.2</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>), which use the same Node Number. For
 example, if this Group Number were assignable, the mistyped URI
 imc:4294967295.7, intended as the LocalNode ipn URI ipn:4294967295.7, could
-silently identify a real multicast group. Reserving it ensures that such an
+silently identify a real multicast endpoint. Reserving it ensures that such an
 error causes the bundle to be discarded rather than delivered to unintended
 recipients.<a href="#section-3.3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.3.2-3">The reservation does not give imc URIs any LocalNode semantics, and the
@@ -1605,7 +1616,7 @@ each length of CBOR encoding; see <a href="#iana-groups" class="auto internal xr
 <p id="section-3.3.3-2">Any imc URI with a zero (0) Allocator Identifier and a Group Number reserved
 for Private Use is not guaranteed to be unique beyond a single administrative
 domain. An administrative domain, as used here, is defined as the set of
-nodes that share a unique allocation of FQGNs from the Private Use ranges.<a href="#section-3.3.3-2" class="pilcrow">¶</a></p>
+nodes that share a unique allocation of Private Use Group Numbers.<a href="#section-3.3.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.3.3-3">Because of this lack of uniqueness, any implementation of a protocol using
 imc URIs that resides on the border between administrative domains <span class="bcp14">MUST</span> have
 suitable mechanisms in place to prevent protocol units using such Private Use
@@ -1619,10 +1630,11 @@ Group Numbers from crossing between different administrative domains.<a href="#s
         <h3 id="name-service-numbers">
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-service-numbers" class="section-name selfRef">Service Numbers</a>
         </h3>
-<p id="section-3.4-1">A Service Number is an unsigned integer that identifies a particular service
-operating on a node, as defined in <span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.5" class="relref">Section 3.5</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>. In an imc URI,
-the Service Number identifies the service on each member of the multicast
-group to which a bundle destined for that group is to be delivered.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-1">A Service Number is an unsigned integer, as defined in
+<span><a href="https://rfc-editor.org/rfc/rfc9758#section-3.5" class="relref">Section 3.5</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>. In an imc URI, the Service Number distinguishes
+the multicast endpoints of a group, and so identifies the service to which a
+bundle destined for that multicast endpoint is delivered at each of its
+members.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="null-imc">
@@ -1630,16 +1642,16 @@ group to which a bundle destined for that group is to be delivered.<a href="#sec
         <h3 id="name-the-null-imc-uri">
 <a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-the-null-imc-uri" class="section-name selfRef">The Null imc URI</a>
         </h3>
-<p id="section-3.5-1">There is value in defining a unique imc URI that identifies a multicast group
-that can never have any members. This imc URI is termed the "Null imc URI" and
-has all three components (the Allocator Identifier, Group Number, and Service
-Number) set to the value zero (0). The multicast group identified by the Null
-imc URI is termed the "null multicast group". No node is ever a member of the
-null multicast group, and any destination identified by the Null imc URI is
-therefore by definition unreachable.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-1">There is value in defining a unique imc URI that identifies a multicast
+endpoint that can never have any members. This imc URI is termed the "Null
+imc URI" and has all three components (the Allocator Identifier, Group
+Number, and Service Number) set to the value zero (0). The multicast endpoint
+identified by the Null imc URI is termed the "null multicast endpoint". No
+node is ever a member of the null multicast endpoint, and any destination
+identified by the Null imc URI is therefore by definition unreachable.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
 <p id="section-3.5-2">In particular, the Null imc URI <span class="bcp14">MUST NOT</span> be interpreted as identifying a
-multicast group of which all nodes, or all nodes supporting the 'imc' scheme,
-are implicitly members. See <a href="#sec-implicit" class="auto internal xref">Section 9.4</a>.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+multicast endpoint of which all nodes, or all nodes supporting the 'imc'
+scheme, are implicitly members. See <a href="#sec-implicit" class="auto internal xref">Section 9.4</a>.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1702,11 +1714,12 @@ DIGIT = %x30-39
 </div>
 <p id="section-4.1-3">None of the reserved characters defined in the generic URI syntax are used as
 delimiters within URIs of the 'imc' scheme, other than '.'.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1-4"><span class="cref" id="text-fqgn">The ABNF in <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> names the
+<p id="section-4.1-4"><span class="cref" id="text-single">The ABNF in <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> names the
 single-number form of the group label "fqgn", implying that it carries
-the 64-bit packed FQGN. This document instead follows Section 4 of
-<span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>: the single-number form is a Group Number assigned by the
-Default Allocator. No packed FQGN is defined (<a href="#fqgn" class="auto internal xref">Section 3.2.1</a>).</span><a href="#section-4.1-4" class="pilcrow">¶</a></p>
+a packed 64-bit Allocator Identifier and Group Number. This document
+instead follows Section 4 of <span>[<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>: the single-number form is a
+Group Number assigned by the Default Allocator, and no packed form is
+defined (<a href="#group-numbers" class="auto internal xref">Section 3.2</a>).</span><a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <p id="section-4.1-5">Unlike the 'ipn' URI scheme, the 'imc' URI scheme has no '!' form, because
 it has no equivalent of LocalNode ipn URIs; see <a href="#max-group" class="auto internal xref">Section 3.3.2</a>.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
 </section>
@@ -1724,38 +1737,53 @@ that <span class="bcp14">MUST</span> be followed when using this URI scheme to r
 Bundle Protocol version 6.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="membership">
 <section id="section-5.1">
-        <h3 id="name-multicast-group-membership">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-multicast-group-membership" class="section-name selfRef">Multicast Group Membership</a>
+        <h3 id="name-multicast-endpoint-membersh">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-multicast-endpoint-membersh" class="section-name selfRef">Multicast Endpoint Membership</a>
         </h3>
-<p id="section-5.1-1">An imc EID <span class="bcp14">MUST NOT</span> identify a singleton endpoint. The multicast group
-identified by an imc EID may at any time have zero, one, or many members.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">A bundle node joins a multicast group by registering in the endpoint
-identified by the imc EID of that group, and leaves the group by
-unregistering from that endpoint. A single bundle node <span class="bcp14">MAY</span> be a member of any
-number of multicast groups.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">As noted in <span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>, registrations are local, and BPv7 does
+<p id="section-5.1-1">The members of a multicast endpoint are those bundle nodes that have a
+registration (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>) in its imc EID. A single bundle
+node may be a member of any number of multicast endpoints.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">This document does not define any mechanism by which a node joins or leaves
+a multicast endpoint. As for any BPv7 endpoint, the means by which a
+registration is created or removed is an implementation matter
+(<span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.3" class="relref">Section 3.3</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>), and may for example be a local application
+interface, configuration, or a separately specified protocol.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">Membership is determined separately for each imc EID. Being a member of one
+multicast endpoint of a group does not make a node a member of any other
+multicast endpoint of that group: for example, the members of imc:977000.17.1
+and of imc:977000.17.2 are independent sets of nodes, either of which may be
+empty. A bundle destined for an imc EID is delivered only at members of that
+multicast endpoint.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">Forwarding implementations may nevertheless aggregate state, such as
+distribution trees or membership information, across the multicast endpoints
+of a group, or across any other set of multicast endpoints, for example one
+described by an EID Pattern (<a href="#patterns" class="auto internal xref">Section 8</a>). Such aggregation is an
+implementation choice that does not alter which nodes are members of each
+multicast endpoint, and does not imply that Group Numbers carry topological
+information (<a href="#late-binding" class="auto internal xref">Section 7.2</a>).<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1-5">As noted in <span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>, registrations are local, and BPv7 does
 not include a mechanism for distributing information about registrations.
-Mechanisms by which information about the membership of multicast groups is
-distributed are out of scope for this document.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+Mechanisms by which information about the membership of multicast endpoints
+is distributed are out of scope for this document.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="null-group">
 <section id="section-5.2">
-        <h3 id="name-the-null-multicast-group">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-the-null-multicast-group" class="section-name selfRef">The Null Multicast Group</a>
+        <h3 id="name-the-null-multicast-endpoint">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-the-null-multicast-endpoint" class="section-name selfRef">The Null Multicast Endpoint</a>
         </h3>
 <p id="section-5.2-1">When the Null imc URI (<a href="#null-imc" class="auto internal xref">Section 3.5</a>) is used as a BPv7 EID, it is termed the
-"Null imc EID", and the endpoint it identifies is the null multicast group.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">The null multicast group never has any members. A bundle node <span class="bcp14">MUST NOT</span>
-register in the null multicast group, and any request to do so <span class="bcp14">MUST</span> be
-refused.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">Because the null multicast group has no members, a bundle destined for the
+"Null imc EID", and the endpoint it identifies is the null multicast endpoint.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">The null multicast endpoint never has any members: a bundle node <span class="bcp14">MUST NOT</span>
+hold a registration in the Null imc EID, by whatever means registrations are
+made.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">Because the null multicast endpoint has no members, a bundle destined for the
 Null imc EID can never be delivered. Such a bundle <span class="bcp14">SHOULD NOT</span> be created, and
 a bundle node that receives or originates such a bundle <span class="bcp14">MUST NOT</span> forward it to
 any other node. If such a bundle is deleted and a bundle deletion status
 report is requested, the reason code "Destination endpoint ID unavailable"
 (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>) <span class="bcp14">SHOULD</span> be used.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2-4">The null multicast group is distinct from the BPv7 null endpoint ("dtn:none",
+<p id="section-5.2-4">The null multicast endpoint is distinct from the BPv7 null endpoint ("dtn:none",
 <span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.2.5.1.1" class="relref">Section 4.2.5.1.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>). Although both identify endpoints that never
 have any members, the Null imc EID <span class="bcp14">MUST NOT</span> be used in place of the null
 endpoint ID, for example to indicate an anonymous bundle source or that no
@@ -1769,8 +1797,8 @@ EID (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-5.2" class="relre
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-node-ids-and-bundle-sources" class="section-name selfRef">Node IDs and Bundle Sources</a>
         </h3>
 <p id="section-5.3-1"><span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.2.5.2" class="relref">Section 4.2.5.2</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> requires that a Node ID be the EID of a
-singleton endpoint. Because no imc EID identifies a singleton endpoint, an imc
-EID <span class="bcp14">MUST NOT</span> be used as a Node ID.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+singleton endpoint. Because a multicast endpoint is never a singleton
+endpoint, an imc EID <span class="bcp14">MUST NOT</span> be used as a Node ID.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 <p id="section-5.3-2">As a consequence, an imc EID <span class="bcp14">MUST NOT</span> be used as the source node ID of a
 bundle (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-5.2" class="relref">Section 5.2</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>), as the node ID carried in a Previous Node
 Block (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.4.1" class="relref">Section 4.4.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>), or as the security source of a Bundle
@@ -1782,8 +1810,9 @@ Protocol Security (BPSec) <span>[<a href="#RFC9172" class="cite xref">RFC9172</a
         <h3 id="name-private-use-imc-eids">
 <a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-private-use-imc-eids" class="section-name selfRef">Private Use imc EIDs</a>
         </h3>
-<p id="section-5.4-1">Bundles destined for EIDs that use an imc URI with an FQGN (<a href="#fqgn" class="auto internal xref">Section 3.2.1</a>) that is
-within the Private Use ranges of the Default Allocator (<a href="#private-groups" class="auto internal xref">Section 3.3.3</a>) are
+<p id="section-5.4-1">Bundles destined for imc EIDs with a zero (0) Allocator Identifier and a
+Group Number within the Private Use ranges of the Default Allocator
+(<a href="#private-groups" class="auto internal xref">Section 3.3.3</a>) are
 not universally unique; therefore, they are only valid within the scope of the
 current administrative domain. This means that any bundle using a Private Use
 imc EID as a bundle destination <span class="bcp14">MUST NOT</span> be allowed to cross administrative
@@ -1797,16 +1826,49 @@ prevents correct operation.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
 </div>
 <div id="admin">
 <section id="section-5.5">
-        <h3 id="name-administrative-endpoints">
-<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-administrative-endpoints" class="section-name selfRef">Administrative Endpoints</a>
+        <h3 id="name-administrative-multicast-en">
+<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-administrative-multicast-en" class="section-name selfRef">Administrative Multicast Endpoints</a>
         </h3>
-<p id="section-5.5-1">The Administrative Endpoint of a node is a singleton endpoint
-(<span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>). Therefore no imc EID identifies the
-Administrative Endpoint of any node, regardless of its Service Number.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
-<p id="section-5.5-2"><span class="cref" id="svc0">The meaning, if any, of Service Number zero (0) in an imc EID needs
-to be decided. Appendix A of <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> uses
-imc:0.0 to convey administrative information about group membership,
-which this document does not permit (see <a href="#null-group" class="auto internal xref">Section 5.2</a>).</span><a href="#section-5.5-2" class="pilcrow">¶</a></p>
+<p id="section-5.5-1">The administrative endpoint of a node is a singleton endpoint, and its EID can
+serve as the node's Node ID (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>). No imc EID
+identifies the administrative endpoint of any node.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<p id="section-5.5-2">However, consistent with the meaning of Service Number zero (0) in 'ipn' EIDs
+(<span><a href="https://rfc-editor.org/rfc/rfc9758#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>), the multicast endpoint of a group with Service
+Number zero (0), for example imc:977000.17.0, is the "administrative
+multicast endpoint" of that group. Bundles destined for an administrative
+multicast endpoint carry administrative records (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-6.1" class="relref">Section 6.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>),
+and are delivered at each member to the administrative element of its
+application agent (<span><a href="https://rfc-editor.org/rfc/rfc9171#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>), rather than to any
+application-specific element.<a href="#section-5.5-2" class="pilcrow">¶</a></p>
+<p id="section-5.5-3">As for every multicast endpoint, the members of an administrative multicast
+endpoint are the nodes registered in its imc EID (<a href="#membership" class="auto internal xref">Section 5.1</a>), and its
+membership is independent of that of the other multicast endpoints of the
+group. A node is not
+implicitly a member of the administrative multicast endpoint of any group,
+including a group of whose other multicast endpoints it is a member.<a href="#section-5.5-3" class="pilcrow">¶</a></p>
+<p id="section-5.5-4">The "ADU is an administrative record" bundle processing control flag
+(<span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.2.3" class="relref">Section 4.2.3</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>) <span class="bcp14">MUST</span> be set in every bundle destined for an
+administrative multicast endpoint, and a bundle destined for an
+administrative multicast endpoint without that flag set <span class="bcp14">MUST NOT</span> be delivered.
+Conversely, a bundle with that flag set <span class="bcp14">MUST NOT</span> be destined for an imc EID
+whose Service Number is not zero (0), consistent with the rule for 'ipn' EIDs
+in <span><a href="https://rfc-editor.org/rfc/rfc9758#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>.<a href="#section-5.5-4" class="pilcrow">¶</a></p>
+<p id="section-5.5-5">The receiver of an administrative record delivered from an administrative
+multicast endpoint <span class="bcp14">MUST</span> be prepared for the same record to be delivered to
+many nodes. A specification of an administrative record type that is intended
+to be sent to administrative multicast endpoints <span class="bcp14">SHOULD</span> state so, and
+administrative record types not so specified <span class="bcp14">SHOULD NOT</span> be sent to them.
+This document specifies that bundle status reports
+(<span><a href="https://rfc-editor.org/rfc/rfc9171#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span>) <span class="bcp14">MAY</span> be sent to an administrative multicast
+endpoint: the report-to EID of a bundle <span class="bcp14">MAY</span> be an administrative multicast
+endpoint, so that a set of monitoring nodes all receive its status reports.<a href="#section-5.5-5" class="pilcrow">¶</a></p>
+<p id="section-5.5-6">Because an administrative multicast endpoint is not the administrative
+endpoint of any node, it cannot be used as a Node ID (<a href="#node-ids" class="auto internal xref">Section 5.3</a>).<a href="#section-5.5-6" class="pilcrow">¶</a></p>
+<p id="section-5.5-7"><span class="cref" id="admin-mc">Appendix A of <span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> uses imc:0.0 to
+convey administrative information about membership. Under this
+document, that function would use the administrative multicast endpoint
+of an explicitly assigned group, whose membership is determined by the
+deployment, rather than the null multicast endpoint (<a href="#null-group" class="auto internal xref">Section 5.2</a>, <a href="#sec-implicit" class="auto internal xref">Section 9.4</a>).</span><a href="#section-5.5-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="well-known">
@@ -1818,7 +1880,9 @@ which this document does not permit (see <a href="#null-group" class="auto inter
 Service Number of an 'ipn' EID. In particular, the well-known Service Numbers
 registered in the "'ipn' Scheme URI Well-Known Service Numbers for BPv7"
 registry (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>) identify the same services when they
-appear in imc EIDs.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
+appear in imc EIDs. Service Number zero (0), registered there as the
+Administrative Endpoint, identifies the administrative multicast endpoint of
+a group (<a href="#admin" class="auto internal xref">Section 5.5</a>).<a href="#section-5.6-1" class="pilcrow">¶</a></p>
 <p id="section-5.6-2"><span class="cref" id="svc-reg"><span>[<a href="#I-D.cavallini-dtn-iac" class="cite xref">I-D.cavallini-dtn-iac</a>]</span> requests that the registries shared by
 'ipn' and 'iac' be renamed. The WG needs to coordinate how these shared
 registries are named and referenced across 'ipn', 'imc', and 'iac'.</span><a href="#section-5.6-2" class="pilcrow">¶</a></p>
@@ -1834,8 +1898,9 @@ registries are named and referenced across 'ipn', 'imc', and 'iac'.</span><a hre
 <p id="section-6-1"><span><a href="https://rfc-editor.org/rfc/rfc9171#section-4.2.5.1" class="relref">Section 4.2.5.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> requires that any URI scheme used to represent
 BPv7 EIDs <span class="bcp14">MUST</span> define how the scheme-specific part of the URI scheme is
 encoded with Concise Binary Object Representation (CBOR) <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>. To meet
-this requirement, this section describes the CBOR encoding of imc EIDs. The formal definition of the CBOR representation is
-specified in <a href="#cbor-syntax" class="auto internal xref">Section 6.2</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+this requirement, this section describes the CBOR encoding of imc EIDs. The
+formal definition of the CBOR representation is specified in
+<a href="#cbor-syntax" class="auto internal xref">Section 6.2</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">The examples in this section use the value 3 as the BPv7 URI scheme type of
 the 'imc' scheme. This value is a placeholder pending assignment by IANA; see
 <a href="#iana-bp" class="auto internal xref">Section 10.2</a>.<a href="#section-6-2" class="pilcrow">¶</a></p>
@@ -1850,8 +1915,7 @@ elements. Each element of the array <span class="bcp14">MUST</span> be encoded a
 integer, and each element carries exactly one component of the imc EID.
 Unlike the two-element encoding of 'ipn' EIDs (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>),
 neither encoding packs the Allocator Identifier and Group Number into a
-single integer; there is no packed encoding of a Fully Qualified Group
-Number.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+single integer.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">An imc EID whose scheme-specific part is not a CBOR array of two (2) or three
 (3) unsigned integers, or whose Allocator Identifier or Group Number is not
 less than 2^32, is malformed. A bundle containing a malformed imc EID in its
@@ -1860,7 +1924,8 @@ primary block <span class="bcp14">MUST</span> be treated as malformed.<a href="#
 are described below, and examples of the different encodings are provided in
 <a href="#cbor-examples" class="auto internal xref">Appendix B</a>.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.1-4"><span class="cref" id="no-pack"><span>[<a href="#I-D.burleigh-dtn-multicast" class="cite xref">I-D.burleigh-dtn-multicast</a>]</span> defines a two-element encoding
-carrying a packed 64-bit FQGN, mirroring the 'ipn' scheme, and ION
+whose first element packs the Allocator Identifier and Group Number
+into a single 64-bit integer, mirroring the 'ipn' scheme, and ION
 implements it. The packed 'ipn' two-element encoding was retained in
 RFC 9758 only for backwards compatibility with ION, and CCSDS is already
 deprecating it, so this document does not carry the bit packing into the
@@ -1942,8 +2007,8 @@ EID:<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2-6">Because the first element of the two-element encoding is a Group Number, it
 is subject to the same limit of 2^32-1 as the Group Number in the
 three-element encoding. A two-element array whose first element is not less
-than 2^32, such as one carrying a packed FQGN with a non-zero Allocator
-Identifier, is therefore malformed, rather than being interpreted as an imc
+than 2^32, such as one carrying a packed Allocator Identifier and Group
+Number with a non-zero Allocator Identifier, is therefore malformed, rather than being interpreted as an imc
 EID with a non-zero Allocator Identifier.<a href="#section-6.1.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2019,7 +2084,7 @@ endpoint. An imc EID and an 'ipn' EID with identical numeric components, such
 as imc:977000.17.1 and ipn:977000.17.1, identify unrelated endpoints.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2"><span class="cref" id="iac"><span>[<a href="#I-D.cavallini-dtn-iac" class="cite xref">I-D.cavallini-dtn-iac</a>]</span> proposes that Group Numbers have the same
 meaning in the 'iac' anycast scheme and in multi-destination schemes such
-as 'imc', so that one group of nodes can be addressed by either scheme.
+as 'imc', so that one Group Number can be used with either scheme.
 The WG needs to decide whether to adopt that alignment.</span><a href="#section-7.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2033,7 +2098,7 @@ address of the destination of a bundle is resolved from its identifier
 hop-by-hop as it transits a BPv7 network. The concept of late binding is
 preserved in the 'imc' URI scheme. Elements of an imc URI <span class="bcp14">MUST NOT</span> be
 regarded as carrying information relating to the location or reachability of
-the members of a multicast group, or other addressing or routing concerns.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+the members of a multicast endpoint, or other addressing or routing concerns.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2133,13 +2198,13 @@ a packed value, and has the domain of a Group Number.<a href="#section-8.3-3" cl
 three elements, and every imc URI is itself a valid imc pattern that matches
 only that imc URI, satisfying <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-eid-pattern-11#section-2.1.1" class="relref">Section 2.1.1</a> of [<a href="#I-D.ietf-dtn-eid-pattern" class="cite xref">I-D.ietf-dtn-eid-pattern</a>]</span>.<a href="#section-8.3-4" class="pilcrow">¶</a></p>
 <p id="section-8.3-5">For example, the following imc pattern matches every Service Number of the
-multicast group with Group Number 17 assigned by Allocator 977000:<a href="#section-8.3-5" class="pilcrow">¶</a></p>
+group with Group Number 17 assigned by Allocator 977000:<a href="#section-8.3-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.3-6">
 <pre>
 imc:977000.17.*
 </pre><a href="#section-8.3-6" class="pilcrow">¶</a>
 </div>
-<p id="section-8.3-7">The following imc pattern matches Service Number 1 on every multicast group
+<p id="section-8.3-7">The following imc pattern matches Service Number 1 of every group
 assigned by the Default Allocator from the first Private Use range
 (<a href="#iana-groups" class="auto internal xref">Section 10.4</a>):<a href="#section-8.3-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.3-8">
@@ -2226,115 +2291,153 @@ required for this purpose.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
 <p id="section-9.2-1">Malicious construction of a conformant imc URI is limited to the malicious
 selection of Allocator Identifiers, Group Numbers, and Service Numbers. That
 is, a maliciously constructed imc EID could be used to direct a bundle to a
-multicast group whose members might be damaged by the arrival of that bundle.
+multicast endpoint whose members might be damaged by the arrival of that bundle.
 A bundle that asserts an imc EID as its source node ID is not valid
 (<a href="#node-ids" class="auto internal xref">Section 5.3</a>). In all cases (and indeed in all bundle processing), the node
 that receives a bundle should verify its authenticity and validity before
 operating on it in any way.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="unauthorized-group-membership">
+<div id="unauthorized-membership">
 <section id="section-9.3">
-        <h3 id="name-unauthorized-group-membersh">
-<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-unauthorized-group-membersh" class="section-name selfRef">Unauthorized Group Membership</a>
+        <h3 id="name-unauthorized-membership">
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-unauthorized-membership" class="section-name selfRef">Unauthorized Membership</a>
         </h3>
-<p id="section-9.3-1">Joining a multicast group is a local registration (<a href="#membership" class="auto internal xref">Section 5.1</a>), and the
-'imc' URI scheme itself provides no means of restricting which nodes may join
-a group. Bundles destined for a multicast group may therefore be delivered to
-nodes that are not intended recipients. Where this is a concern, the
-confidentiality of bundle contents should be protected using BPSec
-<span>[<a href="#RFC9172" class="cite xref">RFC9172</a>]</span>, and multicast protocols should authenticate group membership
+<p id="section-9.3-1">Membership of a multicast endpoint is determined by local registrations
+(<a href="#membership" class="auto internal xref">Section 5.1</a>), and the 'imc' URI scheme itself provides no means of
+restricting which nodes may become members of a multicast endpoint. Bundles destined for a multicast endpoint may therefore
+be delivered to nodes that are not intended recipients. Where this is a
+concern, the confidentiality of bundle contents should be protected using BPSec
+<span>[<a href="#RFC9172" class="cite xref">RFC9172</a>]</span>, and multicast protocols should authenticate membership
 information before acting on it.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-implicit">
 <section id="section-9.4">
-        <h3 id="name-implicit-group-membership">
-<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-implicit-group-membership" class="section-name selfRef">Implicit Group Membership</a>
+        <h3 id="name-implicit-membership">
+<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-implicit-membership" class="section-name selfRef">Implicit Membership</a>
         </h3>
-<p id="section-9.4-1">This document does not define any multicast group of which all nodes, or all
+<p id="section-9.4-1">This document does not define any multicast endpoint of which all nodes, or all
 nodes supporting the 'imc' scheme, are implicitly members. In particular, the
 Null imc URI (<a href="#null-imc" class="auto internal xref">Section 3.5</a>), which earlier specifications suggested for such
-a purpose, instead identifies the null multicast group, which never has any
+a purpose, instead identifies the null multicast endpoint, which never has any
 members (<a href="#null-group" class="auto internal xref">Section 5.2</a>).<a href="#section-9.4-1" class="pilcrow">¶</a></p>
-<p id="section-9.4-2">Such a group would allow any node able to inject a single bundle into a BPv7
-network to cause that bundle to be replicated to, and delivered at, every
+<p id="section-9.4-2">Such an endpoint would allow any node able to inject a single bundle into a
+BPv7 network to cause that bundle to be replicated to, and delivered at, every
 node in the network. This is an amplification mechanism that could be used
 to exhaust transmission opportunities, storage, and power across the whole
 network, which is a particularly severe threat in networks with scarce or
-scheduled connectivity. Because membership would be implicit rather than the
-result of a local registration, no node could decline to receive such
-bundles, and the scope of the group could not be confined to a single
+scheduled connectivity. Because membership would be implicit rather than
+determined by local registrations, no node could decline to receive such
+bundles, and the scope of the endpoint could not be confined to a single
 administrative domain. Mechanisms that require communication with many nodes,
-such as the distribution of group membership information, should instead use
-explicitly assigned multicast groups whose membership and origination can be
-controlled by the deployment.<a href="#section-9.4-2" class="pilcrow">¶</a></p>
+such as the distribution of membership information, should instead use
+multicast endpoints of explicitly assigned groups, whose membership and
+origination can be controlled by the deployment.<a href="#section-9.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-reports">
+<section id="section-9.5">
+        <h3 id="name-status-report-implosion">
+<a href="#section-9.5" class="section-number selfRef">9.5. </a><a href="#name-status-report-implosion" class="section-name selfRef">Status Report Implosion</a>
+        </h3>
+<p id="section-9.5-1"><span><a href="https://rfc-editor.org/rfc/rfc9171#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> notes that requesting status reports for a
+single unicast bundle can result in (1 + (2 * (N-1))) status report bundles,
+where N is the number of nodes on the path to its destination, and for that
+reason requires that the generation of status reports be disabled by default
+and enabled only when the risk of excessive network traffic is deemed
+acceptable. <span><a href="https://rfc-editor.org/rfc/rfc9171#section-8" class="relref">Section 8</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> further notes that malicious initiation
+of status reporting could be used to effect a denial-of-service attack.<a href="#section-9.5-1" class="pilcrow">¶</a></p>
+<p id="section-9.5-2">These risks are multiplied for bundles destined for multicast endpoints. A
+single bundle destined for an imc EID may be replicated along many paths and
+delivered at every member of the multicast endpoint, and each node that
+receives, forwards, delivers, or deletes a copy may generate a status report.
+The number of status reports generated by a single bundle can therefore grow
+with the number of members of the multicast endpoint as well as with the
+length of each path, and all of those reports converge on the single
+report-to endpoint, which may be overwhelmed. A bundle destined for a
+multicast endpoint that requests status reports is also an amplification
+mechanism, since a single bundle sent by an attacker can cause a much larger
+number of bundles to be sent to a victim named as its report-to endpoint.<a href="#section-9.5-2" class="pilcrow">¶</a></p>
+<p id="section-9.5-3">Implementations of the 'imc' scheme <span class="bcp14">MUST</span> retain the default of
+<span><a href="https://rfc-editor.org/rfc/rfc9171#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> that status report generation is disabled, and
+<span class="bcp14">SHOULD NOT</span> generate status reports in response to bundles destined for imc
+EIDs unless explicitly configured to do so for the multicast endpoints
+concerned. Where status reporting for bundles destined for multicast
+endpoints is enabled, operators should take into account the number of
+members and the capacity of the report-to endpoint. Naming an administrative
+multicast endpoint (<a href="#admin" class="auto internal xref">Section 5.5</a>) as the report-to endpoint distributes the
+reports to a set of monitoring nodes, but does not reduce their number, and
+further multiplies the resulting traffic.<a href="#section-9.5-3" class="pilcrow">¶</a></p>
+<p id="section-9.5-4">Integrity protection of the primary block using BPSec <span>[<a href="#RFC9172" class="cite xref">RFC9172</a>]</span> allows a
+node to verify that status reports were genuinely requested by the source of
+a bundle.<a href="#section-9.5-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-private">
-<section id="section-9.5">
+<section id="section-9.6">
         <h3 id="name-private-use-imc-eids-2">
-<a href="#section-9.5" class="section-number selfRef">9.5. </a><a href="#name-private-use-imc-eids-2" class="section-name selfRef">Private Use imc EIDs</a>
+<a href="#section-9.6" class="section-number selfRef">9.6. </a><a href="#name-private-use-imc-eids-2" class="section-name selfRef">Private Use imc EIDs</a>
         </h3>
-<p id="section-9.5-1">Private Use (<a href="#private-groups" class="auto internal xref">Section 3.3.3</a>) imc URIs present a risk to the stability of
+<p id="section-9.6-1">Private Use (<a href="#private-groups" class="auto internal xref">Section 3.3.3</a>) imc URIs present a risk to the stability of
 deployed BPv7 networks. If such imc URIs are allowed to propagate beyond the
 domain in which they are valid, then the required uniqueness of imc URIs no
-longer holds, and bundles may be delivered to unintended multicast groups in
-other administrative domains.<a href="#section-9.5-1" class="pilcrow">¶</a></p>
-<p id="section-9.5-2">See <a href="#private-eids" class="auto internal xref">Section 5.4</a> for required behaviors to mitigate against this form of
-abuse.<a href="#section-9.5-2" class="pilcrow">¶</a></p>
+longer holds, and bundles may be delivered to unintended multicast endpoints in
+other administrative domains.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
+<p id="section-9.6-2">See <a href="#private-eids" class="auto internal xref">Section 5.4</a> for required behaviors to mitigate against this form of
+abuse.<a href="#section-9.6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="back-end-transcoding">
-<section id="section-9.6">
+<section id="section-9.7">
         <h3 id="name-back-end-transcoding">
-<a href="#section-9.6" class="section-number selfRef">9.6. </a><a href="#name-back-end-transcoding" class="section-name selfRef">Back-End Transcoding</a>
+<a href="#section-9.7" class="section-number selfRef">9.7. </a><a href="#name-back-end-transcoding" class="section-name selfRef">Back-End Transcoding</a>
         </h3>
-<p id="section-9.6-1">The limited expressiveness of URIs of the 'imc' scheme effectively eliminates
-the possibility of threats due to errors in back-end transcoding.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
+<p id="section-9.7-1">The limited expressiveness of URIs of the 'imc' scheme effectively eliminates
+the possibility of threats due to errors in back-end transcoding.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rare-ip-address-formats">
-<section id="section-9.7">
+<section id="section-9.8">
         <h3 id="name-rare-ip-address-formats">
-<a href="#section-9.7" class="section-number selfRef">9.7. </a><a href="#name-rare-ip-address-formats" class="section-name selfRef">Rare IP Address Formats</a>
+<a href="#section-9.8" class="section-number selfRef">9.8. </a><a href="#name-rare-ip-address-formats" class="section-name selfRef">Rare IP Address Formats</a>
         </h3>
-<p id="section-9.7-1">Not relevant, as IP addresses do not appear anywhere in conformant imc URIs.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
+<p id="section-9.8-1">Not relevant, as IP addresses do not appear anywhere in conformant imc URIs.<a href="#section-9.8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sensitive-information">
-<section id="section-9.8">
+<section id="section-9.9">
         <h3 id="name-sensitive-information">
-<a href="#section-9.8" class="section-number selfRef">9.8. </a><a href="#name-sensitive-information" class="section-name selfRef">Sensitive Information</a>
+<a href="#section-9.9" class="section-number selfRef">9.9. </a><a href="#name-sensitive-information" class="section-name selfRef">Sensitive Information</a>
         </h3>
-<p id="section-9.8-1">Because imc URIs are used only to represent the numeric identities of
-multicast groups, the risk of disclosure of sensitive information due to
+<p id="section-9.9-1">Because imc URIs are used only to represent the numeric identities of
+multicast endpoints, the risk of disclosure of sensitive information due to
 interception of these URIs is minimal. Examination of imc URIs could be used
 to support traffic analysis; where traffic analysis is a plausible danger,
 bundles should be conveyed by bundle-in-bundle encapsulation
 <span>[<a href="#I-D.ietf-dtn-bibe" class="cite xref">I-D.ietf-dtn-bibe</a>]</span> or by secure convergence-layer protocols that do not
-expose endpoint IDs, such as TCPCLv4 <span>[<a href="#RFC9174" class="cite xref">RFC9174</a>]</span>.<a href="#section-9.8-1" class="pilcrow">¶</a></p>
+expose endpoint IDs, such as TCPCLv4 <span>[<a href="#RFC9174" class="cite xref">RFC9174</a>]</span>.<a href="#section-9.9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="semantic-attacks">
-<section id="section-9.9">
+<section id="section-9.10">
         <h3 id="name-semantic-attacks">
-<a href="#section-9.9" class="section-number selfRef">9.9. </a><a href="#name-semantic-attacks" class="section-name selfRef">Semantic Attacks</a>
+<a href="#section-9.10" class="section-number selfRef">9.10. </a><a href="#name-semantic-attacks" class="section-name selfRef">Semantic Attacks</a>
         </h3>
-<p id="section-9.9-1">The simplicity of the 'imc' URI scheme syntax minimizes the possibility of
-misinterpretation of a URI by a human user.<a href="#section-9.9-1" class="pilcrow">¶</a></p>
+<p id="section-9.10-1">The simplicity of the 'imc' URI scheme syntax minimizes the possibility of
+misinterpretation of a URI by a human user.<a href="#section-9.10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="eid-patterns">
-<section id="section-9.10">
+<section id="section-9.11">
         <h3 id="name-eid-patterns">
-<a href="#section-9.10" class="section-number selfRef">9.10. </a><a href="#name-eid-patterns" class="section-name selfRef">EID Patterns</a>
+<a href="#section-9.11" class="section-number selfRef">9.11. </a><a href="#name-eid-patterns" class="section-name selfRef">EID Patterns</a>
         </h3>
-<p id="section-9.10-1">The security considerations of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-eid-pattern-11#section-5" class="relref">Section 5</a> of [<a href="#I-D.ietf-dtn-eid-pattern" class="cite xref">I-D.ietf-dtn-eid-pattern</a>]</span>
+<p id="section-9.11-1">The security considerations of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dtn-eid-pattern-11#section-5" class="relref">Section 5</a> of [<a href="#I-D.ietf-dtn-eid-pattern" class="cite xref">I-D.ietf-dtn-eid-pattern</a>]</span>
 apply to imc patterns (<a href="#patterns" class="auto internal xref">Section 8</a>). Because the text forms of imc and IPN
 patterns differ only in their scheme name, care is needed that a pattern
 intended to match 'ipn' EIDs is not written with the 'imc' scheme name, or
-vice versa, as the two match disjoint sets of EIDs.<a href="#section-9.10-1" class="pilcrow">¶</a></p>
+vice versa, as the two match disjoint sets of EIDs.<a href="#section-9.11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2497,7 +2600,7 @@ octets, and values less than 2^32 in five octets. The two-octet and
 three-octet encoded lengths are each divided between Private Use and
 registered Group Numbers, so that deployments using Private Use Group Numbers
 are not forced to use less efficiently encoded values than registered
-multicast groups. All one-octet values other than zero (0), and all
+groups. All one-octet values other than zero (0), and all
 five-octet values other than 2^32-1, are reserved for Private Use. This is
 the same structure as the "'ipn' Scheme URI Well-Known Service Numbers for
 BPv7" registry (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-9.3" class="relref">Section 9.3</a> of [<a href="#RFC9758" class="cite xref">RFC9758</a>]</span>).<a href="#section-10.4-3" class="pilcrow">¶</a></p>
@@ -2530,8 +2633,8 @@ BPv7" registry (<span><a href="https://rfc-editor.org/rfc/rfc9758#section-9.3" c
           </tbody>
         </table>
 <p id="section-10.4-6">Each entry in this registry associates a single Group Number with a
-multicast group of interest to the wider BPv7 community. Within the registry,
-the multicast group is identified using the "Description" field, and the
+group of interest to the wider BPv7 community. Within the registry,
+the group is identified using the "Description" field, and the
 "Reference" field identifies a publicly available specification of the
 purpose of the group.<a href="#section-10.4-6" class="pilcrow">¶</a></p>
 <p id="section-10.4-7"><span class="cref" id="groups-ranges">The ranges of the "'ipn' Scheme URI Default Allocator Node
@@ -2556,13 +2659,13 @@ integers in <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>.<a h
 <p id="section-10.4.1-2">Group Numbers assigned by the Default Allocator are intended for multicast
 groups that are of use to the entire BPv7 community. Each registration
 outside the Private Use ranges <span class="bcp14">MUST</span> have a corresponding publicly available
-specification describing the purpose of the multicast group. Multicast
+specification describing the purpose of the group. Multicast
 groups that are specific to a particular deployment or organization are
 expected to use Group Numbers assigned by that organization's own Allocator,
 or Private Use Group Numbers, and do not require an entry in this registry.<a href="#section-10.4.1-2" class="pilcrow">¶</a></p>
 <p id="section-10.4.1-3">Designated experts <span class="bcp14">MUST NOT</span> approve the registration of any Group Number
 whose specification requires bundle nodes to be implicitly members of the
-identified multicast group (see <a href="#sec-implicit" class="auto internal xref">Section 9.4</a>).<a href="#section-10.4.1-3" class="pilcrow">¶</a></p>
+multicast endpoints of the identified group (see <a href="#sec-implicit" class="auto internal xref">Section 9.4</a>).<a href="#section-10.4.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2673,8 +2776,8 @@ identified multicast group (see <a href="#sec-implicit" class="auto internal xre
         <h3 id="name-using-the-default-allocator">
 <a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-using-the-default-allocator" class="section-name selfRef">Using the Default Allocator</a>
         </h3>
-<p id="appendix-A.1-1">Consider the imc URI identifying Service Number 1 on every member of the
-multicast group with Group Number 5 assigned by the Default Allocator (0).<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-1">Consider the imc URI identifying the multicast endpoint with Service Number 1
+of the group with Group Number 5 assigned by the Default Allocator (0).<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
 <p id="appendix-A.1-2">The recommended seven-character representation of this URI would be as
 follows:<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-A.1-3">
@@ -2696,8 +2799,8 @@ imc:0.5.1
         <h3 id="name-using-a-non-default-allocat">
 <a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-using-a-non-default-allocat" class="section-name selfRef">Using a Non-Default Allocator</a>
         </h3>
-<p id="appendix-A.2-1">Consider the imc URI identifying Service Number 1 on every member of the
-multicast group with Group Number 17 assigned by Allocator 977000.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-1">Consider the imc URI identifying the multicast endpoint with Service Number 1
+of the group with Group Number 17 assigned by Allocator 977000.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
 <p id="appendix-A.2-2">The 15-character representation of this URI would be as follows:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-A.2-3">
 <pre>
@@ -2735,7 +2838,7 @@ type.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-using-the-default-allocator-2" class="section-name selfRef">Using the Default Allocator</a>
         </h3>
 <p id="appendix-B.1-1">Consider the imc EID imc:5.1. This textual representation of an imc EID
-identifies Service Number 1 on every member of the multicast group with Group
+identifies the multicast endpoint with Service Number 1 of the group with Group
 Number 5 assigned by the Default Allocator (0).<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
 <p id="appendix-B.1-2">The recommended five-octet encoding of this EID using the two-element
 scheme-specific encoding would be as follows:<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
@@ -2768,7 +2871,7 @@ encoding would be as follows:<a href="#appendix-B.1-4" class="pilcrow">¶</a></p
 <a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-using-a-non-default-allocato" class="section-name selfRef">Using a Non-Default Allocator</a>
         </h3>
 <p id="appendix-B.2-1">Consider the imc EID imc:977000.17.1. This textual representation of an imc
-EID identifies Service Number 1 on every member of the multicast group with
+EID identifies the multicast endpoint with Service Number 1 of the group with
 Group Number 17 assigned by Allocator 977000.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
 <p id="appendix-B.2-2">The 10-octet encoding of this EID using the three-element scheme-specific
 encoding would be as follows:<a href="#appendix-B.2-2" class="pilcrow">¶</a></p>
