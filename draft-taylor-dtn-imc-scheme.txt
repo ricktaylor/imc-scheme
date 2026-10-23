@@ -4,8 +4,8 @@
 
 Delay/Disruption Tolerant Networking                           R. Taylor
 Internet-Draft                                      Aalyria Technologies
-Intended status: Standards Track                         22 October 2026
-Expires: 25 April 2027
+Intended status: Standards Track                         23 October 2026
+Expires: 26 April 2027
 
 
            The 'imc' URI Scheme for Bundle Protocol Multicast
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 April 2027.
+   This Internet-Draft will expire on 26 April 2027.
 
 Copyright Notice
 
@@ -1090,10 +1090,22 @@ Table of Contents
     Table 1: New Value in the Bundle Protocol URI Scheme Types Registry
 
 
-   // Implementations of [I-D.burleigh-dtn-multicast], such as ION, use
-   // the value 3 for 'imc', and [I-D.cavallini-dtn-iac] also suggests
-   // the value 3 for 'iac'.  The WG needs to resolve this conflict
-   // before IANA assignment.
+   // ION already uses the value 3 for 'imc' in its implementation of
+   // [I-D.burleigh-dtn-multicast], although that document does not
+   // request a value from IANA, and [I-D.cavallini-dtn-iac] requests
+   // the value 3 for 'iac'.  Because 'imc' and 'iac' EIDs share the
+   // same three-element structure, assigning 3 to 'iac' would cause
+   // existing three-element 'imc' EIDs to be silently interpreted as
+   // valid 'iac' EIDs, rather than failing to decode.  The author
+   // suggests that 'imc' retain the value 3, as the longer-established
+   // use (the 'imc' scheme dates from [I-D.burleigh-dtnrg-imc]), and
+   // that 'iac' request the next available value.  Note that this
+   // document is already not wire-compatible with existing
+   // implementations for Default Allocator EIDs (Section 6.1) or for
+   // imc:0.0 (Section 5.2), so the WG could instead choose a new value
+   // to separate this specification cleanly from deployed practice.  As
+   // the registry requires Standards Action, the value could be secured
+   // following WG adoption by an early allocation [RFC7120].
 
 10.3.  'ipn' Scheme URI Allocator Identifiers
 
@@ -1279,9 +1291,13 @@ Table of Contents
    [I-D.ietf-dtn-bibe]
               Taylor, R. and A. Montilla, "Bundle-in-Bundle
               Encapsulation", Work in Progress, Internet-Draft, draft-
-              ietf-dtn-bibe-00, 7 September 2026,
+              ietf-dtn-bibe-01, 23 October 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-dtn-
-              bibe-00>.
+              bibe-01>.
+
+   [RFC7120]  Cotton, M., "Early IANA Allocation of Standards Track Code
+              Points", BCP 100, RFC 7120, DOI 10.17487/RFC7120, January
+              2014, <https://www.rfc-editor.org/rfc/rfc7120>.
 
    [RFC9172]  Birrane, III, E. and K. McKeever, "Bundle Protocol
               Security (BPSec)", RFC 9172, DOI 10.17487/RFC9172, January
