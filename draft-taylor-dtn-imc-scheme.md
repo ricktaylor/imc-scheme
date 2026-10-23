@@ -43,6 +43,7 @@ normative:
   I-D.ietf-dtn-eid-pattern:
 
 informative:
+  RFC7120:
   RFC9172:
   RFC9174:
   I-D.burleigh-dtn-multicast:
@@ -1029,10 +1030,21 @@ the "EID Pattern Reference" column added by
 
 [^tbd1]
 
-[^tbd1]: Implementations of {{I-D.burleigh-dtn-multicast}}, such as ION, use
-    the value 3 for 'imc', and {{I-D.cavallini-dtn-iac}} also suggests the
-    value 3 for 'iac'. The WG needs to resolve this conflict before IANA
-    assignment.
+[^tbd1]: ION already uses the value 3 for 'imc' in its implementation of
+    {{I-D.burleigh-dtn-multicast}}, although that document does not request
+    a value from IANA, and {{I-D.cavallini-dtn-iac}} requests the value 3
+    for 'iac'. Because 'imc' and 'iac' EIDs share the same three-element
+    structure, assigning 3 to 'iac' would cause existing three-element 'imc'
+    EIDs to be silently interpreted as valid 'iac' EIDs, rather than failing
+    to decode. The author suggests that 'imc' retain the value 3, as the
+    longer-established use (the 'imc' scheme dates from
+    {{I-D.burleigh-dtnrg-imc}}), and that 'iac' request the next available
+    value. Note that this document is already not wire-compatible with
+    existing implementations for Default Allocator EIDs ({{cbor-encoding}})
+    or for imc:0.0 ({{null-group}}), so the WG could instead choose a new
+    value to separate this specification cleanly from deployed practice. As
+    the registry requires Standards Action, the value could be secured
+    following WG adoption by an early allocation {{RFC7120}}.
 
 
 ## 'ipn' Scheme URI Allocator Identifiers {#iana-allocators}
