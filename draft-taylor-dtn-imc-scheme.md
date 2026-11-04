@@ -43,7 +43,6 @@ normative:
   I-D.ietf-dtn-eid-pattern:
 
 informative:
-  RFC3376:
   RFC7120:
   RFC9172:
   RFC9174:
@@ -58,10 +57,11 @@ This document defines the 'imc' URI scheme, a concise integer-based scheme
 for identifying Bundle Protocol Version 7 (BPv7) endpoints that are not
 singleton endpoints, termed multicast endpoints. The structure of 'imc' URIs
 mirrors that of the 'ipn' URI scheme: each 'imc' URI comprises an Allocator
-Identifier, a Group Number, and a Service Number. The Allocator Identifier
-and Group Number name a group of multicast endpoints, which is the unit on
-which forwarding is based, and the Service Number selects the service to
-which a bundle is delivered at each member. This document specifies the
+Identifier, a Group Number, and a Service Number. In the same way that the
+Allocator Identifier and Node Number of an 'ipn' URI identify the node at
+which a service exists, the Allocator Identifier and Group Number of an 'imc'
+URI identify a group of nodes at which a service exists, and the Service
+Number identifies that service. This document specifies the
 textual syntax of 'imc' URIs, their interpretation when used as BPv7 Endpoint
 Identifiers, their CBOR encoding, and the corresponding EID Pattern, and
 requests the associated IANA registrations.
@@ -81,28 +81,22 @@ no equivalently concise scheme for identifying endpoints that may have many
 members.
 
 This document defines the 'imc' URI scheme for this purpose. An 'imc' URI
-identifies an endpoint that is never a singleton endpoint; such an endpoint
-is termed a "multicast endpoint". The name 'imc' is derived from
+identifies an endpoint that is not a singleton endpoint; such an endpoint is
+termed a "multicast endpoint". The name 'imc' is derived from
 "InterPlanetary MultiCast", in the same way that 'ipn' was derived from
 "InterPlanetary Network", but like 'ipn' the term is now used as a
 non-acronymous name.
 
 The structure of an imc URI mirrors that of an 'ipn' URI, with a Group Number
-in place of the 'ipn' Node Number. However, whereas a Node Number identifies a
-node, a Group Number identifies neither a node nor a set of nodes. As
-throughout BPv7, it is endpoints that are addressed, and nodes are members of
-endpoints: each imc URI identifies a single multicast
-endpoint, with its own membership, and the Allocator Identifier and Group
-Number together name a group of related multicast endpoints.
-
-In the same way that 'ipn' routing is based on the node identified by the
-Fully Qualified Node Number of a destination EID, and the Service Number is
-used only to select the service at that node, forwarding of bundles destined
-for imc EIDs is based on the group, and the Service Number is used only by
-each receiving node to select the service to which a bundle is delivered.
-This is analogous to IP multicast, in which datagrams are forwarded according
-to their destination group address, and each receiving host delivers them
-according to their destination port.
+in place of the 'ipn' Node Number. An 'ipn' URI identifies a service at a
+node: its Fully Qualified Node Number identifies the node, and its Service
+Number identifies the service at that node. In the same way, an imc URI
+identifies a service at a group of nodes: its Fully Qualified Group Number
+identifies the group, and its Service Number identifies the service at the
+nodes of that group. As throughout BPv7, it is endpoints that are the
+destinations of bundles, and nodes are members of endpoints by
+registration: each imc URI identifies a single multicast endpoint, whose
+members are the nodes of the group that are registered in it.
 
 The 'imc' scheme was first proposed in {{I-D.burleigh-dtnrg-imc}} for use
 with Compressed Bundle Header Encoding and the experimental Bundle Protocol
@@ -115,8 +109,9 @@ as updated by {{RFC9758}}.
 
 Like the 'ipn' URI scheme, the 'imc' URI scheme defines identifiers only. An
 'imc' URI does not carry any topological information describing how to route
-bundles to the members of the identified multicast endpoint. Other than the
-requirement that forwarding be based on the group ({{forwarding}}), the
+bundles to the members of the identified multicast endpoint. As with the
+Fully Qualified Node Number, the structure of an imc URI allows forwarding
+mechanisms to base their decisions on the group it identifies, but the
 procedures by which bundles destined for multicast endpoints are forwarded,
 and by which information about membership is distributed, are out of scope
 for this document; one such set of procedures is defined in
@@ -134,26 +129,20 @@ an imc URI that is used as a BPv7 EID.
 The term "multicast endpoint" refers to the BPv7 endpoint identified by an imc
 EID. The members of a multicast endpoint are the bundle nodes that have a
 registration ({{Section 3.1 of RFC9171}}) in that endpoint ({{membership}});
-a multicast endpoint is therefore never a
-singleton endpoint ({{Section 3.1 of RFC9171}}).
+a multicast endpoint is therefore not a singleton endpoint
+({{Section 3.1 of RFC9171}}).
 
 The term "Fully Qualified Group Number" (FQGN) refers to the combination of
 the Allocator Identifier and the Group Number of an imc URI, by analogy with
-the Fully Qualified Node Number of an 'ipn' URI
+the Fully Qualified Node Number (FQNN) of an 'ipn' URI
 ({{Section 3.3.1 of RFC9758}}).
 
-The term "group" refers to the set of all multicast endpoints whose imc EIDs
-share the same FQGN, differing only in their Service Numbers
-({{group-numbers}}). A group has no members of its own, and is not itself a
-BPv7 endpoint, so cannot be the destination of a bundle.
-
-The term "participant" refers to a bundle node that has a registration in at
-least one multicast endpoint of a group, not counting the registration in the
-group's administrative multicast endpoint that results from participation
-itself ({{admin}}). Participation determines the nodes to which bundles
-destined for the multicast endpoints of a group are forwarded
-({{forwarding}}), but does not make a node a member of any multicast
-endpoint, other than the administrative multicast endpoint of the group.
+The term "group" refers to the set of bundle nodes identified by an FQGN:
+the nodes that are members of at least one multicast endpoint whose imc EID
+has that FQGN ({{group-numbers}}). The multicast endpoints whose imc EIDs
+share an FQGN are termed the multicast endpoints "of" that group. A group is
+not identified by an EID, so it is not itself a BPv7 endpoint and cannot be
+the destination of a bundle.
 
 The terms "Allocator", "Allocator Identifier", "Default Allocator", "Node
 Number", and "Service Number" are used as defined in {{RFC9758}}.
@@ -175,22 +164,23 @@ The Allocator Identifier indicates the entity responsible for assigning Group
 Numbers, maintaining uniqueness whilst avoiding the need for a single registry
 for all assigned Group Numbers. See {{allocators}}.
 
-The Group Number names a group of multicast endpoints in the context of an
-Allocator. See {{group-numbers}}.
+The Group Number is a shared identifier assigned to all imc URIs for
+services at the nodes of a single group. See {{group-numbers}}.
 
-The Service Number distinguishes between the multicast endpoints of a group.
-See {{service-numbers}}.
+The Service Number is an identifier to distinguish between services at the
+nodes of a group. See {{service-numbers}}.
 
-The combination of all three components identifies a single multicast
-endpoint. The combination of the Allocator Identifier and the Group Number,
-the FQGN, uniquely identifies a group. See {{group-numbers}}.
+The combination of these three components identifies a single multicast
+endpoint. Additionally, the combination of the Allocator Identifier and the
+Group Number, the FQGN, uniquely identifies the group of nodes at which the
+services identified by those imc URIs exist, in the same way that the FQNN of
+an 'ipn' URI identifies the node on which a particular resource is expected
+to exist. See {{group-numbers}}.
 
-Membership is a property of each multicast endpoint, not of a group: the
-multicast endpoints of a group can have entirely different members. See
-{{membership}}. Forwarding, however, is based on the group: the FQGN of a
-destination imc EID determines where a bundle is forwarded, and the Service
-Number determines only the service to which it is delivered at each member.
-See {{forwarding}}.
+Membership of each multicast endpoint is determined by registration
+({{membership}}), so the multicast endpoints of a group can have different
+members, and the nodes of a group are those that are members of any of its
+multicast endpoints.
 
 
 ## Allocator Identifiers {#allocators}
@@ -213,9 +203,10 @@ assign the same numeric value as both a Group Number and a Node Number, and
 there is no relationship between a group and a node that happen to share the
 same Allocator Identifier and number.
 
-In any case where an encoded imc URI does not explicitly include an Allocator
-Identifier, an implementation MUST assume that the Group Number has been
-assigned by the Default Allocator ({{Section 3.2.2 of RFC9758}}).
+Where the textual representation of an imc URI omits the Allocator
+Identifier ({{text}}), the Group Number has been assigned by the Default
+Allocator ({{Section 3.2.2 of RFC9758}}). The CBOR representation always
+includes the Allocator Identifier ({{cbor-encoding}}).
 
 A new IANA registry, "'imc' Scheme URI Default Allocator Group Numbers", is
 defined to control the assignment of Group Number values by the Default
@@ -229,24 +220,29 @@ Default Allocator for this purpose, are to be used.
 
 ## Group Numbers {#group-numbers}
 
-A Group Number names a group in the context of an Allocator. A Group Number is
-an unsigned integer. A single Group Number assigned by a single Allocator MUST
-refer to a single group.
+A Group Number identifies a group in the context of an Allocator. A Group
+Number is an unsigned integer. A single Group Number assigned by a single
+Allocator MUST refer to a single group.
 
-A group is the set of all multicast endpoints whose imc EIDs share an
-Allocator Identifier and Group Number, distinguished by their Service Numbers,
-in the same way that an 'ipn' FQNN names a node whose services are
-distinguished by their Service Numbers. An Allocator might assign a Group
-Number to a community of interest, a mission, or a function, with the
-multicast endpoints of the group identifying the services of that community.
-A Group Number does not identify any node or set of nodes, and assigning it
-does not make any node a member of any multicast endpoint.
+A group is the set of nodes at which the services identified by imc URIs with
+the group's FQGN exist, distinguished by their Service Numbers, in the same
+way that an 'ipn' FQNN identifies the node at which the services identified by
+its Service Numbers exist. Unlike a node, a group has no fixed membership: its
+nodes are those that are members of at least one of its multicast endpoints
+({{membership}}), and so may change at any time. Assigning a Group Number
+does not make any node a member of any multicast endpoint. An Allocator might
+assign a Group Number to a community of interest, a mission, or a function,
+with the multicast endpoints of the group identifying the services of that
+community.
 
-Because forwarding is based on the group ({{forwarding}}), a bundle destined
-for any multicast endpoint of a group is forwarded towards every participant
-in that group. Services intended for different sets of nodes therefore
-benefit from being assigned to different groups, rather than to different
-Service Numbers of the same group.
+A group is not an endpoint, and cannot be the destination of a bundle. The
+administrative multicast endpoint of a group ({{admin}}), whose members are
+the nodes of that group, can be.
+
+Because the services of a group exist at a common set of nodes, services
+intended for different sets of nodes benefit from being assigned to different
+groups, rather than to different Service Numbers of the same group
+({{sec-unauthorized}}).
 
 All Group Number assignments, by all Allocators, MUST be in the range 0 to
 2^32-1.
@@ -266,44 +262,28 @@ Some special-case Group Numbers are defined by the Default Allocator; see
 The Default Allocator assigns the use of Group Number zero (0) solely for
 identifying the Null imc URI ({{null-imc}}).
 
-This means that any imc URI with a zero (0) Allocator Identifier and a zero
-(0) Group Number, but a non-zero Service Number component, is invalid. Such
-imc URIs MUST NOT be composed, and processors of such imc URIs MUST consider
-them as the Null imc URI.
+Any imc URI with a zero (0) Allocator Identifier and a zero (0) Group Number,
+but a non-zero Service Number component, is invalid. Such imc URIs MUST NOT be
+composed, and processors of such imc URIs MUST consider them as the Null imc
+URI.
 
 
 ### The Maximum Group Number {#max-group}
 
-The Default Allocator reserves Group Number 2^32-1 (0xFFFFFFFF) as invalid.
-This Group Number MUST NOT be assigned, and any imc URI with a zero (0)
-Allocator Identifier and a Group Number of 2^32-1 is invalid and MUST NOT be
-composed.
+The Default Allocator reserves Group Number 2^32-1 (0xFFFFFFFF) as invalid,
+solely to guard against confusion with LocalNode ipn URIs
+({{Section 3.4.2 of RFC9758}}), which use the same Node Number: the mistyped
+URI imc:4294967295.7, intended as ipn:4294967295.7, then identifies no
+multicast endpoint rather than a real one. Any imc URI with a zero (0)
+Allocator Identifier and a Group Number of 2^32-1 is invalid, MUST NOT be
+composed, and identifies a multicast endpoint that never has any members.
+Other Allocators may assign Group Number 2^32-1.
 
-This reservation exists solely to guard against confusion with LocalNode ipn
-URIs ({{Section 3.4.2 of RFC9758}}), which use the same Node Number. For
-example, if this Group Number were assignable, the mistyped URI
-imc:4294967295.7, intended as the LocalNode ipn URI ipn:4294967295.7, could
-silently identify a real multicast endpoint. Reserving it ensures that such an
-error causes the bundle to be discarded rather than delivered at unintended
-recipients.
-
-The reservation does not give imc URIs any LocalNode semantics, and the
-'imc' URI scheme has no equivalent of LocalNode ipn URIs. Services do not
-receive bundles; they receive the application data units (ADUs) of bundles
-delivered to them by their local bundle protocol agent
-({{Section 5.7 of RFC9171}}). An imc URI identifying "the local services"
-would therefore not identify anything to which a bundle could meaningfully be
-sent.
-
-A bundle node that receives or originates a bundle whose destination is an
-imc EID with a zero (0) Allocator Identifier and a Group Number of 2^32-1
-MUST NOT forward or deliver it, and MUST delete it
-({{Section 5.10 of RFC9171}}). If a bundle deletion status report is
-requested, the reason code "Destination endpoint ID unavailable"
-({{Section 6.1.1 of RFC9171}}) SHOULD be used.
-
-This reservation applies only to the Default Allocator. Other Allocators MAY
-assign Group Number 2^32-1 according to their own policies.
+The 'imc' URI scheme has no equivalent of LocalNode ipn URIs: services
+receive the application data units of bundles delivered to them by their
+local bundle protocol agent ({{Section 5.7 of RFC9171}}), not bundles, so an
+imc URI identifying "the local services" would not identify anything to
+which a bundle could meaningfully be sent.
 
 
 ### Private Use Group Numbers {#private-groups}
@@ -315,27 +295,17 @@ each length of CBOR encoding; see {{iana-groups}}.
 
 Any imc URI with a zero (0) Allocator Identifier and a Group Number reserved
 for Private Use is not guaranteed to be unique beyond a single administrative
-domain. An administrative domain, as used here, is defined as the set of
-nodes that share a unique allocation of Private Use Group Numbers.
-
-Because of this lack of uniqueness, any implementation of a protocol using
-imc URIs that resides on the border between administrative domains MUST have
-suitable mechanisms in place to prevent protocol units using such Private Use
-Group Numbers from crossing between different administrative domains.
+domain, defined as the set of nodes that share a unique allocation of Private
+Use Group Numbers. The resulting requirements are specified in
+{{private-eids}}.
 
 
 ## Service Numbers {#service-numbers}
 
-A Service Number is an unsigned integer, as defined in
-{{Section 3.5 of RFC9758}}. In an imc URI, the Service Number distinguishes
-the multicast endpoints of a group, and so identifies the service to which a
-bundle destined for that multicast endpoint is delivered at each of its
-members.
-
-As with the Service Number of an 'ipn' EID, the Service Number of an imc EID
-does not influence forwarding. It is used only by each receiving node to
-determine whether it is a member of the destination multicast endpoint, and
-if so to which service the bundle is delivered ({{forwarding}}).
+A Service Number is an unsigned integer that identifies a particular service
+operating on a node, as defined in {{Section 3.5 of RFC9758}}. In an imc URI,
+the Service Number identifies a particular service operating on each node of
+a group, and so distinguishes the multicast endpoints of that group.
 
 
 ## The Null imc URI {#null-imc}
@@ -430,62 +400,17 @@ registration is created or removed is an implementation matter
 ({{Section 3.3 of RFC9171}}), and may for example be a local application
 interface, configuration, or a separately specified protocol.
 
-Membership is determined separately for each multicast endpoint. Being a
-member of one multicast endpoint of a group does not make a node a member of
-any other multicast endpoint of that group, with the sole exception of the
-group's administrative multicast endpoint ({{admin}}): for example, the
-members of imc:977000.17.1 and of imc:977000.17.2 are independent sets of
-nodes, either of which may be empty. A bundle destined for an imc EID is
-delivered only at members of that multicast endpoint.
+The membership of each multicast endpoint is determined by registration in
+that endpoint alone. For example, the members of imc:977000.17.1 and of
+imc:977000.17.2 are determined by the registrations in each of those
+endpoints, and either may have no members. The nodes of a group are the
+members of any of its multicast endpoints, and every node of a group is a
+member of the group's administrative multicast endpoint ({{admin}}).
 
 As noted in {{Section 3.1 of RFC9171}}, registrations are local, and BPv7 does
 not include a mechanism for distributing information about registrations.
 Mechanisms by which information about the membership of multicast endpoints
 is distributed are out of scope for this document.
-
-
-## Forwarding and Delivery {#forwarding}
-
-Forwarding of bundles destined for imc EIDs is based on the group. The
-destination EID of a bundle destined for an imc EID MUST influence the
-selection of the nodes to which the bundle is forwarded
-({{Section 5.4 of RFC9171}}) only by its FQGN, and its Service Number MUST NOT
-influence that selection. A bundle
-destined for any multicast endpoint of a group is therefore forwarded towards
-every participant in that group, in the same way that a bundle destined for
-any 'ipn' EID with a given FQNN is forwarded towards the node it identifies,
-regardless of its Service Number.
-
-As a consequence, the information about membership that a multicast
-forwarding mechanism needs to distribute is the set of groups in which each
-node participates, and not the individual multicast endpoints of which it is
-a member. Forwarding implementations may additionally aggregate state across
-groups, for example those described by an EID Pattern ({{patterns}}). Neither
-form of aggregation implies that an FQGN carries topological information
-({{late-binding}}).
-
-When a participant receives a bundle destined for a multicast endpoint of
-the group, the bundle is delivered at that node
-({{Section 5.7 of RFC9171}}) only if the node is a member of the bundle's
-destination endpoint, as for any BPv7 endpoint
-({{Section 5.3 of RFC9171}}). A participant that is not a member of the
-bundle's destination endpoint does not deliver the bundle, but forwards it
-to any other participants as required by the forwarding mechanism in use.
-For such a participant, the absence of any further node to which to forward
-the bundle is not a reason for which forwarding is contraindicated
-({{Section 5.4 of RFC9171}}): once forwarding to any other participants has
-concluded, or if there are none, the bundle's "Forward pending" retention
-constraint is removed, and the bundle is discarded without being deleted
-({{Section 3.1 of RFC9171}}), so no bundle deletion status report is
-generated. The absence of a registration in the bundle's destination endpoint
-at a participant is an expected consequence of forwarding based on the group,
-and not a failure of forwarding or delivery. This is analogous to an IP host
-that discards a multicast datagram addressed to a port on which no socket is
-bound.
-
-Because forwarding is based on the group, a bundle may reach, and be
-processed by the bundle protocol agent of, participants that are not members
-of its destination multicast endpoint. See {{sec-unauthorized}}.
 
 
 ## The Null Multicast Endpoint {#null-group}
@@ -495,46 +420,36 @@ When the Null imc URI ({{null-imc}}) is used as a BPv7 EID, it is termed the
 
 The null multicast endpoint never has any members: a bundle node MUST NOT
 have a registration in the null multicast endpoint, by whatever means
-registrations are created.
+registrations are created. A bundle destined for the Null imc EID therefore
+cannot be delivered.
 
-Because the null multicast endpoint has no members, a bundle destined for the
-Null imc EID can never be delivered. Such a bundle SHOULD NOT be created, and
-a bundle node that receives or originates such a bundle MUST NOT forward it to
-any other node. If such a bundle is deleted and a bundle deletion status
-report is requested, the reason code "Destination endpoint ID unavailable"
-({{Section 6.1.1 of RFC9171}}) SHOULD be used.
-
-The null multicast endpoint is distinct from the BPv7 null endpoint ("dtn:none",
-{{Section 4.2.5.1.1 of RFC9171}}). Although both identify endpoints that never
-have any members, the Null imc EID MUST NOT be used in place of the null
-endpoint ID, for example to indicate an anonymous bundle source or that no
-status reports are to be sent. Equally, the null endpoint ID and the Null ipn
-EID ({{Section 5.2 of RFC9758}}) are not imc EIDs.
+The null multicast endpoint is a different endpoint from the BPv7 null
+endpoint ("dtn:none", {{Section 4.2.5.1.1 of RFC9171}}), although neither ever
+has any members. Where {{RFC9171}} gives the null endpoint ID a particular
+meaning, such as an anonymous bundle source, it is the null endpoint ID
+"dtn:none" that has that meaning, not the Null imc EID.
 
 
 ## Node IDs and Bundle Sources {#node-ids}
 
 {{Section 4.2.5.2 of RFC9171}} requires that a Node ID be the EID of a
-singleton endpoint. Because a multicast endpoint is never a singleton
-endpoint, an imc EID MUST NOT be used as a Node ID.
-
-As a consequence, an imc EID MUST NOT be used as the source node ID of a
-bundle ({{Section 5.2 of RFC9171}}), as the node ID carried in a Previous Node
-Block ({{Section 4.4.1 of RFC9171}}), or as the security source of a Bundle
+singleton endpoint. Because a multicast endpoint is not a singleton endpoint,
+an imc EID cannot be used as a Node ID, and so cannot be the source node ID
+of a bundle ({{Section 5.2 of RFC9171}}), the node ID carried in a Previous
+Node Block ({{Section 4.4.1 of RFC9171}}), or the security source of a Bundle
 Protocol Security (BPSec) {{RFC9172}} security block.
 
 
 ## Private Use imc EIDs {#private-eids}
 
-Bundles destined for imc EIDs with a zero (0) Allocator Identifier and a
-Group Number within the Private Use ranges of the Default Allocator
-({{private-groups}}) are
-not universally unique; therefore, they are only valid within the scope of the
-current administrative domain. This means that any bundle using a Private Use
-imc EID as a bundle destination MUST NOT be allowed to cross administrative
-domains. All implementations that could be deployed as a gateway between
-administrative domains MUST be sufficiently configurable to ensure that this
-is enforced, and operators MUST ensure correct configuration.
+imc EIDs with a zero (0) Allocator Identifier and a Group Number within the
+Private Use ranges of the Default Allocator ({{private-groups}}) are not
+universally unique, and are therefore only valid within the scope of the
+current administrative domain. Any bundle using a Private Use imc EID as a
+bundle destination MUST NOT be allowed to cross administrative domains. All
+implementations that could be deployed as a gateway between administrative
+domains MUST be sufficiently configurable to ensure that this is enforced,
+and operators MUST ensure correct configuration.
 
 Private Use imc EIDs MUST NOT be present in any other part of a bundle that is
 destined for another administrative domain when the lack of uniqueness
@@ -543,75 +458,25 @@ prevents correct operation.
 
 ## Administrative Multicast Endpoints {#admin}
 
-The administrative endpoint of a node is a singleton endpoint, and its EID can
-serve as the node's Node ID ({{Section 3.2 of RFC9171}}). No imc EID
-identifies the administrative endpoint of any node.
-
-However, consistent with the meaning of Service Number zero (0) in 'ipn' EIDs
+Consistent with the meaning of Service Number zero (0) in 'ipn' EIDs
 ({{Section 5.7 of RFC9758}}), the multicast endpoint of a group with Service
 Number zero (0), for example imc:977000.17.0, is the "administrative
-multicast endpoint" of that group. Bundles destined for an administrative
-multicast endpoint carry administrative records ({{Section 6.1 of RFC9171}}),
-and are delivered at each member to the administrative element of its
-application agent ({{Section 3.1 of RFC9171}}), rather than to any
-application-specific element.
+multicast endpoint" of that group: administrative records
+({{Section 6.1 of RFC9171}}) destined for it are delivered at each member to
+the administrative element of its application agent
+({{Section 3.1 of RFC9171}}).
 
-Every participant in a group is a member of the administrative multicast
-endpoint of that group. In the same way that every node is permanently
-registered in its own administrative endpoint
-({{Section 3.2 of RFC9171}}), every participant in a group is registered in
-the administrative multicast endpoint of that group, for as long as it is a
-participant. Because forwarding is based on the group ({{forwarding}}), every
-participant already receives bundles destined for the administrative
-multicast endpoint, and this rule ensures that they are delivered rather than
-discarded. A node can also have a registration in an administrative
-multicast endpoint created by any other means, in which case it is a
-participant in that group.
+Every node of a group is a member of the administrative multicast endpoint of
+that group, in the same way that every node is a member of its own
+administrative endpoint ({{Section 3.2 of RFC9171}}). Because a node is a
+node of a group only if it is a member of at least one multicast endpoint of
+that group, no node is implicitly a member of the administrative multicast
+endpoint of any other group.
 
-A node that is not a participant in a group is not a member of that group's
-administrative multicast endpoint unless it has a registration in that
-endpoint created by other means. No node is ever implicitly a member of the
-administrative multicast endpoint of a group in which it is not a
-participant.
-
-This rule is intended as a building block for protocols that manage
-participation in groups, in the manner of the Internet Group Management
-Protocol (IGMP) {{RFC3376}}. Without it, such a protocol would need either an
-endpoint of which every node is implicitly a member, which this document
-rejects ({{sec-implicit}}), or prior knowledge of the participants in a
-group. With it, a single administrative record destined for the
-administrative multicast endpoint of a group is delivered at exactly the
-current participants in that group, wherever they are, so that, for example,
-a query about participation in a group can be addressed to that group alone,
-much as an IGMP Group-Specific Query is sent to the multicast address of the
-group concerned. The specification of any such protocol, and of the
-administrative record types it uses, is out of scope for this document.
-
-The "ADU is an administrative record" bundle processing control flag
-({{Section 4.2.3 of RFC9171}}) MUST be set in every bundle destined for an
-administrative multicast endpoint, and a bundle destined for an
-administrative multicast endpoint without that flag set MUST NOT be delivered.
-Conversely, a bundle with that flag set MUST NOT be destined for an imc EID
-whose Service Number is not zero (0), consistent with the rule for 'ipn' EIDs
-in {{Section 5.7 of RFC9758}}.
-
-The receiver of an administrative record delivered from an administrative
-multicast endpoint MUST be prepared for the same record to be delivered at
-many nodes. A specification of an administrative record type that is intended
-to be sent to administrative multicast endpoints SHOULD state so, and
-administrative record types not so specified SHOULD NOT be sent to them.
-This document specifies that bundle status reports
-({{Section 6.1.1 of RFC9171}}) MAY be sent to an administrative multicast
-endpoint: the report-to EID of a bundle MAY identify an administrative
-multicast endpoint, so that its status reports are delivered at a set of
-monitoring nodes.
-Because every participant in the group is a member of its administrative
-multicast endpoint, such reports are delivered at every participant, and a
-group used for this purpose would normally be assigned to the monitoring
-function alone ({{sec-reports}}).
-
-Because an administrative multicast endpoint is not the administrative
-endpoint of any node, it cannot be used as a Node ID ({{node-ids}}).
+An administrative multicast endpoint is not the administrative endpoint of
+any node, which is a singleton endpoint ({{Section 3.2 of RFC9171}}). An
+administrative record delivered from an administrative multicast endpoint
+may therefore have been delivered at many nodes.
 
 
 ## Well-Known Service Numbers {#well-known}
@@ -742,10 +607,9 @@ encodings that need to be treated as equivalent.
 
 ## Relationship to Other URI Schemes {#other-schemes}
 
-Although imc URIs share their structure, Allocator Identifiers, and Service
-Numbers with 'ipn' URIs, the two schemes identify different kinds of
-endpoint. An imc EID and an 'ipn' EID with identical numeric components, such
-as imc:977000.17.1 and ipn:977000.17.1, identify unrelated endpoints.
+imc URIs share their Allocator Identifiers and Service Numbers with 'ipn'
+URIs ({{allocators}}, {{well-known}}). Group Numbers and Node Numbers are
+distinct namespaces.
 
 [^iac]
 
@@ -764,10 +628,10 @@ preserved in the 'imc' URI scheme. Elements of an imc URI MUST NOT be
 regarded as carrying information relating to the location or reachability of
 the members of a multicast endpoint, or other addressing or routing concerns.
 
-Basing forwarding on the FQGN ({{forwarding}}), in the same way that 'ipn'
-forwarding is based on the FQNN, does not imply that an FQGN carries any such
-information: the participants in a group may be located anywhere, and may
-change at any time.
+In particular, although a forwarding mechanism may base its decisions on the
+FQGN, in the same way that 'ipn' forwarding may be based on the FQNN, an FQGN
+carries no such information: the nodes of a group may be located anywhere,
+and may change at any time.
 
 
 # imc EID Patterns {#patterns}
@@ -812,9 +676,7 @@ Number taking the place of the Node Number.
 An imc pattern matches an imc EID according to the rules of
 {{Section 2.4.1 of I-D.ietf-dtn-eid-pattern}}, applied to the decoded
 Allocator Identifier, Group Number, and Service Number of the EID. An imc
-pattern never matches an EID of any other scheme; in particular, an imc
-pattern and an IPN pattern with identical elements match disjoint sets of
-EIDs ({{other-schemes}}).
+pattern never matches an EID of any other scheme.
 
 Set logic between imc patterns is as defined for IPN patterns in
 {{Section 2.4.2 of I-D.ietf-dtn-eid-pattern}}.
@@ -828,9 +690,9 @@ the scheme name is "imc" rather than "ipn". In the same way that the IPN
 pattern accepts a single 'ipn' EID written in its two-element text form, the
 imc pattern accepts a single imc URI written in its two-element text form
 ({{text}}), without the '!' character, since the 'imc' scheme has no
-LocalNode equivalent ({{max-group}}). It conforms to the following ABNF, which reuses the rules ipn-part-pat, ipn-decimal, and
-nbr-delim (and the rules on which they depend) from Figure 1 of
-{{I-D.ietf-dtn-eid-pattern}}:
+LocalNode equivalent ({{max-group}}). It conforms to the following ABNF,
+which reuses the rules ipn-part-pat, ipn-decimal, and nbr-delim (and the
+rules on which they depend) from Figure 1 of {{I-D.ietf-dtn-eid-pattern}}:
 
 ~~~ abnf
 eid-pattern-item =/ imc-pat-item
@@ -955,24 +817,23 @@ are not intended recipients. Where this is a concern, the confidentiality of
 bundle contents should be protected using BPSec {{RFC9172}}, and multicast
 protocols should authenticate membership information before acting on it.
 
-Because forwarding is based on the group ({{forwarding}}), a bundle destined
-for one multicast endpoint of a group is also received by every participant
-in that group, including participants that are not members of its
-destination endpoint. Although such a participant does not deliver the
-bundle, its bundle protocol agent has access to the bundle's blocks.
-Allocators and operators should therefore assign services intended for
-different sets of nodes to different groups, and should not rely on the
-Service Number to confine bundles to the members of a single multicast
-endpoint.
+Because the services of a group exist at a common set of nodes, a
+forwarding mechanism that bases its decisions on the FQGN may convey a bundle
+destined for one multicast endpoint of a group to any node of that group,
+including nodes that are not members of its destination endpoint. Although
+such a node does not deliver the bundle, its bundle protocol agent has access
+to the bundle's blocks. Allocators and operators should therefore assign
+services intended for different sets of nodes to different groups, and
+should not rely on the Service Number to confine bundles to the members of a
+single multicast endpoint.
 
 
 ## Implicit Membership {#sec-implicit}
 
-This document does not define any multicast endpoint of which all nodes, or all
-nodes supporting the 'imc' scheme, are implicitly members. In particular, the
-Null imc URI ({{null-imc}}), which earlier specifications suggested for such
-a purpose, instead identifies the null multicast endpoint, which never has any
-members ({{null-group}}).
+This document does not define any multicast endpoint of which all nodes, or
+all nodes supporting the 'imc' scheme, are implicitly members. In particular,
+the Null imc URI ({{null-imc}}) identifies the null multicast endpoint, which
+never has any members ({{null-group}}).
 
 Such an endpoint would allow any node able to inject a single bundle into a
 BPv7 network to cause that bundle to be replicated to, and delivered at, every
@@ -987,10 +848,10 @@ such as the distribution of membership information, should instead use
 multicast endpoints of explicitly assigned groups, whose membership and
 origination can be controlled by the deployment.
 
-The implicit membership of every participant in the administrative multicast
-endpoint of its group ({{admin}}) does not create such an endpoint. It is
-confined to the participants in that group, each of which has a registration
-in at least one of its multicast endpoints, and a node that does not wish
+The membership of every node of a group in that group's administrative
+multicast endpoint ({{admin}}) does not create such an endpoint. It is
+confined to the nodes of that group, each of which is a member of at least
+one of its multicast endpoints by registration, and a node that does not wish
 administrative records sent to a group to be delivered at it can avoid this
 by having no registration in any multicast endpoint of that group.
 
@@ -1026,15 +887,11 @@ endpoints is enabled, operators should take into account the number of
 members and the capacity of the report-to endpoint. Naming an administrative
 multicast endpoint ({{admin}}) as the report-to endpoint distributes the
 reports to a set of monitoring nodes, but does not reduce their number, and
-further multiplies the resulting traffic. Because every participant in a group
-is a member of its administrative multicast endpoint, such reports are
-delivered at every participant in that group, and not only at nodes intended
-to monitor them.
-
-Participants that are not members of the destination endpoint of a bundle
-do not generate bundle deletion status reports for it ({{forwarding}}), so
-that forwarding based on the group does not itself cause status reports to be
-generated by every such participant.
+further multiplies the resulting traffic. Because every node of a group is a
+member of its administrative multicast endpoint, such reports are delivered at
+every node of that group, and not only at nodes intended to monitor them, so
+a group used for this purpose would normally be assigned to the monitoring
+function alone.
 
 Integrity protection of the primary block using BPSec {{RFC9172}} allows a
 node to verify that status reports were genuinely requested by the source of
@@ -1140,7 +997,7 @@ the "EID Pattern Reference" column added by
     to decode. The author suggests that 'imc' retain the value 3, as the
     longer-established use (the 'imc' scheme dates from
     {{I-D.burleigh-dtnrg-imc}}), and that 'iac' request the next available
-    value. Note that this document is already not wire-compatible with
+    value; the 'iac' authors have indicated that this is acceptable. Note that this document is already not wire-compatible with
     existing implementations for Default Allocator EIDs ({{cbor-encoding}})
     or for imc:0.0 ({{null-group}}), so the WG could instead choose a new
     value to separate this specification cleanly from deployed practice. As
@@ -1230,14 +1087,16 @@ deployment or organization are expected to use Group Numbers assigned by that
 organization's own Allocator, or Private Use Group Numbers, and do not
 require an entry in this registry.
 
-Because forwarding is based on the group ({{forwarding}}), designated experts
-should encourage specifications to request separate Group Numbers for
-services intended for different sets of nodes, rather than separate Service
-Numbers of a single group (see {{sec-unauthorized}}).
+Because the services of a group exist at a common set of nodes
+({{group-numbers}}), designated experts should encourage specifications to
+request separate Group Numbers for services intended for different sets of
+nodes, rather than separate Service Numbers of a single group (see
+{{sec-unauthorized}}).
 
 Designated experts MUST NOT approve the registration of any Group Number
-whose specification requires bundle nodes to be implicitly participants in
-the identified group (see {{sec-implicit}}).
+whose specification requires bundle nodes to be implicitly nodes of the
+identified group, or members of any of its multicast endpoints (see
+{{sec-implicit}}).
 
 
 --- back
